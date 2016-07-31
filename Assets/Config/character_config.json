@@ -1,0 +1,32 @@
+/** 
+rank: 兵团外部的排序，站位是按照rank顺序来的
+interval: 兵团内部的排序，每个小兵直接的距离
+*/
+{
+    "rank_pos":{
+        "1":10,
+        "2":100,
+        "3":200,
+        "4":300,
+    },
+
+    "saber":{
+        "id":1,
+        "life":80,
+        "attack":10,
+        "defense":10,
+        "max_count":5, 
+        "rank":1,
+        "interval":10, 
+    },
+
+    "archer":{
+        "id":2,
+        "life":80,
+        "attack":10,
+        "defense":10,
+        "max_count":5,
+        "rank":2,
+        "interval":10,
+    }
+}
