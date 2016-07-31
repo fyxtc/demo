@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 enum TroopId{
-    Saber=1,Archer
+    Saber=1,Archer=2
 }
 
 public class PlayerTroopModel {
@@ -27,6 +27,7 @@ public class PlayerTroopModel {
     }
 
     void InitData(){
+        troops = new List<List<BaseCharacter>>();
         foreach (KeyValuePair<int, int> item in data){
             Debug.Log("key=" + item.Key.ToString() + "；value=" + item.Value.ToString());  
             TroopId troopType = (TroopId)item.Key;

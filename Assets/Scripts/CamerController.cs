@@ -7,8 +7,8 @@ public class CamerController : MonoBehaviour {
 	void Start () {
         configManager = ConfigManager.share();
     	configManager.loadConfig();
-		Debug.Log("saber: " + configManager.getCharacterConfig().Saber.Life);
-		Debug.Log("archer: " + configManager.getCharacterConfig().Archer.Attack);
+		// Debug.Log("saber: " + configManager.getCharacterConfig().Saber.Life);
+		// Debug.Log("archer: " + configManager.getCharacterConfig().Archer.Attack);
 	}
 	
 	// Update is called once per frame
