@@ -4,20 +4,88 @@ using System.Collections.Generic;
 using System;
 
 public class PlayerTroopController : MonoBehaviour {
-    Dictionary<int, int> data = new Dictionary<int, int>(); 
-	PlayerTroopModel model;
-	List<List<BaseCharacter>> troops;
+    int maxCount = 4; // 最多能带四个兵团
+    Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
+	Dictionary<TroopType, List<GameObject>> troops = new Dictionary<TroopType, List<GameObject>>();
+	public GameObject saber;
+	public GameObject archer;
 
 	// Use this for initialization
 	void Start () {
-        data.Add(1, 5);
-        data.Add(2, 5);
-		model = new PlayerTroopModel(data);
-		troops = model.Troops;;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+        data.Add(TroopType.Saber, 5);
+        data.Add(TroopType.Archer, 5);
+        InitTroops();
+    }
+
+    void InitTroops(){
+        foreach (KeyValuePair<TroopType, int> item in data) {
+            TroopType troopType = item.Key;
+            int count = item.Value;
+            // Debug.Log("key=" + item.Key.ToString() + "；value=" + item.Value.ToString());  
+            List<GameObject> characters = new List<GameObject>();
+            switch (troopType){
+            case TroopType.Saber:
+                for(int i = 0; i < count; i++){
+					GameObject obj = Instantiate(saber);
+                    characters.Add(obj);
+                }
+                break;
+            case TroopType.Archer:
+                for(int i = 0; i < count; i++){
+                    GameObject obj = Instantiate(archer);
+                    characters.Add(obj);
+                }
+                break;
+            }
+            troops.Add(troopType, characters);
+        }
+        Debug.Assert(troops.Count > 0 && troops.Count < maxCount, "troops count error");
+        resort();
+    }
+    
+    void resort(){
+        int rank = 1;
+        foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
+            TroopType troopType = item.Key;
+            List<GameObject> troop = item.Value;
+            double posX = getRankPos(rank);
+            double interval = getTroopInterval(troopType) / 100.0;
+            Debug.Log("interval: " + getTroopInterval(troopType).ToString() + ", " + interval.ToString());
+
+            for(int i = 0; i < troop.Count; i++){
+                GameObject obj = troop[i];
+                double x = posX - interval * (i);
+				// Vector3 v = new Vector3((float)x, obj.transform.position.y, obj.transform.position.z);
+                Debug.Log("x = " + x.ToString());
+                Vector3 v = new Vector3((float)x, 0, 0);
+				obj.transform.Translate(v);
+            }
+            rank++;
+        }
+    }
+
+    int getTroopInterval(TroopType type){
+        switch (type) 
+        {
+        case TroopType.Saber:
+            return ConfigManager.share().getCharacterConfig().Saber.Interval;
+        case TroopType.Archer:
+            return ConfigManager.share().getCharacterConfig().Archer.Interval;
+        }
+		return 1;
+    }
+
+    double getRankPos(int rank){
+        switch (rank){
+        case 1:
+            return -0.1;
+        case 2:
+            return -1.0;
+        }
+		return 1.0;
+    }
+
+    // Update is called once per frame
+    void Update () {
 	}
 }

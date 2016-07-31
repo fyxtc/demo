@@ -5,17 +5,17 @@ using System.Text;
 using System;
 using UnityEngine;
 
-public class BaseCharacter{
-    protected int id;
+public class BaseModel{
+    protected int type;
     protected int life;
     protected int attack;
     protected int defense;   
     protected int maxCount;
     protected int rank;
     protected int interval;
-    public int Id{
-        set{id = value;}
-        get{return id;}
+    public int Type{
+        set{type = value;}
+        get{return type;}
     } 
     public int Life{
         set{life = value;}
@@ -43,11 +43,11 @@ public class BaseCharacter{
     }
 }
 
-public class Saber : BaseCharacter{
+public class Saber : BaseModel{
 
 }
 
-public class Archer: BaseCharacter{
+public class Archer: BaseModel{
 
 }
 
@@ -69,7 +69,7 @@ public class CharacterConfig{
         JsonData data = JsonMapper.ToObject(str);
 
         JsonData saberData = data["saber"];
-        saber.Id = (int)saberData["id"];
+        saber.Type = (int)saberData["type"];
         saber.Life = (int)saberData["life"];
         saber.Attack = (int)saberData["attack"];
         saber.Defense = (int)saberData["defense"];
@@ -78,7 +78,7 @@ public class CharacterConfig{
         saber.Interval = (int)saberData["interval"];
 
         JsonData archerData = data["archer"];
-        archer.Id = (int)archerData["id"];
+        archer.Type = (int)archerData["type"];
         archer.Life = (int)archerData["life"];
         archer.Attack = (int)archerData["attack"];
         archer.Defense = (int)archerData["defense"];
@@ -118,6 +118,7 @@ public class ConfigManager{
         }
     }
     public CharacterConfig getCharacterConfig(){
+        loadConfig();
         return characterConfig;
     }
 

@@ -1,15 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Spine.Unity;
 
-public class SaberController : MonoBehaviour {
+public class SaberController : BaseController {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

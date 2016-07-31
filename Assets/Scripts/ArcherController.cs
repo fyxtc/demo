@@ -1,15 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Spine.Unity;
 
-public class ArcherController : MonoBehaviour {
+public class ArcherController : BaseController {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
+
