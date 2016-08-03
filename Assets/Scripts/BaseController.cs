@@ -2,9 +2,18 @@
 using System.Collections;
 using Spine.Unity;
 
-public class BaseController : MonoBehaviour {
+public abstract class BaseController : MonoBehaviour {
 
-    protected BaseModel model;
+	protected BaseModel Model{get;set;}
+    protected bool IsMy{get;set;}
+	protected abstract void InitModel();
+    public float speed = 0.1f;
+
+	protected enum TroopStatus{
+        Idle, Forward, Attack, Back,
+    }
+
+    protected TroopStatus status;
 
     #region Inspector
     // [SpineAnimation] attribute allows an Inspector dropdown of Spine animation names coming form SkeletonAnimation.
@@ -33,7 +42,38 @@ public class BaseController : MonoBehaviour {
         spineAnimationState = skeletonAnimation.state;
         skeleton = skeletonAnimation.skeleton;
 
-        StartCoroutine(DoDemoRoutine());
+        // StartCoroutine(DoDemoRoutine());
+
+        InitModel ();
+        IsMy = true; // test
+         // skeleton.FlipX = !IsMy;
+        Idle();
+    }
+
+    void Update(){
+        // transform.position = Vector3.Lerp(transform.position, new Vector3(6, transform.position.y), speed * Time.deltaTime);
+    }
+
+    void FixedUpdate(){
+    }
+
+    void Forward(){
+        skeleton.FlipX = !IsMy;
+        spineAnimationState.SetAnimation(0, walkAnimationName, true);
+    }
+
+    void Attack(){
+        spineAnimationState.SetAnimation(0, shootAnimationName, false);
+    }
+
+    void Back(){
+        skeleton.FlipX = IsMy;
+        spineAnimationState.SetAnimation(0, walkAnimationName, true);
+    }
+
+    void Idle(){
+        skeleton.FlipX = !IsMy;
+        spineAnimationState.SetAnimation(0, idleAnimationName, true);
     }
         
     /// <summary>This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.</summary>

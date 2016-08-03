@@ -13,6 +13,7 @@ public class BaseModel{
     protected int maxCount;
     protected int rank;
     protected double interval;
+    public double AttackRange{get; set;}
     public int Type{
         set{type = value;}
         get{return type;}
@@ -75,7 +76,8 @@ public class CharacterConfig{
         saber.Defense = (int)saberData["defense"];
         saber.MaxCount = (int)saberData["max_count"];
         saber.Rank = (int)saberData["rank"];
-		saber.Interval = (double)saberData["interval"];
+        saber.Interval = (double)saberData["interval"];
+		saber.AttackRange = (double)saberData["attackRange"];
 
         JsonData archerData = data["archer"];
         archer.Type = (int)archerData["type"];
@@ -85,6 +87,7 @@ public class CharacterConfig{
         archer.MaxCount = (int)archerData["max_count"];
         archer.Rank = (int)archerData["rank"];
         archer.Interval = (double)archerData["interval"];
+        archer.AttackRange = (double)archerData["attackRange"];
 
     }
 
