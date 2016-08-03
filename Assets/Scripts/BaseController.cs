@@ -10,10 +10,17 @@ public abstract class BaseController : MonoBehaviour {
     public float speed = 0.1f;
 
 	protected enum TroopStatus{
-        Idle, Forward, Attack, Back,
+        STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK,
     }
 
     protected TroopStatus status;
+
+    protected enum TroopCommand{
+        CMD_IDLE, CMD_FORWARD, CMD_ATTACK, CMD_BACK,
+    }
+
+    public Vector3 startPos;
+    public Vector3 endPos;
 
     #region Inspector
     // [SpineAnimation] attribute allows an Inspector dropdown of Spine animation names coming form SkeletonAnimation.
@@ -48,33 +55,88 @@ public abstract class BaseController : MonoBehaviour {
         IsMy = true; // test
          // skeleton.FlipX = !IsMy;
         Idle();
+        startPos = transform.position;
+        endPos = new Vector3(6, transform.position.y);
+        handleCommand(TroopCommand.CMD_IDLE);
     }
 
     void Update(){
-        // transform.position = Vector3.Lerp(transform.position, new Vector3(6, transform.position.y), speed * Time.deltaTime);
+        switch(status){
+        case TroopStatus.STATUS_IDLE:
+            break;
+        case TroopStatus.STATUS_FORWARD:
+			transform.position = Vector3.Lerp(transform.position, endPos, 1/((transform.position - endPos).magnitude) * speed);
+            // Debug.Log(transform.position.x + ", " + endPos.x);
+            if(transform.position == endPos){
+                handleCommand(TroopCommand.CMD_ATTACK);
+            }
+            break;
+        case TroopStatus.STATUS_ATTACK:
+            break;
+        case TroopStatus.STATUS_BACK:
+			transform.position = Vector3.Lerp(transform.position, startPos, 1/((transform.position - startPos).magnitude) * speed);
+            if(transform.position == startPos){
+                handleCommand(TroopCommand.CMD_IDLE);
+            }
+            break;
+        }
+
     }
 
     void FixedUpdate(){
     }
 
+    void handleCommand(TroopCommand cmd){
+        Debug.Log("handleCommand " + cmd);
+        switch(cmd){
+        case TroopCommand.CMD_IDLE:
+            Idle();
+            break;
+        case TroopCommand.CMD_FORWARD:
+            Forward();
+            break;
+        case TroopCommand.CMD_ATTACK:
+            Attack();
+            break;
+        case TroopCommand.CMD_BACK:
+            Back();
+            break;
+        }
+    }
+
     void Forward(){
+        status = TroopStatus.STATUS_FORWARD;
         skeleton.FlipX = !IsMy;
         spineAnimationState.SetAnimation(0, walkAnimationName, true);
     }
 
     void Attack(){
+        status = TroopStatus.STATUS_ATTACK;
         spineAnimationState.SetAnimation(0, shootAnimationName, false);
+        Invoke("DoBackDelay", 0.5f);
     }
 
     void Back(){
+        status = TroopStatus.STATUS_BACK;
         skeleton.FlipX = IsMy;
         spineAnimationState.SetAnimation(0, walkAnimationName, true);
     }
 
     void Idle(){
+        status = TroopStatus.STATUS_IDLE;
         skeleton.FlipX = !IsMy;
         spineAnimationState.SetAnimation(0, idleAnimationName, true);
+        Invoke("DoForwardDelay", 2.0f);
     }
+
+    void DoBackDelay () {
+		handleCommand(TroopCommand.CMD_BACK);
+    }
+
+    void DoForwardDelay () {
+        handleCommand(TroopCommand.CMD_FORWARD);
+    }
+
         
     /// <summary>This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.</summary>
     IEnumerator DoDemoRoutine () {
