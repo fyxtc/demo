@@ -5,7 +5,7 @@ using Spine.Unity;
 public abstract class BaseController : MonoBehaviour {
 
 	protected BaseModel Model{get;set;}
-    protected bool IsMy{get;set;}
+    public bool IsMy{get;set;}
 	protected abstract void InitModel();
     public float speed = 0.1f;
 
@@ -52,11 +52,11 @@ public abstract class BaseController : MonoBehaviour {
         // StartCoroutine(DoDemoRoutine());
 
         InitModel ();
-        IsMy = true; // test
+        // IsMy = true; // test
          // skeleton.FlipX = !IsMy;
         Idle();
         startPos = transform.position;
-        endPos = new Vector3(6, transform.position.y);
+        endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
         handleCommand(TroopCommand.CMD_IDLE);
     }
 

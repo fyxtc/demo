@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System;
 
 public class PlayerTroopController : MonoBehaviour {
-    float[] posConfig = {-0.1f, -2.5f, -3.0f, -4.5f};
+    public bool isMy = true;
+    float[] posConfig = {-0.5f, -2.5f, -3.0f, -4.5f};
     int maxCount = 4; // 最多能带四个兵团
     Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
 	Dictionary<TroopType, List<GameObject>> troops = new Dictionary<TroopType, List<GameObject>>();
@@ -13,8 +14,8 @@ public class PlayerTroopController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        data.Add(TroopType.Saber, 5);
-        data.Add(TroopType.Archer, 5);
+        data.Add(TroopType.Saber, 1);
+        data.Add(TroopType.Archer, 1);
         InitTroops();
     }
 
@@ -28,12 +29,14 @@ public class PlayerTroopController : MonoBehaviour {
             case TroopType.Saber:
                 for(int i = 0; i < count; i++){
 					GameObject obj = Instantiate(saber);
+                    obj.GetComponent<SaberController>().IsMy = isMy;
                     characters.Add(obj);
                 }
                 break;
             case TroopType.Archer:
                 for(int i = 0; i < count; i++){
                     GameObject obj = Instantiate(archer);
+                    obj.GetComponent<ArcherController>().IsMy = isMy;
                     characters.Add(obj);
                 }
                 break;
@@ -55,7 +58,10 @@ public class PlayerTroopController : MonoBehaviour {
 
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
-                double x = posX - interval * (i);
+                double x = posX - interval * i;
+                if(!isMy){
+                    x = -x;
+                }
 				// Vector3 v = new Vector3((float)x, obj.transform.position.y, obj.transform.position.z);
                 // Debug.Log("x = " + x.ToString());
 				Vector3 v = new Vector3((float)x, obj.transform.position.y, 0);
@@ -67,15 +73,20 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
     double getTroopInterval(TroopType type){
+        double res = 0.0;
         switch (type) 
         {
-        case TroopType.Saber:
-            return ConfigManager.share().getCharacterConfig().Saber.Interval;
-        case TroopType.Archer:
-            return ConfigManager.share().getCharacterConfig().Archer.Interval;
+		case TroopType.Saber:
+			res = ConfigManager.share ().getCharacterConfig ().Saber.Interval;
+			break;
+		case TroopType.Archer:
+			res = ConfigManager.share ().getCharacterConfig ().Archer.Interval;
+			break;
+        default:
+            Debug.Assert(false);
+            break;
         }
-        Debug.Assert(false);
-		return 1.0;
+        return res;
     }
 
     float getRankPos(int rank){
