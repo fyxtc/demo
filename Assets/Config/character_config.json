@@ -5,10 +5,10 @@ interval: 兵团内部的排序，每个小兵直接的距离
 */
 {
     "rank_pos":{
-        "1":10,
-        "2":100,
-        "3":200,
-        "4":300
+        "1":0.1,
+        "2":1.5,
+        "3":3.0,
+        "4":4.5
     },
 
     "saber":{
@@ -18,7 +18,7 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "defense":10,
         "max_count":5, 
         "rank":1,
-        "interval":100
+        "interval":0.3
     },
 
     "archer":{
@@ -28,6 +28,6 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "defense":10,
         "max_count":5,
         "rank":2,
-        "interval":100
+        "interval":0.3
     }
 }

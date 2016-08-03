@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class PlayerTroopController : MonoBehaviour {
+    float[] posConfig = {-0.1f, -2.5f, -3.0f, -4.5f};
     int maxCount = 4; // 最多能带四个兵团
     Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
 	Dictionary<TroopType, List<GameObject>> troops = new Dictionary<TroopType, List<GameObject>>();
@@ -44,27 +45,28 @@ public class PlayerTroopController : MonoBehaviour {
     }
     
     void resort(){
-        int rank = 1;
+        int rank = 0;
         foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
             TroopType troopType = item.Key;
             List<GameObject> troop = item.Value;
-            double posX = getRankPos(rank);
-            double interval = getTroopInterval(troopType) / 100.0;
-            Debug.Log("interval: " + getTroopInterval(troopType).ToString() + ", " + interval.ToString());
+            float posX = getRankPos(rank);
+            double interval = getTroopInterval(troopType);
+            // Debug.Log("interval: " + getTroopInterval(troopType).ToString() + ", " + interval.ToString());
 
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
                 double x = posX - interval * (i);
 				// Vector3 v = new Vector3((float)x, obj.transform.position.y, obj.transform.position.z);
-                Debug.Log("x = " + x.ToString());
-                Vector3 v = new Vector3((float)x, 0, 0);
-				obj.transform.Translate(v);
+                // Debug.Log("x = " + x.ToString());
+				Vector3 v = new Vector3((float)x, obj.transform.position.y, 0);
+				obj.transform.position = v;
+				// obj.transform.Translate(v);
             }
             rank++;
         }
     }
 
-    int getTroopInterval(TroopType type){
+    double getTroopInterval(TroopType type){
         switch (type) 
         {
         case TroopType.Saber:
@@ -72,17 +74,12 @@ public class PlayerTroopController : MonoBehaviour {
         case TroopType.Archer:
             return ConfigManager.share().getCharacterConfig().Archer.Interval;
         }
-		return 1;
+        Debug.Assert(false);
+		return 1.0;
     }
 
-    double getRankPos(int rank){
-        switch (rank){
-        case 1:
-            return -0.1;
-        case 2:
-            return -1.0;
-        }
-		return 1.0;
+    float getRankPos(int rank){
+        return posConfig[rank];
     }
 
     // Update is called once per frame

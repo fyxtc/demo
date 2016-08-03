@@ -12,7 +12,7 @@ public class BaseModel{
     protected int defense;   
     protected int maxCount;
     protected int rank;
-    protected int interval;
+    protected double interval;
     public int Type{
         set{type = value;}
         get{return type;}
@@ -37,7 +37,7 @@ public class BaseModel{
         set{rank = value;}
         get{return rank;}
     }
-    public int Interval{
+    public double Interval{
         set{interval = value;}
         get{return interval;}
     }
@@ -75,7 +75,7 @@ public class CharacterConfig{
         saber.Defense = (int)saberData["defense"];
         saber.MaxCount = (int)saberData["max_count"];
         saber.Rank = (int)saberData["rank"];
-        saber.Interval = (int)saberData["interval"];
+		saber.Interval = (double)saberData["interval"];
 
         JsonData archerData = data["archer"];
         archer.Type = (int)archerData["type"];
@@ -84,12 +84,12 @@ public class CharacterConfig{
         archer.Defense = (int)archerData["defense"];
         archer.MaxCount = (int)archerData["max_count"];
         archer.Rank = (int)archerData["rank"];
-        archer.Interval = (int)archerData["interval"];
+        archer.Interval = (double)archerData["interval"];
 
     }
 
     string readFile(){
-        StreamReader sr = new StreamReader("Assets\\Config\\" + CHARACTER_CONFIG_FILE,Encoding.Default);
+        StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + CHARACTER_CONFIG_FILE,Encoding.Default);
         string line;
         string res = "";
         while ((line = sr.ReadLine()) != null) 
