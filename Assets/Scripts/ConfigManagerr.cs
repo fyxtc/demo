@@ -6,7 +6,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class BaseModel{
+public class BaseModel : ICloneable{
     protected int type;
     protected int life;
     protected int attack;
@@ -44,6 +44,11 @@ public class BaseModel{
     public double Interval{
         set{interval = value;}
         get{return interval;}
+    }
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
     }
 }
 
@@ -110,14 +115,26 @@ public class CharacterConfig{
     }
 }
 
+public enum SkillStatus{
+    STATUS_IDLE, STATUS_USING, STATUS_STOP,
+}
+
 public class SkillModel{
 	public double Attack{ get; set;}
 	public double Defense{ get; set;}
 	public double HitRate{ get; set;}
+    public double Time{ get; set;}
+    public double CD{ get; set;}
 }
 
 public enum SkillType{
     SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_HIT
+}
+
+public class SkillEvent : EventArgs{
+    public SkillType Type{get; set;}
+    public SkillStatus Status{get; set;}
+    public bool IsMy{get; set;}
 }
 
 public class SkillConfig{
@@ -135,6 +152,8 @@ public class SkillConfig{
             model.Attack = (double)skillType["attack"];
             model.Defense = (double)skillType["defense"];
             model.HitRate = (double)skillType["hitRate"];
+            model.Time = (double)skillType["time"];
+            model.CD = (double)skillType["cd"];
             skillModels.Add(model);
         }
     }

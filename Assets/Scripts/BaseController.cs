@@ -1,19 +1,45 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Spine.Unity;
+using System;
 
 public abstract class BaseController : MonoBehaviour {
-
-	protected BaseModel Model{get;set;}
+    protected BaseModel model;
+    protected BaseModel Model{
+        get{
+            if(isBuffing){
+                return AddBuffModel();
+            }else{
+                return model;
+            }
+        }
+        set{
+            model = value;
+        }
+    }
+    BaseModel AddBuffModel(){
+        BaseModel resModel = (BaseModel)model.Clone(); // 用Model，就无限递归了。。。，还有，不能用model，因为是引用，直接修改model的值了。。fuck
+        resModel.Attack = (int)(resModel.Attack * (1.0 + skillBuffModel.Attack));
+        resModel.Defense = (int)(resModel.Defense * (1.0 + skillBuffModel.Defense));
+        resModel.HitRate = resModel.HitRate * (1.0 + skillBuffModel.HitRate);
+        if(resModel.HitRate > 1.0){
+            resModel.HitRate = 1.0;
+        }
+        // Debug.Log("buff: attack " + resModel.Attack);
+        return resModel;
+    }
     public bool IsMy{get;set;}
-	protected abstract void InitModel();
+    protected abstract void InitModel();
     public float speed = 0.1f;
     private GameObject attackedTarget;
     public PlayerTroopController OtherTroopController{get; set;}
     public GameObject Attacker{get; set;}
-	public bool IsDead{ get; set;}
+    public bool IsDead{ get; set;}
+    SkillModel skillBuffModel = new SkillModel();
+    bool isBuffing = false;
 
-	protected enum TroopStatus{
+    protected enum TroopStatus{
         STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD,
     }
 
@@ -62,6 +88,11 @@ public abstract class BaseController : MonoBehaviour {
         startPos = transform.position;
         endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
         handleCommand(TroopCommand.CMD_IDLE);
+
+        for(int i = 0; i < 3; i++){
+            string tag = "skill_"+i;
+            GameObject.Find(tag).GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+        }
     }
 
     void Update(){
@@ -69,7 +100,7 @@ public abstract class BaseController : MonoBehaviour {
         case TroopStatus.STATUS_IDLE:
             break;
         case TroopStatus.STATUS_FORWARD:
-			transform.position = Vector3.Lerp(transform.position, endPos, 1/((transform.position - endPos).magnitude) * speed);
+            transform.position = Vector3.Lerp(transform.position, endPos, 1/((transform.position - endPos).magnitude) * speed);
             // Debug.Log(transform.position.x + ", " + endPos.x);
             // if(transform.position == endPos){
             //     handleCommand(TroopCommand.CMD_ATTACK);
@@ -81,7 +112,7 @@ public abstract class BaseController : MonoBehaviour {
         case TroopStatus.STATUS_ATTACK:
             break;
         case TroopStatus.STATUS_BACK:
-			transform.position = Vector3.Lerp(transform.position, startPos, 1/((transform.position - startPos).magnitude) * speed);
+            transform.position = Vector3.Lerp(transform.position, startPos, 1/((transform.position - startPos).magnitude) * speed);
             if(transform.position == startPos){
                 handleCommand(TroopCommand.CMD_IDLE);
             }
@@ -92,10 +123,10 @@ public abstract class BaseController : MonoBehaviour {
 
     GameObject FindAttackedTarget(){
         // Debug.Log(OtherTroopController);
-		GameObject obj = OtherTroopController.GetAttackTarget();
-		if (obj == null) {
-			return null;
-		}
+        GameObject obj = OtherTroopController.GetAttackTarget();
+        if (obj == null) {
+            return null;
+        }
         if(IsMy){
             if(transform.position.x + Model.AttackRange >= obj.transform.position.x){
                 return obj;
@@ -105,7 +136,7 @@ public abstract class BaseController : MonoBehaviour {
                 return obj;
             }
         }
-		return null;
+        return null;
     }
 
     void FixedUpdate(){
@@ -142,8 +173,8 @@ public abstract class BaseController : MonoBehaviour {
             // Debug.Log("my x:" + transform.position.x + " target x:" + attackedTarget.transform.position.x);
         }
         Invoke("DoBackDelay", 0.5f);
-		attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
-		attackedTarget.GetComponent<BaseController>().BeingAttacked();
+        attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
+        attackedTarget.GetComponent<BaseController>().BeingAttacked();
         // attackedTarget = null;
     }
 
@@ -162,7 +193,11 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     int CalcHarm(){
-		float att = Attacker.GetComponent<BaseController>().Model.Attack;
+        float att = Attacker.GetComponent<BaseController>().Model.Attack;
+        if(!IsMy){
+            Debug.Log("attacker att " + att);
+        }
+
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
         Debug.Assert(res >= 0, "CalcHarm error");
@@ -170,13 +205,13 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     bool CanMiss(){
-        return Random.value > Attacker.GetComponent<BaseController>().Model.HitRate; 
+        return UnityEngine.Random.value > Attacker.GetComponent<BaseController>().Model.HitRate; 
     }
 
     void Dead(){
         Debug.Log("dead");
         Model.Life = 0;
-		status = TroopStatus.STATUS_DEAD;
+        status = TroopStatus.STATUS_DEAD;
         IsDead = true;
         // Destroy(gameObject);
     }
@@ -195,11 +230,26 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     void DoBackDelay () {
-		handleCommand(TroopCommand.CMD_BACK);
+        handleCommand(TroopCommand.CMD_BACK);
     }
 
     void DoForwardDelay () {
         handleCommand(TroopCommand.CMD_FORWARD);
+    }
+
+
+    void OnSkillEvent(object sender, EventArgs e)
+    {
+        SkillEvent ev = (SkillEvent)e;
+        // 给自己的小兵加
+        if(ev.IsMy == IsMy){
+            Debug.Log("type " + ev.Type + ", status " + ev.Status);
+            isBuffing = ev.Status == SkillStatus.STATUS_USING;
+            // 感觉能叠加技能更混乱一点。。。也难写一点。。。。，先不叠加吧
+            if(isBuffing){
+                skillBuffModel = ConfigManager.share().SkillConfig.GetSkillModel(ev.Type);
+            }
+        }
     }
 
         
