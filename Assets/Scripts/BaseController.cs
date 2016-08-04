@@ -8,9 +8,13 @@ public abstract class BaseController : MonoBehaviour {
     public bool IsMy{get;set;}
 	protected abstract void InitModel();
     public float speed = 0.1f;
+    private GameObject attackedTarget;
+    public PlayerTroopController OtherTroopController{get; set;}
+    public GameObject Attacker{get; set;}
+	public bool IsDead{ get; set;}
 
 	protected enum TroopStatus{
-        STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK,
+        STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD,
     }
 
     protected TroopStatus status;
@@ -67,7 +71,10 @@ public abstract class BaseController : MonoBehaviour {
         case TroopStatus.STATUS_FORWARD:
 			transform.position = Vector3.Lerp(transform.position, endPos, 1/((transform.position - endPos).magnitude) * speed);
             // Debug.Log(transform.position.x + ", " + endPos.x);
-            if(transform.position == endPos){
+            // if(transform.position == endPos){
+            //     handleCommand(TroopCommand.CMD_ATTACK);
+            // }
+            if(attackedTarget = FindAttackedTarget()){
                 handleCommand(TroopCommand.CMD_ATTACK);
             }
             break;
@@ -83,11 +90,29 @@ public abstract class BaseController : MonoBehaviour {
 
     }
 
+    GameObject FindAttackedTarget(){
+        // Debug.Log(OtherTroopController);
+		GameObject obj = OtherTroopController.GetAttackTarget();
+		if (obj == null) {
+			return null;
+		}
+        if(IsMy){
+            if(transform.position.x + Model.AttackRange >= obj.transform.position.x){
+                return obj;
+            }
+        }else{
+            if(transform.position.x - Model.AttackRange <= obj.transform.position.x){
+                return obj;
+            }
+        }
+		return null;
+    }
+
     void FixedUpdate(){
     }
 
     void handleCommand(TroopCommand cmd){
-        Debug.Log("handleCommand " + cmd);
+        // Debug.Log("handleCommand " + cmd);
         switch(cmd){
         case TroopCommand.CMD_IDLE:
             Idle();
@@ -113,7 +138,38 @@ public abstract class BaseController : MonoBehaviour {
     void Attack(){
         status = TroopStatus.STATUS_ATTACK;
         spineAnimationState.SetAnimation(0, shootAnimationName, false);
+        if(IsMy){
+            // Debug.Log("my x:" + transform.position.x + " target x:" + attackedTarget.transform.position.x);
+        }
         Invoke("DoBackDelay", 0.5f);
+		attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
+		attackedTarget.GetComponent<BaseController>().BeingAttacked();
+        // attackedTarget = null;
+    }
+
+    public void BeingAttacked(){
+        Model.Life -= CalcHarm();
+        Debug.Log("Life : " + Model.Life);
+        if(Model.Life <= 0){
+            Dead();
+        }
+        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+    }
+
+    int CalcHarm(){
+		float att = Attacker.GetComponent<BaseController>().Model.Attack;
+        float def = Model.Defense;
+        int res = (int)(att * (att / (att + def)));
+        Debug.Assert(res >= 0, "CalcHarm error");
+        return res;
+    }
+
+    void Dead(){
+        Debug.Log("dead");
+        Model.Life = 0;
+		status = TroopStatus.STATUS_DEAD;
+        IsDead = true;
+        // Destroy(gameObject);
     }
 
     void Back(){
@@ -126,7 +182,7 @@ public abstract class BaseController : MonoBehaviour {
         status = TroopStatus.STATUS_IDLE;
         skeleton.FlipX = !IsMy;
         spineAnimationState.SetAnimation(0, idleAnimationName, true);
-        Invoke("DoForwardDelay", 2.0f);
+        Invoke("DoForwardDelay", (float)Model.AttackCD);
     }
 
     void DoBackDelay () {

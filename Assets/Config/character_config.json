@@ -13,23 +13,25 @@ interval: 兵团内部的排序，每个小兵直接的距离
 
     "saber":{
         "type":1,
-        "life":100,
+        "life":20,
         "attack":10,
         "defense":10,
         "max_count":5, 
         "rank":1,
         "interval":0.3,
-        "attackRange":0.1
+        "attackRange":1.0,
+        "attackCD":2.0
     },
 
     "archer":{
         "type":2,
-        "life":80,
+        "life":15,
         "attack":10,
         "defense":10,
         "max_count":5,
         "rank":2,
         "interval":0.3,
-        "attackRange":0.3
+        "attackRange":3.0,
+        "attackCD":4.0
     }
 }
