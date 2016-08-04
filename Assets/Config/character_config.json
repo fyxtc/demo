@@ -20,7 +20,8 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "rank":1,
         "interval":0.3,
         "attackRange":1.0,
-        "attackCD":2.0
+        "attackCD":2.0,
+        "hitRate":0.9
     },
 
     "archer":{
@@ -32,6 +33,7 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "rank":2,
         "interval":0.3,
         "attackRange":3.0,
-        "attackCD":4.0
+        "attackCD":4.0,
+        "hitRate":0.9
     }
 }

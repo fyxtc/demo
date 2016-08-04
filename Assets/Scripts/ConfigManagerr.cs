@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class BaseModel{
     protected int type;
@@ -15,6 +16,7 @@ public class BaseModel{
     protected double interval;
     public double AttackRange{get; set;}
     public double AttackCD{get; set;}
+    public double HitRate{get; set;}
     public int Type{
         set{type = value;}
         get{return type;}
@@ -66,8 +68,8 @@ public class CharacterConfig{
         get{return archer;}
     }
 
-    public void loadConfig(){
-        string str = readFile();
+    public void LoadConfig(){
+        string str = ReadFile();
         JsonData data = JsonMapper.ToObject(str);
 
         JsonData saberData = data["saber"];
@@ -79,7 +81,8 @@ public class CharacterConfig{
         saber.Rank = (int)saberData["rank"];
         saber.Interval = (double)saberData["interval"];
         saber.AttackRange = (double)saberData["attackRange"];
-		saber.AttackCD = (double)saberData["attackCD"];
+        saber.AttackCD = (double)saberData["attackCD"];
+		saber.HitRate = (double)saberData["hitRate"];
 
         JsonData archerData = data["archer"];
         archer.Type = (int)archerData["type"];
@@ -91,11 +94,60 @@ public class CharacterConfig{
         archer.Interval = (double)archerData["interval"];
         archer.AttackRange = (double)archerData["attackRange"];
         archer.AttackCD = (double)archerData["attackCD"];
+        archer.HitRate = (double)archerData["hitRate"];
 
     }
 
-    string readFile(){
+    string ReadFile(){
         StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + CHARACTER_CONFIG_FILE,Encoding.Default);
+        string line;
+        string res = "";
+        while ((line = sr.ReadLine()) != null) 
+        {
+            res += line;
+        }
+        return res;
+    }
+}
+
+public class SkillModel{
+	public double Attack{ get; set;}
+	public double Defense{ get; set;}
+	public double HitRate{ get; set;}
+}
+
+public enum SkillType{
+    SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_HIT
+}
+
+public class SkillConfig{
+    int skillCount = 3;
+    public const string SKILL_CONFIG_FILE = "skill_config.json";
+    List<SkillModel> skillModels = new List<SkillModel>();
+
+    public void LoadConfig(){
+        string str = ReadFile();
+        JsonData data = JsonMapper.ToObject(str);
+        for(int i = 0; i < skillCount; i++){
+            string key = "skill"+i;
+            SkillModel model = new SkillModel();
+            JsonData skillType = data[key];
+            model.Attack = (double)skillType["attack"];
+            model.Defense = (double)skillType["defense"];
+            model.HitRate = (double)skillType["hitRate"];
+            skillModels.Add(model);
+        }
+    }
+
+    public SkillModel GetSkillModel(SkillType type){
+        if(skillModels.Count == 0){
+            LoadConfig();
+        }
+        return skillModels[(int)type];
+    }
+
+    string ReadFile(){
+        StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + SKILL_CONFIG_FILE,Encoding.Default);
         string line;
         string res = "";
         while ((line = sr.ReadLine()) != null) 
@@ -108,8 +160,15 @@ public class CharacterConfig{
 
 public class ConfigManager{
     public static ConfigManager instance;
-    private CharacterConfig characterConfig = new CharacterConfig();
+	public CharacterConfig CharacterConfig{ get; set;}
+	public SkillConfig SkillConfig{ get; set;}
     bool isLoaded = false;
+
+    public ConfigManager(){
+        CharacterConfig = new CharacterConfig();
+        SkillConfig = new SkillConfig();
+        LoadConfig();
+    }
 
     public static ConfigManager share(){
 		if(instance == null){
@@ -117,16 +176,14 @@ public class ConfigManager{
         }
         return instance;
     }
-    public void loadConfig(){
+    public void LoadConfig(){
         if(!isLoaded){
             isLoaded = true;
-            characterConfig.loadConfig();
+            CharacterConfig.LoadConfig();
+            SkillConfig.LoadConfig();
         }
     }
-    public CharacterConfig getCharacterConfig(){
-        loadConfig();
-        return characterConfig;
-    }
+
 
     // static void Main(string[] arg){
     //     ConfigManager.share().loadConfig();

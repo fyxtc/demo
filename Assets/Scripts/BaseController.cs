@@ -148,12 +148,17 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     public void BeingAttacked(){
-        Model.Life -= CalcHarm();
-        Debug.Log("Life : " + Model.Life);
-        if(Model.Life <= 0){
-            Dead();
+        if(CanMiss()){
+            // miss anim
+            Debug.Log("attack miss");
+        }else{
+            Model.Life -= CalcHarm();
+            // Debug.Log("Life : " + Model.Life);
+            if(Model.Life <= 0){
+                Dead();
+            }
+            transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         }
-        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
     }
 
     int CalcHarm(){
@@ -162,6 +167,10 @@ public abstract class BaseController : MonoBehaviour {
         int res = (int)(att * (att / (att + def)));
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
+    }
+
+    bool CanMiss(){
+        return Random.value > Attacker.GetComponent<BaseController>().Model.HitRate; 
     }
 
     void Dead(){

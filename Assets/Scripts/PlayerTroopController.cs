@@ -16,6 +16,9 @@ public class PlayerTroopController : MonoBehaviour {
     public GameObject otherTroopObj;
     private PlayerTroopController otherTroopController;
 
+    // SKILL -------------------
+
+
 	// Use this for initialization
 	void Start () {
         data.Add(TroopType.Saber, 1);
@@ -136,10 +139,10 @@ public class PlayerTroopController : MonoBehaviour {
         switch (type) 
         {
 		case TroopType.Saber:
-			res = ConfigManager.share ().getCharacterConfig ().Saber.Interval;
+			res = ConfigManager.share ().CharacterConfig.Saber.Interval;
 			break;
 		case TroopType.Archer:
-			res = ConfigManager.share ().getCharacterConfig ().Archer.Interval;
+			res = ConfigManager.share ().CharacterConfig.Archer.Interval;
 			break;
         default:
             Debug.Assert(false);
