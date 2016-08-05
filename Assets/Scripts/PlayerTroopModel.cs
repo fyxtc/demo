@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 enum TroopType{
-    Saber=1,Archer=2
+    Saber=0,Archer=1
 }
 
 // public class PlayerTroopModel {

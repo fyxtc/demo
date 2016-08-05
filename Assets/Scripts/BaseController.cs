@@ -181,7 +181,7 @@ public abstract class BaseController : MonoBehaviour {
     public void BeingAttacked(){
         if(CanMiss()){
             // miss anim
-            Debug.Log("attack miss");
+            // Debug.Log("attack miss");
         }else{
             Model.Life -= CalcHarm();
             // Debug.Log("Life : " + Model.Life);
@@ -195,7 +195,7 @@ public abstract class BaseController : MonoBehaviour {
     int CalcHarm(){
         float att = Attacker.GetComponent<BaseController>().Model.Attack;
         if(!IsMy){
-            Debug.Log("attacker att " + att);
+            // Debug.Log("attacker att " + att);
         }
 
         float def = Model.Defense;

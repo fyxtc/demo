@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class PlayerTroopController : MonoBehaviour {
     public bool isMy = true;
@@ -16,8 +17,8 @@ public class PlayerTroopController : MonoBehaviour {
     public GameObject otherTroopObj;
     private PlayerTroopController otherTroopController;
 
-    // SKILL -------------------
-
+    // UI
+    public List<Text> countText;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +30,7 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
     void InitTroops(){
+        int textIndex = 0;
         foreach (KeyValuePair<TroopType, int> item in data) {
             TroopType troopType = item.Key;
             int count = item.Value;
@@ -53,10 +55,20 @@ public class PlayerTroopController : MonoBehaviour {
                 break;
             }
             troops.Add(troopType, characters);
+            // Debug.Log(textIndex + " / " + countText.Count);
+            countText[textIndex].text = "" + count;
+            textIndex++;
+        }
+
+        while(countText.Count > troops.Count){
+            int last = countText.Count - 1;
+            Destroy(countText[last]);
+            countText.RemoveAt(last);
         }
         Debug.Assert(troops.Count > 0 && troops.Count < maxCount, "troops count error");
         resort();
     }
+
 
     public GameObject GetAttackTarget(){
         if(troops.Count == 0){
@@ -87,10 +99,14 @@ public class PlayerTroopController : MonoBehaviour {
 		return target;
     }
 
+    Text GetTextByTroopType(TroopType type){
+        return countText[(int)type]; // 这里应该要根据rank来的。。。先简单写
+    }
+
     void CleanDeadObj(){
 		bool isOver = true;
         foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
-//            TroopType troopType = item.Key;
+           TroopType troopType = item.Key;
             List<GameObject> troop = item.Value;
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
@@ -99,6 +115,7 @@ public class PlayerTroopController : MonoBehaviour {
                     troop.RemoveAt(i);
                 }
             }
+            GetTextByTroopType(troopType).text = troop.Count + "";
 			if (troop.Count > 0) {
 				isOver = false;
 			}
@@ -130,6 +147,7 @@ public class PlayerTroopController : MonoBehaviour {
 				obj.transform.position = v;
 				// obj.transform.Translate(v);
             }
+            // countText[rank].transform.position = new Vector3(posX, countText[rank].transform.position.y, 0);
             rank++;
         }
     }
