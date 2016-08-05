@@ -19,6 +19,9 @@ public class PlayerTroopController : MonoBehaviour {
 
     // UI
     public List<Text> countText;
+    public List<Button> skillButtons;
+    bool isBuffing = false;
+    SkillController buffingController = null;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +30,10 @@ public class PlayerTroopController : MonoBehaviour {
         otherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
         InitTroops();
         // Debug.Log("my is my " + isMy + " other is my " + otherTroopController.isMy);
+
+        foreach(Button btn in skillButtons){
+            btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+        }
     }
 
     void InitTroops(){
@@ -123,6 +130,26 @@ public class PlayerTroopController : MonoBehaviour {
         if(isOver){
             IsGameOver = true;
             Debug.Log(isMy ? "you lose" : "you win");
+        }
+    }
+
+    void OnSkillEvent(object sender, EventArgs e){
+        SkillEvent ev = (SkillEvent)e;
+        // 给自己对应的小兵加
+        if(ev.IsMy == isMy){
+            // 如果已经处于技能中，而且又来了一个使用，需要覆盖，先stop当前的
+            if(isBuffing && ev.Status == SkillStatus.STATUS_USING && buffingController){
+                buffingController.IsForceStop = true;
+                buffingController.SkillStop();
+            }
+            buffingController = (SkillController)sender;
+            Debug.Assert(buffingController, "buffingController error");
+            isBuffing = ev.Status == SkillStatus.STATUS_USING;
+            foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
+                foreach(GameObject obj in item.Value){
+					obj.GetComponent<BaseController>().OnSkillEvent(sender, e);
+                }
+            }
         }
     }
     

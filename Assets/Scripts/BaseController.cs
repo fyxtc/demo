@@ -39,6 +39,8 @@ public abstract class BaseController : MonoBehaviour {
     SkillModel skillBuffModel = new SkillModel();
     bool isBuffing = false;
 
+    public GameObject skillTip;
+
     protected enum TroopStatus{
         STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD,
     }
@@ -89,10 +91,10 @@ public abstract class BaseController : MonoBehaviour {
         endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
         handleCommand(TroopCommand.CMD_IDLE);
 
-        for(int i = 0; i < 3; i++){
-            string tag = "skill_"+i;
-            GameObject.Find(tag).GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
-        }
+        // for(int i = 0; i < 3; i++){
+        //     string tag = "skill_"+i;
+        //     GameObject.Find(tag).GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+        // }
     }
 
     void Update(){
@@ -238,16 +240,22 @@ public abstract class BaseController : MonoBehaviour {
     }
 
 
-    void OnSkillEvent(object sender, EventArgs e)
+    public void OnSkillEvent(object sender, EventArgs e)
     {
         SkillEvent ev = (SkillEvent)e;
         // 给自己的小兵加
         if(ev.IsMy == IsMy){
             Debug.Log("type " + ev.Type + ", status " + ev.Status);
             isBuffing = ev.Status == SkillStatus.STATUS_USING;
-            // 感觉能叠加技能更混乱一点。。。也难写一点。。。。，先不叠加吧
+            // 感觉能叠加技能更混乱一点。。。也难写一点。。。。，先不叠加吧, 直接覆盖
+            // 这里现在有一个bug，就是如果覆盖的时候是没有调用skillstop的，这里有问题，但我也不能发啊，发过来这里把现在的又停了。。
+            // 就算现在不发，到时间照样会来一个stop...shit
+			SpriteRenderer spr = skillTip.GetComponent<SpriteRenderer>();  
             if(isBuffing){
                 skillBuffModel = ConfigManager.share().SkillConfig.GetSkillModel(ev.Type);
+				spr.sprite = skillTip.GetComponent<SkillTipController>().tipImages[(int)ev.Type];
+            }else{
+                spr.sprite = null;
             }
         }
     }

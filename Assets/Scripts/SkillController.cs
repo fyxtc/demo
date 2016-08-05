@@ -9,6 +9,7 @@ public class SkillController : MonoBehaviour {
 	public event EventHandler SkillEventHandler;
 	public SkillEvent SkillEvent{get; set;}
 	public bool isMy = true;
+	public bool IsForceStop{get; set;}
 
 	SkillStatus status;
 
@@ -50,10 +51,15 @@ public class SkillController : MonoBehaviour {
 		SkillEventHandler(this, SkillEvent);
 	}
 
-	void SkillStop(){
+	public void SkillStop(){
 		status = SkillStatus.STATUS_STOP;
-		SkillEvent.Status = status;
-		SkillEventHandler(this, SkillEvent);
+		if(IsForceStop){
+			IsForceStop = false;
+			// do nothing
+		}else{
+			SkillEvent.Status = status;
+			SkillEventHandler(this, SkillEvent);
+		}
 		// Debug.Log ("skill " + skillType + " stop");
 	}
 
