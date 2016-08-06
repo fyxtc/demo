@@ -1,0 +1,46 @@
+/*
+type: 0 技能触发，1 状态触发，2 自带光环
+property: 0 攻击，1 防御，2 攻速，3 命中率，4 生命值
+effect: 加成的比例，有可能为负
+skill: 总对应type0情况，表示哪一种技能触发
+status: 总对应type1情况，表示哪一种状态触发 0 休息，1 攻击，2 防御，3 移动，4 死亡
+target: 可适用的目标，对应character_config里面的type，100 所有兵种，0 saber，1 archer
+*/
+
+[
+    {
+        "id":0,
+        "type":0,
+        "property":0,
+        "effect":0.1,
+        "rate":0.1,
+        "skill":0,
+        "target":[100]
+    },
+    {
+        "id":1,
+        "type":0,
+        "property":1,
+        "effect":0.1,
+        "rate":0.1,
+        "skill":1,
+        "target":[0]
+    },
+    {
+        "id":2,
+        "type":1,
+        "property":2,
+        "effect":0.1,
+        "rate":0.1,
+        "status":2,
+        "target":[0,1]
+    },
+    {
+        "id":3,
+        "type":2,
+        "property":3,
+        "effect":0.1,
+        "rate":0.1,
+        "target":[100,0,1]
+    }
+]

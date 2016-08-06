@@ -25,8 +25,8 @@ public class PlayerTroopController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        data.Add(TroopType.Saber, 1);
-        data.Add(TroopType.Archer, 1);
+        data.Add(TroopType.TROOP_SABER, 1);
+        data.Add(TroopType.TROOP_ARCHER, 1);
         otherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
         InitTroops();
         // Debug.Log("my is my " + isMy + " other is my " + otherTroopController.isMy);
@@ -44,7 +44,7 @@ public class PlayerTroopController : MonoBehaviour {
             // Debug.Log("key=" + item.Key.ToString() + "；value=" + item.Value.ToString());  
             List<GameObject> characters = new List<GameObject>();
             switch (troopType){
-            case TroopType.Saber:
+            case TroopType.TROOP_SABER:
                 for(int i = 0; i < count; i++){
 					GameObject obj = Instantiate(saber);
                     obj.GetComponent<SaberController>().IsMy = isMy;
@@ -52,7 +52,7 @@ public class PlayerTroopController : MonoBehaviour {
                     characters.Add(obj);
                 }
                 break;
-            case TroopType.Archer:
+            case TroopType.TROOP_ARCHER:
                 for(int i = 0; i < count; i++){
                     GameObject obj = Instantiate(archer);
                     obj.GetComponent<ArcherController>().IsMy = isMy;
@@ -183,11 +183,11 @@ public class PlayerTroopController : MonoBehaviour {
         double res = 0.0;
         switch (type) 
         {
-		case TroopType.Saber:
-			res = ConfigManager.share ().CharacterConfig.Saber.Interval;
+		case TroopType.TROOP_SABER:
+			res = ConfigManager.share ().CharacterConfig.GetModel(TroopType.TROOP_SABER).Interval;
 			break;
-		case TroopType.Archer:
-			res = ConfigManager.share ().CharacterConfig.Archer.Interval;
+		case TroopType.TROOP_ARCHER:
+			res = ConfigManager.share ().CharacterConfig.GetModel(TroopType.TROOP_ARCHER).Interval;
 			break;
         default:
             Debug.Assert(false);

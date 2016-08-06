@@ -41,7 +41,7 @@ public abstract class BaseController : MonoBehaviour {
 
     public GameObject skillTip;
 
-    protected enum TroopStatus{
+    public enum TroopStatus{
         STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD,
     }
 

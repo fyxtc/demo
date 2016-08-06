@@ -1,23 +1,25 @@
 using System.Collections;
 using LitJson;
-using System.IO;
 using System.Text;
 using System;
 using UnityEngine;
 using System.Collections.Generic;
 
 public class BaseModel : ICloneable{
-    protected int type;
-    protected int life;
-    protected int attack;
-    protected int defense;   
-    protected int maxCount;
-    protected int rank;
-    protected double interval;
-    public double AttackRange{get; set;}
-    public double AttackCD{get; set;}
-    public double HitRate{get; set;}
-    public int Type{
+    // public just for litjson mapper
+    public TroopType type; // 靠，这里厉害了，直接在饮食的时候int强转enum了
+    public int life;
+    public int attack;
+    public int defense;   
+    public int maxCount;
+    public int rank;
+    public double interval;
+    public double attackRange;
+    public double attackCD;
+    public double hitRate;
+    public int[] tricks;
+
+    public TroopType Type{
         set{type = value;}
         get{return type;}
     } 
@@ -45,11 +47,36 @@ public class BaseModel : ICloneable{
         set{interval = value;}
         get{return interval;}
     }
+    public double AttackRange{
+        set{attackRange = value;}
+        get{return attackRange;}
+    }
+    public double AttackCD{
+        set{attackCD = value;}
+        get{return attackCD;}
+    }
+    public double HitRate{
+        set{hitRate = value;}
+        get{return hitRate;}
+    }
+    public int[] Tricks{
+        set{tricks = value;}
+        get{return tricks;}
+    }
+
 
     public object Clone()
     {
         return this.MemberwiseClone();
     }
+
+    public override string ToString(){
+		return "type:" + type + ", attack:" + attack + ", defense:" + defense + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
+    }
+}
+
+public enum TroopType{
+    TROOP_SABER=0, TROOP_ARCHER=1, TROOP_ALL=100
 }
 
 public class Saber : BaseModel{
@@ -62,6 +89,7 @@ public class Archer: BaseModel{
 
 public class CharacterConfig{
     public const string CHARACTER_CONFIG_FILE = "character_config.json";
+    public BaseModel[] models;
     private Saber saber = new Saber();
     private Archer archer = new Archer();
     public Saber Saber{
@@ -74,44 +102,15 @@ public class CharacterConfig{
     }
 
     public void LoadConfig(){
-        string str = ReadFile();
-        JsonData data = JsonMapper.ToObject(str);
-
-        JsonData saberData = data["saber"];
-        saber.Type = (int)saberData["type"];
-        saber.Life = (int)saberData["life"];
-        saber.Attack = (int)saberData["attack"];
-        saber.Defense = (int)saberData["defense"];
-        saber.MaxCount = (int)saberData["max_count"];
-        saber.Rank = (int)saberData["rank"];
-        saber.Interval = (double)saberData["interval"];
-        saber.AttackRange = (double)saberData["attackRange"];
-        saber.AttackCD = (double)saberData["attackCD"];
-		saber.HitRate = (double)saberData["hitRate"];
-
-        JsonData archerData = data["archer"];
-        archer.Type = (int)archerData["type"];
-        archer.Life = (int)archerData["life"];
-        archer.Attack = (int)archerData["attack"];
-        archer.Defense = (int)archerData["defense"];
-        archer.MaxCount = (int)archerData["max_count"];
-        archer.Rank = (int)archerData["rank"];
-        archer.Interval = (double)archerData["interval"];
-        archer.AttackRange = (double)archerData["attackRange"];
-        archer.AttackCD = (double)archerData["attackCD"];
-        archer.HitRate = (double)archerData["hitRate"];
-
+        string str = DemoUtil.ReadConfigFile(CHARACTER_CONFIG_FILE);
+		models = JsonMapper.ToObject<BaseModel[]>(str);
+        // foreach (BaseModel m in models){
+        //     Debug.Log(m);
+        // }
     }
 
-    string ReadFile(){
-        StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + CHARACTER_CONFIG_FILE,Encoding.Default);
-        string line;
-        string res = "";
-        while ((line = sr.ReadLine()) != null) 
-        {
-            res += line;
-        }
-        return res;
+    public BaseModel GetModel(TroopType type){
+        return models[(int)type];
     }
 }
 
@@ -128,7 +127,7 @@ public class SkillModel{
 }
 
 public enum SkillType{
-    SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_HIT
+    SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_HIT, SKILL_INVALID=-1
 }
 
 public class SkillEvent : EventArgs{
@@ -143,7 +142,7 @@ public class SkillConfig{
     List<SkillModel> skillModels = new List<SkillModel>();
 
     public void LoadConfig(){
-        string str = ReadFile();
+        string str = DemoUtil.ReadConfigFile(SKILL_CONFIG_FILE);
         JsonData data = JsonMapper.ToObject(str);
         for(int i = 0; i < skillCount; i++){
             string key = "skill"+i;
@@ -165,27 +164,109 @@ public class SkillConfig{
         return skillModels[(int)type];
     }
 
-    string ReadFile(){
-        StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + SKILL_CONFIG_FILE,Encoding.Default);
-        string line;
-        string res = "";
-        while ((line = sr.ReadLine()) != null) 
-        {
-            res += line;
-        }
-        return res;
+}
+
+
+public enum TrickProperty{
+    PROPERTY_ATTACK=0, PROPERTY_DEFENSE, PROPERTY_SPEED, PROPERTY_HIT, PROPERTY_LIFE,
+}
+
+public enum TrickType{
+    TRICK_SKILL=0, TRICK_STATUS, TRICK_NATURAL, TRICK_INVALID=-1
+}
+
+// 这和TroopStatus不完全一样，所以要重新定义
+public enum TrickStatusType{
+    STATUS_IDLE=0, STATUS_MOVE, STATUS_ATTACK, STATUS_DEFENSE, STATUS_DEAD, STATUS_INVALID=-1
+}
+
+public class BaseTrickModel{
+    // public just for litjson mapper...orz
+    public int id;
+    public TrickType type;
+    public TrickProperty property;
+    public double effect;
+    public double rate;
+    public TroopType[] target;
+    // skill 和status都放在base里，这样方便映射，默认为无效值即可，这样该有值的就自己复写了，问题在于现在要怎么转换，或者直接在config再根据type区分list出来，虽然统一读取的
+    public SkillType skill = SkillType.SKILL_INVALID;
+    public TrickStatusType status = TrickStatusType.STATUS_INVALID;
+
+    public int Id{
+		get{return id;}
+        set{id = value;}
     }
+    public TrickType Type{
+		get{return type;}
+        set{type = value;}
+    }
+    public TrickProperty Property{
+		get{return property;}
+		set{property = value;;}
+    }
+    public double Effect{
+		get{return effect;}
+        set{effect = value;}
+    }
+    public double Rate{
+		get{return rate;}
+        set{rate = value;}
+    }
+    public TroopType[] Target{
+		get{return target;}
+        set{target = value;}
+    }
+    public SkillType Skill{
+        get{return skill;}
+        set{skill = value;}
+    }
+    public TrickStatusType Status{
+        get{return status;}
+        set{status = value;}
+    }
+
+    public override string ToString(){
+        return "id:"+id+", type:"+type+", property:"+property+", effect:"+effect+", rate:"+rate+", target:"+target.Length+", skill:"+skill+", status:"+status;
+    }
+}
+
+public class SkillTrickModel : BaseTrickModel{
+
+}
+
+public class StatusTrickModel : BaseTrickModel{
+
+}
+
+public class TrickConfig{
+    public const string TRICK_CONFIG_FILE = "trick_config.json";
+    private BaseTrickModel[] models;
+    public void LoadConfig(){
+        string str = DemoUtil.ReadConfigFile(TRICK_CONFIG_FILE);
+        JsonData data = JsonMapper.ToObject(str);
+        models = JsonMapper.ToObject<BaseTrickModel[]>(str);
+        // foreach (BaseTrickModel m in models){
+        //     Debug.Log(m);
+        // }
+    }
+
+    public BaseTrickModel GetModel(int id){
+        return models[id];
+    }
+
 }
 
 public class ConfigManager{
     public static ConfigManager instance;
 	public CharacterConfig CharacterConfig{ get; set;}
 	public SkillConfig SkillConfig{ get; set;}
+    public TrickConfig TrickConfig{ get; set;}
     bool isLoaded = false;
 
     public ConfigManager(){
         CharacterConfig = new CharacterConfig();
         SkillConfig = new SkillConfig();
+        TrickConfig = new TrickConfig();
         LoadConfig();
     }
 
@@ -200,6 +281,7 @@ public class ConfigManager{
             isLoaded = true;
             CharacterConfig.LoadConfig();
             SkillConfig.LoadConfig();
+            TrickConfig.LoadConfig();
         }
     }
 

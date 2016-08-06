@@ -1,39 +1,34 @@
 /** 
 rank: 兵团外部的排序，站位是按照rank顺序来的
 interval: 兵团内部的排序，每个小兵直接的距离
-注意最后一个字段不能接逗号。。。ORZ
+注意最后一个字段不能接逗号。。。否则报错：JsonException: Invalid token '125' in input string
 */
-{
-    "rank_pos":{
-        "1":0.1,
-        "2":1.5,
-        "3":3.0,
-        "4":4.5
-    },
-
-    "saber":{
-        "type":1,
+[
+    {
+        "type":0,
         "life":20,
         "attack":10,
         "defense":10,
-        "max_count":5, 
+        "maxCount":5, 
         "rank":1,
         "interval":0.3,
         "attackRange":1.0,
         "attackCD":2.0,
-        "hitRate":0.9
+        "hitRate":0.9,
+        "tricks":[0,1]
     },
 
-    "archer":{
-        "type":2,
+    {
+        "type":1,
         "life":15,
         "attack":10,
         "defense":10,
-        "max_count":5,
+        "maxCount":5,
         "rank":2,
         "interval":0.3,
         "attackRange":3.0,
         "attackCD":4.0,
-        "hitRate":0.9
+        "hitRate":0.9,
+        "tricks":[0]
     }
-}
+]
