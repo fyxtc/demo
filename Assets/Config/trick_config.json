@@ -31,8 +31,8 @@ self: 表示是否给己方部队
     },
     {
         "id":2,
-        "type":1,
-        "property":2,
+        "type":2,
+        "property":3,
         "effect":0.5,
         "rate":1.0,
         "status":2,

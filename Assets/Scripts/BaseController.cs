@@ -94,10 +94,19 @@ public abstract class BaseController : MonoBehaviour {
         endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
         // handleCommand(TroopCommand.CMD_IDLE);
 
-        // for(int i = 0; i < 3; i++){
-        //     string tag = "skill_"+i;
-        //     GameObject.Find(tag).GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
-        // }
+        Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
+        // Invoke("Test", 5);
+    }
+
+    void DispatchNaturalTricks(){
+        List<int> trickIds = TrickController.OnNaturalTrick(true);
+        MyTroopController.DispatchTricks(trickIds, true);
+    }
+
+    void Test(){
+        if(Model.Type == TroopType.TROOP_SABER && IsMy){
+            Dead();
+        }
     }
 
     void Update(){
@@ -258,7 +267,7 @@ public abstract class BaseController : MonoBehaviour {
                 spr.sprite = null;
             }
             List<int> trickIds = TrickController.GetSkillTrick(ev.Type);
-            MyTroopController.OnTrickEvent(trickIds, isBuffing);
+            MyTroopController.DispatchTricks(trickIds, isBuffing);
 
             Debug.Log("AFTER SKILL&TRICK: " + Model);
         }

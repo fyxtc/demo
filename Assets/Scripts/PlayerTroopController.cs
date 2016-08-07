@@ -167,9 +167,9 @@ public class PlayerTroopController : MonoBehaviour {
         }
     }
 
-    public void OnTrickEvent(List<int> trickIds, bool isStart){
+    public void DispatchTricks(List<int> trickIds, bool isStart){
         // 所有这个时刻触发的特技的分发处理，所有的basecontroller的status trick应该都要回传到这里再次转发
-        Debug.Log("OnTrickEvent count:" + trickIds.Count);
+        Debug.Log("DispatchTricks count:" + trickIds.Count);
         foreach(int id in trickIds){
             if(trickConfig.GetModel(id).IsSelf){
                 DispatchTrick(id, isStart);

@@ -15,7 +15,7 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
-        "tricks":[0,1]
+        "tricks":[2]
     },
 
     {
@@ -29,6 +29,6 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "attackRange":3.0,
         "attackCD":4.0,
         "hitRate":0.9,
-        "tricks":[0]
+        "tricks":[]
     }
 ]
