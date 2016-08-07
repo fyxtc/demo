@@ -7,4 +7,8 @@ public class SaberController : BaseController {
 		Model = ConfigManager.share().CharacterConfig.GetModel(TroopType.TROOP_SABER);;
 		// Debug.Log(model.Life);
 	}
+
+    protected override void InitTrickController(){
+		TrickController = new TrickController (Model.Tricks);
+    }
 }

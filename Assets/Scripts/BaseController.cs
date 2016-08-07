@@ -6,38 +6,39 @@ using System;
 
 public abstract class BaseController : MonoBehaviour {
     protected BaseModel model;
-    protected BaseModel Model{
+    public BaseModel Model{
         get{
+            BaseModel resModel = model;
             if(isBuffing){
-                return AddBuffModel();
-            }else{
-                return model;
+                resModel = AddSkillModel();
+                // Debug.Log("buffing: " + resModel);
             }
+            resModel = AddTrickModels(resModel);
+			// if(trickingIds.Count > 0){
+   //              Debug.Log("base: " + model);
+   //              Debug.Log("tricking: " + resModel);
+   //          }
+            return resModel;
         }
         set{
+            // 注意这里set不能通过skill/trick调啊，不然直接改原型了
             model = value;
         }
     }
-    BaseModel AddBuffModel(){
-        BaseModel resModel = (BaseModel)model.Clone(); // 用Model，就无限递归了。。。，还有，不能用model，因为是引用，直接修改model的值了。。fuck
-        resModel.Attack = (int)(resModel.Attack * (1.0 + skillBuffModel.Attack));
-        resModel.Defense = (int)(resModel.Defense * (1.0 + skillBuffModel.Defense));
-        resModel.HitRate = resModel.HitRate * (1.0 + skillBuffModel.HitRate);
-        if(resModel.HitRate > 1.0){
-            resModel.HitRate = 1.0;
-        }
-        // Debug.Log("buff: attack " + resModel.Attack);
-        return resModel;
-    }
+
     public bool IsMy{get;set;}
     protected abstract void InitModel();
     public float speed = 0.1f;
     private GameObject attackedTarget;
     public PlayerTroopController OtherTroopController{get; set;}
+    public PlayerTroopController MyTroopController{get; set;}
     public GameObject Attacker{get; set;}
     public bool IsDead{ get; set;}
+    // unity好像默认访问级别不是private是protected
     SkillModel skillBuffModel = new SkillModel();
     bool isBuffing = false;
+    List<int> trickingIds = new List<int>();
+    protected TrickConfig trickConfig = ConfigManager.share().TrickConfig;
 
     public GameObject skillTip;
 
@@ -50,6 +51,10 @@ public abstract class BaseController : MonoBehaviour {
     protected enum TroopCommand{
         CMD_IDLE, CMD_FORWARD, CMD_ATTACK, CMD_BACK,
     }
+
+	public TrickController TrickController{ get; set; }
+    protected abstract void InitTrickController();
+
 
     public Vector3 startPos;
     public Vector3 endPos;
@@ -84,12 +89,10 @@ public abstract class BaseController : MonoBehaviour {
         // StartCoroutine(DoDemoRoutine());
 
         InitModel ();
-        // IsMy = true; // test
-         // skeleton.FlipX = !IsMy;
-        Idle();
+        InitTrickController();
         startPos = transform.position;
         endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
-        handleCommand(TroopCommand.CMD_IDLE);
+        // handleCommand(TroopCommand.CMD_IDLE);
 
         // for(int i = 0; i < 3; i++){
         //     string tag = "skill_"+i;
@@ -247,18 +250,123 @@ public abstract class BaseController : MonoBehaviour {
         if(ev.IsMy == IsMy){
             Debug.Log("type " + ev.Type + ", status " + ev.Status);
             isBuffing = ev.Status == SkillStatus.STATUS_USING;
-            // 感觉能叠加技能更混乱一点。。。也难写一点。。。。，先不叠加吧, 直接覆盖
-            // 这里现在有一个bug，就是如果覆盖的时候是没有调用skillstop的，这里有问题，但我也不能发啊，发过来这里把现在的又停了。。
-            // 就算现在不发，到时间照样会来一个stop...shit
-			SpriteRenderer spr = skillTip.GetComponent<SpriteRenderer>();  
+            SpriteRenderer spr = skillTip.GetComponent<SpriteRenderer>();  
             if(isBuffing){
                 skillBuffModel = ConfigManager.share().SkillConfig.GetSkillModel(ev.Type);
 				spr.sprite = skillTip.GetComponent<SkillTipController>().tipImages[(int)ev.Type];
             }else{
                 spr.sprite = null;
             }
+            List<int> trickIds = TrickController.GetSkillTrick(ev.Type);
+            MyTroopController.OnTrickEvent(trickIds, isBuffing);
+
+            Debug.Log("AFTER SKILL&TRICK: " + Model);
         }
     }
+
+    BaseModel AddSkillModel(){
+        BaseModel resModel = (BaseModel)model.Clone(); // 用Model，就无限递归了。。。，还有，不能用model，因为是引用，直接修改model的值了。。fuck
+        resModel.Attack = (int)(resModel.Attack * (1.0 + skillBuffModel.Attack));
+        resModel.Defense = (int)(resModel.Defense * (1.0 + skillBuffModel.Defense));
+        resModel.HitRate = resModel.HitRate * (1.0 + skillBuffModel.HitRate);
+        if(resModel.HitRate > 1.0){
+            resModel.HitRate = 1.0;
+        }
+        // Debug.Log("buff: attack " + resModel.Attack);
+        return resModel;
+    }
+
+    BaseModel AddTrickModels(BaseModel afterBuffModel){
+        List<TrickModel> tricks = GetTrickingModels();
+        BaseModel resModel = afterBuffModel;
+        foreach(TrickModel m in tricks){
+            resModel = AddTrickModel(resModel, m);
+        }
+        return resModel;
+    }
+
+    BaseModel AddTrickModel(BaseModel originModel, TrickModel trickModel){
+        BaseModel resModel = (BaseModel)originModel.Clone();
+		double effect = 1.0 + trickModel.Effect;
+		switch(trickModel.Property){
+        case TrickProperty.PROPERTY_ATTACK:
+            resModel.Attack = (int)(resModel.Attack * effect);
+            break;
+        case TrickProperty.PROPERTY_DEFENSE:
+            resModel.Defense = (int)(resModel.Defense * effect);
+            break;
+        case TrickProperty.PROPERTY_SPEED:
+            break;
+        case TrickProperty.PROPERTY_HIT:
+            resModel.HitRate = resModel.HitRate * effect;
+            if(resModel.HitRate > 1.0){
+                resModel.HitRate = 1.0;
+            }        
+            break;
+        case TrickProperty.PROPERTY_LIFE:
+            // 固定回复值，注意配置是10.0，这个我估计得特殊处理，每秒回复。。费劲啊，开一个timer去invoke调用，记得timer要清理！！！！
+            resModel.Life += (int)effect;
+            int maxLife = ConfigManager.share().CharacterConfig.GetModel(Model.Type).Life;
+            if(resModel.Life > maxLife){
+                resModel.Life = maxLife;
+            }
+            // 而且注意血量是特么需要重置到自己原本的model的！！！日，不能这样直接复制，会重复叠加了。。。咦？好像可以？
+            model.Life = resModel.Life;
+            break;
+        default:
+            Debug.Assert(false, "error trick property");
+            break;
+        }
+
+        return resModel;
+    }
+
+    List<TrickModel> GetTrickingModels(){
+        List<TrickModel> models = new List<TrickModel>();
+        foreach(int id in trickingIds){
+            TrickModel m = trickConfig.GetModel(id);
+            Debug.Assert(m != null, "error trick id");
+            models.Add(m);
+        }
+        return models;
+    }
+
+
+    public void OnTrickEvent(object sender, EventArgs e){
+        TrickEvent ev = (TrickEvent)e;
+        if(ev.IsStart){
+            Debug.Assert(ev.Tricks.Length == 1, "error trick length");
+            AddTrickBuff(ev.Tricks[0]);
+            Debug.Log("base:     " + model);
+            Debug.Log("start id" + ev.Tricks[0] + ": " + Model);
+        }else{
+            RemoveTrickBuff(ev.Tricks);
+            Debug.Log("stop  id" + ev.Tricks[0] + ": " + Model);
+        }
+    }
+
+    // 加应该是单个的，一个个处理，而移除却是一群的，而且还有可能在敌方。。。卧槽。。。
+    void AddTrickBuff(int trickId){
+        if(TroopValid(ConfigManager.share().TrickConfig.GetModel(trickId).Target)){
+            trickingIds.Add(trickId);
+        }
+    }
+
+     bool TroopValid(TroopType[] target){
+        foreach(TroopType t in target){
+			if(Model.Type == t || t == TroopType.TROOP_ALL){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void RemoveTrickBuff(int[] trickIds){
+        foreach(int id in trickIds){
+            trickingIds.Remove(id);
+        }
+    }
+
 
         
     /// <summary>This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.</summary>

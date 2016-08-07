@@ -180,7 +180,7 @@ public enum TrickStatusType{
     STATUS_IDLE=0, STATUS_MOVE, STATUS_ATTACK, STATUS_DEFENSE, STATUS_DEAD, STATUS_INVALID=-1
 }
 
-public class BaseTrickModel{
+public class TrickModel{
     // public just for litjson mapper...orz
     public int id;
     public TrickType type;
@@ -188,6 +188,7 @@ public class BaseTrickModel{
     public double effect;
     public double rate;
     public TroopType[] target;
+    public bool isSelf;
     // skill 和status都放在base里，这样方便映射，默认为无效值即可，这样该有值的就自己复写了，问题在于现在要怎么转换，或者直接在config再根据type区分list出来，虽然统一读取的
     public SkillType skill = SkillType.SKILL_INVALID;
     public TrickStatusType status = TrickStatusType.STATUS_INVALID;
@@ -224,33 +225,42 @@ public class BaseTrickModel{
         get{return status;}
         set{status = value;}
     }
+    public bool IsSelf{
+        get{return isSelf;}
+        set{isSelf = value;}
+    }
 
     public override string ToString(){
         return "id:"+id+", type:"+type+", property:"+property+", effect:"+effect+", rate:"+rate+", target:"+target.Length+", skill:"+skill+", status:"+status;
     }
 }
 
-public class SkillTrickModel : BaseTrickModel{
+public class SkillTrickModel : TrickModel{
 
 }
 
-public class StatusTrickModel : BaseTrickModel{
+public class StatusTrickModel : TrickModel{
 
+}
+
+public class TrickEvent : EventArgs{
+    public int[] Tricks{get; set;}
+    public bool IsStart{get; set;}
 }
 
 public class TrickConfig{
     public const string TRICK_CONFIG_FILE = "trick_config.json";
-    private BaseTrickModel[] models;
+    private TrickModel[] models;
     public void LoadConfig(){
         string str = DemoUtil.ReadConfigFile(TRICK_CONFIG_FILE);
         JsonData data = JsonMapper.ToObject(str);
-        models = JsonMapper.ToObject<BaseTrickModel[]>(str);
-        // foreach (BaseTrickModel m in models){
+        models = JsonMapper.ToObject<TrickModel[]>(str);
+        // foreach (TrickModel m in models){
         //     Debug.Log(m);
         // }
     }
 
-    public BaseTrickModel GetModel(int id){
+    public TrickModel GetModel(int id){
         return models[id];
     }
 

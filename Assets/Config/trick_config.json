@@ -5,6 +5,7 @@ effect: 加成的比例，有可能为负
 skill: 总对应type0情况，表示哪一种技能触发
 status: 总对应type1情况，表示哪一种状态触发 0 休息，1 攻击，2 防御，3 移动，4 死亡
 target: 可适用的目标，对应character_config里面的type，100 所有兵种，0 saber，1 archer
+self: 表示是否给己方部队
 */
 
 [
@@ -12,35 +13,39 @@ target: 可适用的目标，对应character_config里面的type，100 所有兵
         "id":0,
         "type":0,
         "property":0,
-        "effect":0.1,
-        "rate":0.1,
+        "effect":0.5,
+        "rate":1.0,
         "skill":0,
-        "target":[100]
+        "target":[100],
+        "isSelf":true
     },
     {
         "id":1,
         "type":0,
         "property":1,
-        "effect":0.1,
-        "rate":0.1,
+        "effect":0.5,
+        "rate":1.0,
         "skill":1,
-        "target":[0]
+        "target":[0,1],
+        "isSelf":true
     },
     {
         "id":2,
         "type":1,
         "property":2,
-        "effect":0.1,
-        "rate":0.1,
+        "effect":0.5,
+        "rate":1.0,
         "status":2,
-        "target":[0,1]
+        "target":[0,1],
+        "isSelf":true
     },
     {
         "id":3,
         "type":2,
         "property":3,
-        "effect":0.1,
-        "rate":0.1,
-        "target":[100,0,1]
+        "effect":0.5,
+        "rate":1.0,
+        "target":[100,0,1],
+        "isSelf":true
     }
 ]

@@ -15,25 +15,36 @@ public class PlayerTroopController : MonoBehaviour {
     public bool IsGameOver{get; set;}
 
     public GameObject otherTroopObj;
-    private PlayerTroopController otherTroopController;
+	public PlayerTroopController OtherTroopController{ get; set; }
 
     // UI
     public List<Text> countText;
     public List<Button> skillButtons;
     bool isBuffing = false;
     SkillController buffingController = null;
+    public event EventHandler TrickEventHandler;
+    protected TrickConfig trickConfig = ConfigManager.share().TrickConfig;
+
+
 
 	// Use this for initialization
 	void Start () {
         data.Add(TroopType.TROOP_SABER, 1);
         data.Add(TroopType.TROOP_ARCHER, 1);
-        otherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
+        OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
         InitTroops();
-        // Debug.Log("my is my " + isMy + " other is my " + otherTroopController.isMy);
+        // Debug.Log("my is my " + isMy + " other is my " + OtherTroopController.isMy);
 
         foreach(Button btn in skillButtons){
             btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
         }
+    }
+
+    void SetController(ref GameObject obj){
+        obj.GetComponent<BaseController>().IsMy = isMy;
+        obj.GetComponent<BaseController>().OtherTroopController = OtherTroopController;
+        obj.GetComponent<BaseController>().MyTroopController = this;
+        obj.GetComponent<BaseController>().MyTroopController.TrickEventHandler += obj.GetComponent<BaseController>().OnTrickEvent;
     }
 
     void InitTroops(){
@@ -47,16 +58,14 @@ public class PlayerTroopController : MonoBehaviour {
             case TroopType.TROOP_SABER:
                 for(int i = 0; i < count; i++){
 					GameObject obj = Instantiate(saber);
-                    obj.GetComponent<SaberController>().IsMy = isMy;
-                    obj.GetComponent<SaberController>().OtherTroopController = otherTroopController;
+                    SetController(ref obj);
                     characters.Add(obj);
                 }
                 break;
             case TroopType.TROOP_ARCHER:
                 for(int i = 0; i < count; i++){
                     GameObject obj = Instantiate(archer);
-                    obj.GetComponent<ArcherController>().IsMy = isMy;
-                    obj.GetComponent<ArcherController>().OtherTroopController = otherTroopController;
+                    SetController(ref obj);
                     characters.Add(obj);
                 }
                 break;
@@ -73,7 +82,7 @@ public class PlayerTroopController : MonoBehaviour {
             countText.RemoveAt(last);
         }
         Debug.Assert(troops.Count > 0 && troops.Count < maxCount, "troops count error");
-        resort();
+        Resort();
     }
 
 
@@ -115,9 +124,15 @@ public class PlayerTroopController : MonoBehaviour {
         foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
            TroopType troopType = item.Key;
             List<GameObject> troop = item.Value;
+            // 这里现在是有bug的，不能在这样的for里面remove
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
-                if(obj.GetComponent<BaseController>().IsDead){
+                BaseController controller = obj.GetComponent<BaseController>();
+                if(controller.IsDead){
+                    TrickEvent ev = new TrickEvent();
+                    ev.Tricks = controller.Model.Tricks;
+                    ev.IsStart = false;
+                    TrickEventHandler(this, ev);
                     Destroy(obj);
                     troop.RemoveAt(i);
                 }
@@ -139,7 +154,6 @@ public class PlayerTroopController : MonoBehaviour {
         if(ev.IsMy == isMy){
             // 如果已经处于技能中，而且又来了一个使用，需要覆盖，先stop当前的
             if(isBuffing && ev.Status == SkillStatus.STATUS_USING && buffingController){
-                buffingController.IsForceStop = true;
                 buffingController.SkillStop();
             }
             buffingController = (SkillController)sender;
@@ -152,15 +166,37 @@ public class PlayerTroopController : MonoBehaviour {
             }
         }
     }
+
+    public void OnTrickEvent(List<int> trickIds, bool isStart){
+        // 所有这个时刻触发的特技的分发处理，所有的basecontroller的status trick应该都要回传到这里再次转发
+        Debug.Log("OnTrickEvent count:" + trickIds.Count);
+        foreach(int id in trickIds){
+            if(trickConfig.GetModel(id).IsSelf){
+                DispatchTrick(id, isStart);
+            }else{
+                OtherTroopController.DispatchTrick(id, isStart);
+            }
+        }
+    }
+
+    public void DispatchTrick(int trickId, bool isStart){
+        Debug.Log("DispatchTrick " + trickId + ", " + isStart);
+        TrickEvent ev = new TrickEvent();
+        ev.Tricks = new int[1]{trickId};
+        ev.IsStart = isStart;
+        TrickEventHandler(this, ev);
+    }
+
+
     
-    void resort(){
+    void Resort(){
         int rank = 0;
         foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
             TroopType troopType = item.Key;
             List<GameObject> troop = item.Value;
-            float posX = getRankPos(rank);
-            double interval = getTroopInterval(troopType);
-            // Debug.Log("interval: " + getTroopInterval(troopType).ToString() + ", " + interval.ToString());
+            float posX = GetRankPos(rank);
+            double interval = GetTroopInterval(troopType);
+            // Debug.Log("interval: " + GetTroopInterval(troopType).ToString() + ", " + interval.ToString());
 
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
@@ -179,7 +215,7 @@ public class PlayerTroopController : MonoBehaviour {
         }
     }
 
-    double getTroopInterval(TroopType type){
+    double GetTroopInterval(TroopType type){
         double res = 0.0;
         switch (type) 
         {
@@ -196,7 +232,7 @@ public class PlayerTroopController : MonoBehaviour {
         return res;
     }
 
-    float getRankPos(int rank){
+    float GetRankPos(int rank){
         return posConfig[rank];
     }
 

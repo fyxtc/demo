@@ -4,7 +4,11 @@ using UnityEngine.UI;
 using System;
 
 public class SkillController : MonoBehaviour {
-	public SkillType skillType; 
+	public SkillType skillType;
+	public SkillType SkillType{
+		get{return skillType;} 
+		set{skillType = value;}
+	} 
 	public SkillModel Model{get; set;}
 	public event EventHandler SkillEventHandler;
 	public SkillEvent SkillEvent{get; set;}
@@ -14,11 +18,11 @@ public class SkillController : MonoBehaviour {
 	SkillStatus status;
 
 	void InitModel(){
-		Model = ConfigManager.share().SkillConfig.GetSkillModel(skillType);
+		Model = ConfigManager.share().SkillConfig.GetSkillModel(SkillType);
 		SkillEvent = new SkillEvent();
-		SkillEvent.Type = skillType;
+		SkillEvent.Type = SkillType;
 		SkillEvent.IsMy = isMy;
-        // Debug.Log(skillType + " " + transform.position.x +": " + Model.Attack + ", " + Model.Defense + ", " + Model.HitRate);
+        // Debug.Log(SkillType + " " + transform.position.x +": " + Model.Attack + ", " + Model.Defense + ", " + Model.HitRate);
 	}
 
 	// Use this for initialization
@@ -40,7 +44,7 @@ public class SkillController : MonoBehaviour {
 
 	void SkillStart(){
 		// todo: send event this kind skill start
-		// Debug.Log ("skill " + skillType + " start");
+		// Debug.Log ("skill " + SkillType + " start");
         // Debug.Log(Model.Attack + ", " + Model.Defense + ", " + Model.HitRate);
 		status = SkillStatus.STATUS_USING;
 		Debug.Assert(Model.CD > Model.Time, "error cd time");
@@ -52,21 +56,19 @@ public class SkillController : MonoBehaviour {
 	}
 
 	public void SkillStop(){
-		status = SkillStatus.STATUS_STOP;
-		if(IsForceStop){
-			IsForceStop = false;
-			// do nothing
-		}else{
+		// 有可能先被覆盖导致stop了，原来就是没加这个判断才导致发了两次。。。傻逼了，还加什么forcestop...orz
+		if(status != SkillStatus.STATUS_STOP){
+			status = SkillStatus.STATUS_STOP;
 			SkillEvent.Status = status;
 			SkillEventHandler(this, SkillEvent);
+			// Debug.Log ("skill " + SkillType + " stop");
 		}
-		// Debug.Log ("skill " + skillType + " stop");
 	}
 
 	void SkillReset(){
 		status = SkillStatus.STATUS_IDLE;
 		// SkillEvent.Status = status;
 		// SkillEventHandler(this, SkillEvent);
-		// Debug.Log ("skill " + skillType + " reset");
+		// Debug.Log ("skill " + SkillType + " reset");
 	}
 }
