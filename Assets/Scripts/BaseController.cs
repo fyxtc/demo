@@ -28,7 +28,7 @@ public abstract class BaseController : MonoBehaviour {
 
     public bool IsMy{get;set;}
     protected abstract void InitModel();
-    public float speed = 0.1f;
+    // public float speed = 0.1f;
     private GameObject attackedTarget;
     public PlayerTroopController OtherTroopController{get; set;}
     public PlayerTroopController MyTroopController{get; set;}
@@ -92,15 +92,17 @@ public abstract class BaseController : MonoBehaviour {
         InitTrickController();
         startPos = transform.position;
         endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
-        // handleCommand(TroopCommand.CMD_IDLE);
+        handleCommand(TroopCommand.CMD_IDLE);
 
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
         // Invoke("Test", 5);
     }
 
     void DispatchNaturalTricks(){
-        List<int> trickIds = TrickController.OnNaturalTrick(true);
-        MyTroopController.DispatchTricks(trickIds, true);
+        if(IsMy){ // test
+            List<int> trickIds = TrickController.OnNaturalTrick(true);
+            MyTroopController.DispatchTricks(trickIds, true);
+        }
     }
 
     void Test(){
@@ -114,7 +116,7 @@ public abstract class BaseController : MonoBehaviour {
         case TroopStatus.STATUS_IDLE:
             break;
         case TroopStatus.STATUS_FORWARD:
-            transform.position = Vector3.Lerp(transform.position, endPos, 1/((transform.position - endPos).magnitude) * speed);
+            transform.position = Vector3.Lerp(transform.position, endPos, (float)(1/((transform.position - endPos).magnitude) * Model.Speed));
             // Debug.Log(transform.position.x + ", " + endPos.x);
             // if(transform.position == endPos){
             //     handleCommand(TroopCommand.CMD_ATTACK);
@@ -126,7 +128,7 @@ public abstract class BaseController : MonoBehaviour {
         case TroopStatus.STATUS_ATTACK:
             break;
         case TroopStatus.STATUS_BACK:
-            transform.position = Vector3.Lerp(transform.position, startPos, 1/((transform.position - startPos).magnitude) * speed);
+            transform.position = Vector3.Lerp(transform.position, startPos, (float)(1/((transform.position - startPos).magnitude) * Model.Speed));
             if(transform.position == startPos){
                 handleCommand(TroopCommand.CMD_IDLE);
             }
@@ -305,6 +307,7 @@ public abstract class BaseController : MonoBehaviour {
             resModel.Defense = (int)(resModel.Defense * effect);
             break;
         case TrickProperty.PROPERTY_SPEED:
+            resModel.Speed = resModel.Speed * effect;
             break;
         case TrickProperty.PROPERTY_HIT:
             resModel.HitRate = resModel.HitRate * effect;
@@ -321,6 +324,9 @@ public abstract class BaseController : MonoBehaviour {
             }
             // 而且注意血量是特么需要重置到自己原本的model的！！！日，不能这样直接复制，会重复叠加了。。。咦？好像可以？
             model.Life = resModel.Life;
+            break;
+        case TrickProperty.PROPERTY_ATTACK_CD:
+            resModel.AttackCD = resModel.AttackCD * effect;
             break;
         default:
             Debug.Assert(false, "error trick property");
@@ -343,14 +349,22 @@ public abstract class BaseController : MonoBehaviour {
 
     public void OnTrickEvent(object sender, EventArgs e){
         TrickEvent ev = (TrickEvent)e;
-        if(ev.IsStart){
-            Debug.Assert(ev.Tricks.Length == 1, "error trick length");
-            AddTrickBuff(ev.Tricks[0]);
-            Debug.Log("base:     " + model);
-            Debug.Log("start id" + ev.Tricks[0] + ": " + Model);
-        }else{
-            RemoveTrickBuff(ev.Tricks);
-            Debug.Log("stop  id" + ev.Tricks[0] + ": " + Model);
+        // 如果发送放和接收方相等，且是对自己产生作用的特技的话
+        bool condition1 = IsMy == ev.IsMy && ev.IsSelf;
+        // 或者如果发送放和接收方不等，且是对别人产生作用的特技的话
+        bool condition2 = IsMy != ev.IsMy && !ev.IsSelf;
+        bool canTrigger = condition1 || condition2;
+        Debug.Log("can trigger trick " + canTrigger + ": " + IsMy + "," + ev.IsMy + "," + ev.IsSelf);
+        if(canTrigger){
+            if(ev.IsStart){
+                Debug.Assert(ev.Tricks.Length == 1, "error trick length");
+                AddTrickBuff(ev.Tricks[0]);
+                Debug.Log("base:     " + model);
+                Debug.Log("start id" + ev.Tricks[0] + ": " + Model);
+            }else{
+                RemoveTrickBuff(ev.Tricks);
+                Debug.Log("stop  id" + ev.Tricks[0] + ": " + Model);
+            }
         }
     }
 

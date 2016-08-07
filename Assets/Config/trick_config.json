@@ -1,6 +1,6 @@
 /*
 type: 0 技能触发，1 状态触发，2 自带光环
-property: 0 攻击，1 防御，2 攻速，3 命中率，4 生命值
+property: 0 攻击，1 防御，2 速度，3 命中率，4 生命值 5 攻速
 effect: 加成的比例，有可能为负
 skill: 总对应type0情况，表示哪一种技能触发
 status: 总对应type1情况，表示哪一种状态触发 0 休息，1 攻击，2 防御，3 移动，4 死亡
@@ -32,8 +32,8 @@ self: 表示是否给己方部队
     {
         "id":2,
         "type":2,
-        "property":3,
-        "effect":0.5,
+        "property":2,
+        "effect":10,
         "rate":1.0,
         "status":2,
         "target":[0,1],

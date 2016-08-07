@@ -11,6 +11,7 @@ public class BaseModel : ICloneable{
     public int life;
     public int attack;
     public int defense;   
+    public double speed;
     public int maxCount;
     public int rank;
     public double interval;
@@ -34,6 +35,10 @@ public class BaseModel : ICloneable{
     public int Defense{
         set{defense = value;}
         get{return defense;}
+    }
+    public double Speed{
+        set{speed = value;}
+        get{return speed;}
     }
     public int MaxCount{
         set{maxCount = value;}
@@ -71,7 +76,7 @@ public class BaseModel : ICloneable{
     }
 
     public override string ToString(){
-		return "type:" + type + ", attack:" + attack + ", defense:" + defense + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
+		return "type:" + type + ", attack:" + attack + ", defense:" + defense + ", speed:" + speed + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
     }
 }
 
@@ -168,7 +173,7 @@ public class SkillConfig{
 
 
 public enum TrickProperty{
-    PROPERTY_ATTACK=0, PROPERTY_DEFENSE, PROPERTY_SPEED, PROPERTY_HIT, PROPERTY_LIFE,
+    PROPERTY_ATTACK=0, PROPERTY_DEFENSE, PROPERTY_SPEED, PROPERTY_HIT, PROPERTY_LIFE, PROPERTY_ATTACK_CD
 }
 
 public enum TrickType{
@@ -246,6 +251,8 @@ public class StatusTrickModel : TrickModel{
 public class TrickEvent : EventArgs{
     public int[] Tricks{get; set;}
     public bool IsStart{get; set;}
+    public bool IsSelf{get; set;}
+    public bool IsMy{get; set;}
 }
 
 public class TrickConfig{

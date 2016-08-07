@@ -171,19 +171,17 @@ public class PlayerTroopController : MonoBehaviour {
         // 所有这个时刻触发的特技的分发处理，所有的basecontroller的status trick应该都要回传到这里再次转发
         Debug.Log("DispatchTricks count:" + trickIds.Count);
         foreach(int id in trickIds){
-            if(trickConfig.GetModel(id).IsSelf){
-                DispatchTrick(id, isStart);
-            }else{
-                OtherTroopController.DispatchTrick(id, isStart);
-            }
+            DispatchTrick(id, isStart, trickConfig.GetModel(id).IsSelf);
         }
     }
 
-    public void DispatchTrick(int trickId, bool isStart){
+    public void DispatchTrick(int trickId, bool isStart, bool isSelf){
         Debug.Log("DispatchTrick " + trickId + ", " + isStart);
         TrickEvent ev = new TrickEvent();
         ev.Tricks = new int[1]{trickId};
         ev.IsStart = isStart;
+        ev.IsSelf = isSelf;
+        ev.IsMy = isMy;
         TrickEventHandler(this, ev);
     }
 
