@@ -47,7 +47,7 @@ public class PlayerTroopController : MonoBehaviour {
         if(IsMy){
             // data.Add(TroopType.TROOP_SABER, 1);
             data.Add(TroopType.TROOP_ARCHER, 1);
-            // data.Add(TroopType.TROOP_RECOVER, 1);
+            data.Add(TroopType.TROOP_RECOVER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
         }else{
             data.Add(TroopType.TROOP_RIDER, 1);

@@ -28,11 +28,11 @@ opponent：和这种类型的对战才会产生的特技，一般配合status使
     {
         "id":1,
         "type":0,
-        "property":1,
-        "effect":0.5,
+        "property":4,
+        "effect":2,
         "rate":1.0,
-        "skill":1,
-        "target":[0,1],
+        "skill":3,
+        "target":[100],
         "isSelf":true
     },
     {

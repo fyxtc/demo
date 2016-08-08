@@ -29,7 +29,8 @@ public abstract class BaseController : MonoBehaviour {
 
     public bool IsMy{get;set;}
     protected void InitModel(){
-        Model = ConfigManager.share().CharacterConfig.GetModel(troopType);
+        // 不然直接影响到配置的值，卧槽，这怎么会返回引用啊，日了狗了
+        Model = (BaseModel)ConfigManager.share().CharacterConfig.GetModel(troopType).Clone();
         // Debug.Log(Model);
     }
     // public float speed = 0.1f;
@@ -112,6 +113,7 @@ public abstract class BaseController : MonoBehaviour {
         HandleCommand(TroopCommand.CMD_IDLE);
 
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
+        InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
         // Invoke("Test", 5);
     }
 
@@ -373,7 +375,7 @@ public abstract class BaseController : MonoBehaviour {
                 spr.sprite = null;
             }
             if(skillBuffModel.Type == SkillType.SKILL_LIFE){
-                AddLifeBuff(isBuffing);   
+                AddSkillLifeBuff(isBuffing);   
             }
             List<int> trickIds = TrickController.GetSkillTrick(ev.Type);
             MyTroopController.DispatchTricks(trickIds, isBuffing);
@@ -395,26 +397,47 @@ public abstract class BaseController : MonoBehaviour {
         return resModel;
     }
 
-    void AddLifeBuff(bool isStart){
+    void AddSkillLifeBuff(bool isStart){
         if(isStart){
-            if(!IsInvoking("AddLifeTimer")){
-                InvokeRepeating("AddLifeTimer", 0, 1.0f);
+            if(!IsInvoking("AddSkillLifeTimer")){
+                InvokeRepeating("AddSkillLifeTimer", 0, 1.0f);
             }
         }else{
-            CancelInvoke("AddLifeTimer");
+            CancelInvoke("AddSkillLifeTimer");
         }
     }
 
-    void AddLifeTimer(){
+    void AddSkillLifeTimer(){
         Debug.Assert(isBuffing && skillBuffModel != null, "what the fuck life buff ?");
         BaseModel config = characterConfig.GetModel(model.Type);
-        Debug.Log(model.Life + " add life " + skillBuffModel.Life);
+        Debug.Log(Model.Type + ":" + model.Life + " add skill life " + skillBuffModel.Life);
         model.Life += skillBuffModel.Life;
         if(model.Life > config.Life){
             model.Life = config.Life;
         }
 
     }
+
+    void AddTrickLifeTimer(){
+        int trickLife = 0;
+        foreach(int id in trickingIds){
+            TrickModel m = trickConfig.GetModel(id);
+            if(m.Property == TrickProperty.PROPERTY_LIFE){
+                trickLife += (int)m.Effect;
+            }
+        }
+        if(trickLife != 0){
+            Debug.Log(Model.Type + ":" + model.Life + " add trick life " + trickLife);
+        }
+        model.Life += trickLife;
+        BaseModel config = characterConfig.GetModel(model.Type);
+        // Debug.Log("current:" + model.Life + ", max:" + config.Life);
+        if(model.Life > config.Life){
+            model.Life = config.Life;
+        }
+
+    }
+
 
     BaseModel AddTrickModels(BaseModel afterBuffModel){
         List<TrickModel> tricks = GetTrickingModels();
@@ -426,6 +449,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     BaseModel AddTrickModel(BaseModel originModel, TrickModel trickModel){
+        // 注意这里不能用Model去隐式调用get方法，这样会无限递归了。。。
         BaseModel resModel = (BaseModel)originModel.Clone();
 		double effect = 1.0 + trickModel.Effect;
 		switch(trickModel.Property){
@@ -446,14 +470,16 @@ public abstract class BaseController : MonoBehaviour {
             }        
             break;
         case TrickProperty.PROPERTY_LIFE:
-            // 固定回复值，注意配置是10.0，这个我估计得特殊处理，每秒回复。。费劲啊，开一个timer去invoke调用，记得timer要清理！！！！
-            resModel.Life += (int)effect;
-            int maxLife = ConfigManager.share().CharacterConfig.GetModel(Model.Type).Life;
-            if(resModel.Life > maxLife){
-                resModel.Life = maxLife;
-            }
-            // 而且注意血量是特么需要重置到自己原本的model的！！！日，不能这样直接复制，会重复叠加了。。。咦？好像可以？
-            model.Life = resModel.Life;
+            // 已经在AddTrickLifeTimer里处理了
+
+            // // 固定回复值，注意配置是10.0，这个我估计得特殊处理，每秒回复。。费劲啊，开一个timer去invoke调用，记得timer要清理！！！！
+            // resModel.Life += (int)effect;
+            // int maxLife = ConfigManager.share().CharacterConfig.GetModel(model.Type).Life;
+            // if(resModel.Life > maxLife){
+            //     resModel.Life = maxLife;
+            // }
+            // // 而且注意血量是特么需要重置到自己原本的model的！！！日，不能这样直接复制，会重复叠加了。。。咦？好像可以？
+            // model.Life = resModel.Life;
             break;
         case TrickProperty.PROPERTY_ATTACK_CD:
             resModel.AttackCD = resModel.AttackCD * effect;
