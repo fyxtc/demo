@@ -99,10 +99,10 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     void DispatchNaturalTricks(){
-        if(IsMy){ // test
+        // if(IsMy){ // test
             List<int> trickIds = TrickController.OnNaturalTrick(true);
             MyTroopController.DispatchTricks(trickIds, true);
-        }
+        // }
     }
 
     void Test(){
@@ -197,10 +197,14 @@ public abstract class BaseController : MonoBehaviour {
     public void BeingAttacked(){
         if(CanMiss()){
             // miss anim
-            // Debug.Log("attack miss");
+            Debug.Log("attack miss");
         }else{
-            Model.Life -= CalcHarm();
-            // Debug.Log("Life : " + Model.Life);
+            int harm = CalcHarm();
+            Debug.Log("Life: " + Model.Life);
+            // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
+            // Model.Life -= harm;
+            model.Life -= harm;
+            Debug.Log("Life : " + Model.Life + ", harm:-" + harm);
             if(Model.Life <= 0){
                 Dead();
             }
@@ -225,7 +229,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     void Dead(){
-        Debug.Log("dead");
+        Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
         Model.Life = 0;
         status = TroopStatus.STATUS_DEAD;
         IsDead = true;
@@ -359,13 +363,13 @@ public abstract class BaseController : MonoBehaviour {
             if(canTrigger){
                 Debug.Assert(ev.Tricks.Length == 1, "error trick length");
                 AddTrickBuff(ev.Tricks[0]);
-                Debug.Log("base:     " + model);
-                Debug.Log("start id" + ev.Tricks[0] + ": " + Model);
+                Debug.Log((IsMy?"my ":"enemy ")+"base:     " + model);
+                Debug.Log((IsMy?"my ":"enemy ")+"start id" + ev.Tricks[0] + ": " + Model);
             }
         }else{
             RemoveTrickBuff(ev.Tricks);
             foreach(int id in ev.Tricks){
-                Debug.Log("stop  id" + id + ": " + Model);
+                Debug.Log((IsMy?"my ":"enemy ") + "stop  id" + id + ": " + Model);
             }
         }
     }

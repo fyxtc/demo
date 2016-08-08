@@ -177,7 +177,6 @@ public class SkillConfig{
 
     public void LoadConfig(){
         string str = DemoUtil.ReadConfigFile(SKILL_CONFIG_FILE);
-        JsonData data = JsonMapper.ToObject(str);
         models = JsonMapper.ToObject<SkillModel[]>(str);
         // foreach (SkillModel m in models){
         //     Debug.Log(m);
@@ -278,7 +277,6 @@ public class TrickConfig{
     private TrickModel[] models;
     public void LoadConfig(){
         string str = DemoUtil.ReadConfigFile(TRICK_CONFIG_FILE);
-        JsonData data = JsonMapper.ToObject(str);
         models = JsonMapper.ToObject<TrickModel[]>(str);
         // foreach (TrickModel m in models){
         //     Debug.Log(m);

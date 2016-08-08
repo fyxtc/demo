@@ -132,7 +132,7 @@ public class PlayerTroopController : MonoBehaviour {
                     TrickEvent ev = new TrickEvent();
                     ev.Tricks = controller.Model.Tricks;
                     ev.IsStart = false;
-                    ev.IsSelf = false; // 这个值其实无所谓吧。。反正都是移除特技的事件
+                    ev.IsSelf = false; // 这个值其实无所谓吧。。反正都是移除特技的事件，好像不一定，如果是natural的debuff不就尴尬了。。。
                     TrickEventHandler(this, ev);
                     Destroy(obj);
                     troop.RemoveAt(i);
