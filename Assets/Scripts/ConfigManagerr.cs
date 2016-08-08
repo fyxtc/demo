@@ -84,13 +84,17 @@ public class BaseModel : ICloneable{
     }
 
     public override string ToString(){
-		return "type:" + type + ", life:" + life + ", attackMin:" + attackMin + ", attackMax:" + attackMax + ", defense:" + defense + ", speed:" + speed + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
+		return "type:" + type + ", attackMin:" + attackMin + ", attackMax:" + attackMax + ", defense:" + defense + ", speed:" + speed + ", life:" + life + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
     }
 }
 
 public enum TroopType{
     TROOP_SABER=0, TROOP_ARCHER, TROOP_RECOVER, TROOP_DANCER, TROOP_SPYER, TROOP_RIDER, TROOP_FLYER, TROOP_MAGICICAN, TROOP_TITAN
-    ,TROOP_ALL=100
+    ,TROOP_ALL=100, TROOP_SELF=-1,
+}
+
+public enum TroopCategory{
+    CATEGORY_LAND, CATEGORY_FLY
 }
 
 public class Saber : BaseModel{
@@ -220,6 +224,7 @@ public class TrickModel{
     public double rate;
     public TroopType[] target;
     public bool isSelf;
+    public TroopType[] opponent;
     // skill 和status都放在base里，这样方便映射，默认为无效值即可，这样该有值的就自己复写了，问题在于现在要怎么转换，或者直接在config再根据type区分list出来，虽然统一读取的
     public SkillType skill = SkillType.SKILL_INVALID;
     public TrickStatusType status = TrickStatusType.STATUS_INVALID;
@@ -260,9 +265,14 @@ public class TrickModel{
         get{return isSelf;}
         set{isSelf = value;}
     }
+    public TroopType[] Opponent{
+        get{return opponent;}
+        set{opponent = value;}
+    }
 
     public override string ToString(){
-        return "id:"+id+", type:"+type+", property:"+property+", effect:"+effect+", rate:"+rate+", target:"+target.Length+", skill:"+skill+", status:"+status;
+        return "id:"+id+", type:"+type+", property:"+property+", effect:"+effect+", rate:"+rate+", target:"+target.Length
+               +", skill:"+skill+", status:"+status+", opponentCount:"+Opponent.Length;
     }
 }
 

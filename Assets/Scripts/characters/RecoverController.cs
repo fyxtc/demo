@@ -1,15 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RecoverController : MonoBehaviour {
+public class RecoverController : BaseController {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

@@ -1,15 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RiderController : MonoBehaviour {
+public class RiderController : BaseController {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

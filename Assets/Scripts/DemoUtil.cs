@@ -14,4 +14,12 @@ public class DemoUtil{
         }
         return res;
     }
+
+    public static TroopCategory GetTroopCategory(TroopType type){
+        if(type == TroopType.TROOP_FLYER){
+            return TroopCategory.CATEGORY_FLY;
+        }else{
+            return TroopCategory.CATEGORY_LAND;
+        }
+    }
 }

@@ -51,6 +51,16 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected TroopStatus status;
+    public TroopStatus Status{
+        get{return status;}
+        set{ 
+            // 关闭上一个状态的产生的Trick
+            HandleStatusTrick(false); 
+            status = value;
+            // 开始新状态的trick，被攻击等情况额外处理
+            HandleStatusTrick(true); 
+        }
+    }
 
     protected enum TroopCommand{
         CMD_IDLE, CMD_FORWARD, CMD_ATTACK, CMD_BACK,
@@ -166,7 +176,6 @@ public abstract class BaseController : MonoBehaviour {
 
     void HandleCommand(TroopCommand cmd){
         // Debug.Log("HandleCommand " + cmd);
-        HandleStatusTrick(false); // 关闭上一个状态的产生的Trick
         switch(cmd){
         case TroopCommand.CMD_IDLE:
             Idle();
@@ -181,12 +190,11 @@ public abstract class BaseController : MonoBehaviour {
             Back();
             break;
         }
-        HandleStatusTrick(true); // 开始新状态的trick，被攻击等情况额外处理
     }
 
-    void HandleStatusTrick(bool isStart){
+    TrickStatusType GetTrickStatusType(){
         TrickStatusType type = TrickStatusType.STATUS_INVALID;
-        switch(status){
+        switch(Status){
         case TroopStatus.STATUS_IDLE:
             type = TrickStatusType.STATUS_IDLE;
             break;
@@ -204,27 +212,78 @@ public abstract class BaseController : MonoBehaviour {
             Debug.Assert(false, "error status in handle status trick");
             break;
         }
+        return type;
+    }
+    
+    void HandleStatusTrick(bool isStart){
+        TrickStatusType type = GetTrickStatusType();
         DispatchStatusTricks(type, isStart);
     }
 
+
     void DispatchStatusTricks(TrickStatusType type, bool isStart){
+        if(!isStart){
+            RemoveLastStatusBuff();
+        }
+
         List<int> trickIds = TrickController.OnStatusTrick(type, isStart);
-        MyTroopController.DispatchTricks(trickIds, isStart);
+        // Debug.Log(type + ", " + isStart + ", count:" + trickIds.Count);
+        List<int> needDispatchIds = new List<int>();
+        foreach(int id in trickIds){
+            // 如果目标是自己（注意是自己，不是自己类型，这是两个概念），就不转发了
+            TrickModel m = trickConfig.GetModel(id);
+            bool isSelfCall = m.Target.Length == 1 && m.Target[0] == TroopType.TROOP_SELF;
+            if(isSelfCall){
+                Debug.Log("self call: " + id);
+                if(isStart){
+                    bool isRightOppo = false;
+                    if(attackedTarget != null){
+                        TroopType oppoType = attackedTarget.GetComponent<BaseController>().Model.Type;
+                        foreach(TroopType t in m.Opponent){
+                            if(t == oppoType){
+                                isRightOppo = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(isRightOppo){
+                        AddTrickBuff(id);
+                    }
+                }else{
+                    RemoveTrickBuff(id);
+                }
+            }else{
+                needDispatchIds.Add(id);
+            }
+        }
+        MyTroopController.DispatchTricks(needDispatchIds, isStart);
+    }
+
+    void RemoveLastStatusBuff(){
+        List<int> removeIds = new List<int>();
+        foreach(int id in trickingIds){
+            TrickModel m = trickConfig.GetModel(id);
+            if(m.Type == TrickType.TRICK_STATUS && m.Status == GetTrickStatusType()){
+                // RemoveTrickBuff(id);
+                removeIds.Add(id);
+            }
+        }
+        RemoveTrickBuff(removeIds.ToArray());
     }
 
     void Forward(){
-        status = TroopStatus.STATUS_FORWARD;
+        Status = TroopStatus.STATUS_FORWARD;
         skeleton.FlipX = !IsMy;
         spineAnimationState.SetAnimation(0, walkAnimationName, true);
     }
 
     void Attack(){
-        status = TroopStatus.STATUS_ATTACK;
+        Status = TroopStatus.STATUS_ATTACK;
         spineAnimationState.SetAnimation(0, shootAnimationName, false);
         if(IsMy){
             // Debug.Log("my x:" + transform.position.x + " target x:" + attackedTarget.transform.position.x);
         }
-        Invoke("DoBackDelay", 0.5f);
+        Invoke("DoBackDelay", 0.5f); // 注意这个时间应该要大于攻击cd
         attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
         attackedTarget.GetComponent<BaseController>().BeingAttacked();
         // attackedTarget = null;
@@ -253,13 +312,11 @@ public abstract class BaseController : MonoBehaviour {
 
     int CalcHarm(){
         float att = Attacker.GetComponent<BaseController>().Model.Attack;
-        if(!IsMy){
-            // Debug.Log("attacker att " + att);
-        }
-
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
-        // Debug.Log("att: " + att + ", def:" + def);
+        if(!IsMy){
+            Debug.Log("att: " + att + ", def:" + def);
+        }
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
     }
@@ -271,19 +328,19 @@ public abstract class BaseController : MonoBehaviour {
     void Dead(){
         Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
         Model.Life = 0;
-        status = TroopStatus.STATUS_DEAD;
+        Status = TroopStatus.STATUS_DEAD;
         IsDead = true;
         // Destroy(gameObject);
     }
 
     void Back(){
-        status = TroopStatus.STATUS_BACK;
+        Status = TroopStatus.STATUS_BACK;
         skeleton.FlipX = IsMy;
         spineAnimationState.SetAnimation(0, walkAnimationName, true);
     }
 
     void Idle(){
-        status = TroopStatus.STATUS_IDLE;
+        Status = TroopStatus.STATUS_IDLE;
         skeleton.FlipX = !IsMy;
         spineAnimationState.SetAnimation(0, idleAnimationName, true);
         Invoke("DoForwardDelay", (float)Model.AttackCD);
@@ -401,26 +458,33 @@ public abstract class BaseController : MonoBehaviour {
         bool condition2 = IsMy != ev.IsMy && !ev.IsSelf;
         bool canTrigger = condition1 || condition2;
         if(ev.IsStart){
-            Debug.Log("can trigger trick " + canTrigger + ": " + IsMy + "," + ev.IsMy + "," + ev.IsSelf);
+            // Debug.Log("can trigger trick " + canTrigger + ": " + IsMy + "," + ev.IsMy + "," + ev.IsSelf);
             if(canTrigger){
                 Debug.Assert(ev.Tricks.Length == 1, "error trick length");
                 if(TroopValid(ConfigManager.share().TrickConfig.GetModel(ev.Tricks[0]).Target)){
                     AddTrickBuff(ev.Tricks[0]);
-                    Debug.Log((IsMy?"my ":"enemy ")+"base:     " + model);
-                    Debug.Log((IsMy?"my ":"enemy ")+"start id" + ev.Tricks[0] + ": " + Model);
                 }
             }
         }else{
             RemoveTrickBuff(ev.Tricks);
-            foreach(int id in ev.Tricks){
-                Debug.Log((IsMy?"my ":"enemy ") + "stop  id" + id + ": " + Model);
-            }
+            // foreach(int id in ev.Tricks){
+            //     Debug.Log((IsMy?"my ":"enemy ") + "stop  id" + id + ": " + Model);
+            // }
         }
     }
 
     // 加应该是单个的，一个个处理，而移除却是一群的，而且还有可能在敌方。。。卧槽。。。
     void AddTrickBuff(int trickId){
         trickingIds.Add(trickId);
+        Debug.Log((IsMy?"my ":"enemy ")+"base:     " + model);
+        Debug.Log((IsMy?"my ":"enemy ")+"start id" + trickId + ": " + Model);
+
+    }
+
+    void AddTrickBuff(int[] trickIds){
+        foreach(int id in trickIds){
+			AddTrickBuff(id);
+        }        
     }
 
      bool TroopValid(TroopType[] target){
@@ -434,11 +498,20 @@ public abstract class BaseController : MonoBehaviour {
 
     void RemoveTrickBuff(int[] trickIds){
         foreach(int id in trickIds){
-            trickingIds.Remove(id);
+            // trickingIds.Remove(id);
+            RemoveTrickBuff(id);
         }
     }
 
+    void RemoveTrickBuff(int trickId){
+		trickingIds.Remove(trickId);
+		Debug.Log((IsMy?"my ":"enemy ") + "stop  id" + trickId + ": " + Model);
 
+    }
+
+    bool IsFlyCategory(){
+        return DemoUtil.GetTroopCategory(Model.Type) == TroopCategory.CATEGORY_FLY;
+    }
         
     /// <summary>This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.</summary>
     IEnumerator DoDemoRoutine () {

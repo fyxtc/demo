@@ -1,15 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DancerController : MonoBehaviour {
+public class DancerController : BaseController {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

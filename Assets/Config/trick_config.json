@@ -1,22 +1,28 @@
 /*
-type: 0 技能触发，1 状态触发，2 自带光环
-property: 0 攻击，1 防御，2 速度，3 命中率，4 生命值 5 攻速
+type: 0 技能触发，1 状态触发，2 自带光环，
+
+注意这0-5其实都是只做了改变属性的状态，如果类似其他与属性无关的，需要另写，比如最大攻击力，这种类型是无视effect值的
+property: 0 攻击，1 防御，2 速度，3 命中率，4 生命值 5 攻速 
+          6 最大攻击力 
+
 effect: 加成的比例，有可能为负
 skill: 总对应type0情况，表示哪一种技能触发
 status: 总对应type1情况，表示哪一种状态触发 0 休息，1 移动 2 攻击，3 防御 4 死亡
-target: 可适用的目标，对应character_config里面的type，100 所有兵种，0 saber，1 archer
+target: 可适用的目标，对应character_config里面的type，100 所有兵种，0 saber，1 archer, -1表示自己
 self: 表示是否给己方部队
+opponent：和这种类型的对战才会产生的特技，一般配合status使用
 */
 
 [
     {
         "id":0,
-        "type":0,
+        "type":1,
+        "status":2,
         "property":0,
         "effect":0.5,
         "rate":1.0,
-        "skill":0,
-        "target":[100],
+        "target":[-1],
+        "opponent":[6],
         "isSelf":true
     },
     {
@@ -46,6 +52,26 @@ self: 表示是否给己方部队
         "rate":1.0,
         "status":3,
         "target":[0],
+        "isSelf":true
+    },
+    {
+        "id":4,
+        "type":0,
+        "property":0,
+        "effect":0.5,
+        "rate":1.0,
+        "skill":0,
+        "target":[3],
+        "isSelf":true
+    },
+    {
+        "id":5,
+        "type":0,
+        "property":1,
+        "effect":0.5,
+        "rate":1.0,
+        "skill":0,
+        "target":[3],
         "isSelf":true
     }
 ]

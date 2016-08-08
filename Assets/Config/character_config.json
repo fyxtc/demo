@@ -27,7 +27,7 @@ type:
         "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
-        "tricks":[0]
+        "tricks":[]
     },
     
     {
@@ -41,9 +41,9 @@ type:
         "rank":2,
         "interval":0.3,
         "attackRange":3.0,
-        "attackCD":4.0,
+        "attackCD":2.0,
         "hitRate":0.9,
-        "tricks":[]
+        "tricks":[0]
     },
 
     {
@@ -75,7 +75,7 @@ type:
         "attackRange":3.0,
         "attackCD":4.0,
         "hitRate":0.9,
-        "tricks":[]
+        "tricks":[4,5]
     },
 
     {
