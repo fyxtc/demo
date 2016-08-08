@@ -7,7 +7,8 @@ interval: 兵团内部的排序，每个小兵直接的距离
     {
         "type":0,
         "life":20,
-        "attack":10,
+        "attackMin":10,
+        "attackMax":20,
         "defense":10,
         "speed":0.05,
         "maxCount":5, 
@@ -16,13 +17,14 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
-        "tricks":[2]
+        "tricks":[3]
     },
 
     {
         "type":1,
         "life":15,
-        "attack":10,
+        "attackMin":10,
+        "attackMax":20,
         "defense":10,
         "speed":0.05,
         "maxCount":5,

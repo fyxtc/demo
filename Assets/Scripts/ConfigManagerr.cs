@@ -9,7 +9,8 @@ public class BaseModel : ICloneable{
     // public just for litjson mapper
     public TroopType type; // 靠，这里厉害了，直接在饮食的时候int强转enum了
     public int life;
-    public int attack;
+    public int attackMin;
+    public int attackMax;
     public int defense;   
     public double speed;
     public int maxCount;
@@ -28,9 +29,16 @@ public class BaseModel : ICloneable{
         set{life = value;}
         get{return life;}
     } 
+    public int AttackMin{
+        set{attackMin = value;}
+        get{return attackMin;}
+    }
+    public int AttackMax{
+        set{attackMax = value;}
+        get{return attackMax;}
+    }
     public int Attack{
-        set{attack = value;}
-        get{return attack;}
+        get{return (int)(UnityEngine.Random.Range(attackMin, attackMax));}
     }
     public int Defense{
         set{defense = value;}
@@ -76,7 +84,7 @@ public class BaseModel : ICloneable{
     }
 
     public override string ToString(){
-		return "type:" + type + ", attack:" + attack + ", defense:" + defense + ", speed:" + speed + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
+		return "type:" + type + ", attackMin:" + attackMin + ", attackMax:" + attackMax + ", defense:" + defense + ", speed:" + speed + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
     }
 }
 

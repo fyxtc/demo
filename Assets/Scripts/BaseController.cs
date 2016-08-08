@@ -92,7 +92,7 @@ public abstract class BaseController : MonoBehaviour {
         InitTrickController();
         startPos = transform.position;
         endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
-        handleCommand(TroopCommand.CMD_IDLE);
+        HandleCommand(TroopCommand.CMD_IDLE);
 
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
         // Invoke("Test", 5);
@@ -119,10 +119,10 @@ public abstract class BaseController : MonoBehaviour {
             transform.position = Vector3.Lerp(transform.position, endPos, (float)(1/((transform.position - endPos).magnitude) * Model.Speed));
             // Debug.Log(transform.position.x + ", " + endPos.x);
             // if(transform.position == endPos){
-            //     handleCommand(TroopCommand.CMD_ATTACK);
+            //     HandleCommand(TroopCommand.CMD_ATTACK);
             // }
             if(attackedTarget = FindAttackedTarget()){
-                handleCommand(TroopCommand.CMD_ATTACK);
+                HandleCommand(TroopCommand.CMD_ATTACK);
             }
             break;
         case TroopStatus.STATUS_ATTACK:
@@ -130,7 +130,7 @@ public abstract class BaseController : MonoBehaviour {
         case TroopStatus.STATUS_BACK:
             transform.position = Vector3.Lerp(transform.position, startPos, (float)(1/((transform.position - startPos).magnitude) * Model.Speed));
             if(transform.position == startPos){
-                handleCommand(TroopCommand.CMD_IDLE);
+                HandleCommand(TroopCommand.CMD_IDLE);
             }
             break;
         }
@@ -158,8 +158,9 @@ public abstract class BaseController : MonoBehaviour {
     void FixedUpdate(){
     }
 
-    void handleCommand(TroopCommand cmd){
-        // Debug.Log("handleCommand " + cmd);
+    void HandleCommand(TroopCommand cmd){
+        // Debug.Log("HandleCommand " + cmd);
+        HandleStatusTrick(false); // 关闭上一个状态的产生的Trick
         switch(cmd){
         case TroopCommand.CMD_IDLE:
             Idle();
@@ -174,6 +175,35 @@ public abstract class BaseController : MonoBehaviour {
             Back();
             break;
         }
+        HandleStatusTrick(true); // 开始新状态的trick，被攻击等情况额外处理
+    }
+
+    void HandleStatusTrick(bool isStart){
+        TrickStatusType type = TrickStatusType.STATUS_INVALID;
+        switch(status){
+        case TroopStatus.STATUS_IDLE:
+            type = TrickStatusType.STATUS_IDLE;
+            break;
+        case TroopStatus.STATUS_FORWARD:
+        case TroopStatus.STATUS_BACK:
+            type = TrickStatusType.STATUS_MOVE;
+            break;
+        case TroopStatus.STATUS_DEAD:
+            type = TrickStatusType.STATUS_DEAD;
+            break;
+        case TroopStatus.STATUS_ATTACK:
+            type = TrickStatusType.STATUS_ATTACK;
+            break;
+        default:
+            Debug.Assert(false, "error status in handle status trick");
+            break;
+        }
+        DispatchStatusTricks(type, isStart);
+    }
+
+    void DispatchStatusTricks(TrickStatusType type, bool isStart){
+        List<int> trickIds = TrickController.OnStatusTrick(type, isStart);
+        MyTroopController.DispatchTricks(trickIds, isStart);
     }
 
     void Forward(){
@@ -195,21 +225,24 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     public void BeingAttacked(){
+        Debug.Log("BeingAttacked");
+        DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
         if(CanMiss()){
             // miss anim
-            Debug.Log("attack miss");
+            // Debug.Log("attack miss");
         }else{
             int harm = CalcHarm();
-            Debug.Log("Life: " + Model.Life);
+            // Debug.Log("Life: " + Model.Life);
             // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
             // Model.Life -= harm;
             model.Life -= harm;
-            Debug.Log("Life : " + Model.Life + ", harm:-" + harm);
+            // Debug.Log("Life : " + Model.Life + ", harm:-" + harm);
             if(Model.Life <= 0){
                 Dead();
             }
             transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         }
+        DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, false);
     }
 
     int CalcHarm(){
@@ -220,6 +253,7 @@ public abstract class BaseController : MonoBehaviour {
 
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
+        // Debug.Log("att: " + att + ", def:" + def);
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
     }
@@ -250,11 +284,11 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     void DoBackDelay () {
-        handleCommand(TroopCommand.CMD_BACK);
+        HandleCommand(TroopCommand.CMD_BACK);
     }
 
     void DoForwardDelay () {
-        handleCommand(TroopCommand.CMD_FORWARD);
+        HandleCommand(TroopCommand.CMD_FORWARD);
     }
 
 
@@ -281,7 +315,8 @@ public abstract class BaseController : MonoBehaviour {
 
     BaseModel AddSkillModel(){
         BaseModel resModel = (BaseModel)model.Clone(); // 用Model，就无限递归了。。。，还有，不能用model，因为是引用，直接修改model的值了。。fuck
-        resModel.Attack = (int)(resModel.Attack * (1.0 + skillBuffModel.Attack));
+        resModel.AttackMin = (int)(resModel.AttackMin * (1.0 + skillBuffModel.Attack));
+        resModel.AttackMax = (int)(resModel.AttackMax * (1.0 + skillBuffModel.Attack));
         resModel.Defense = (int)(resModel.Defense * (1.0 + skillBuffModel.Defense));
         resModel.HitRate = resModel.HitRate * (1.0 + skillBuffModel.HitRate);
         if(resModel.HitRate > 1.0){
@@ -305,7 +340,8 @@ public abstract class BaseController : MonoBehaviour {
 		double effect = 1.0 + trickModel.Effect;
 		switch(trickModel.Property){
         case TrickProperty.PROPERTY_ATTACK:
-            resModel.Attack = (int)(resModel.Attack * effect);
+            resModel.AttackMin = (int)(resModel.AttackMin * effect);
+            resModel.AttackMax = (int)(resModel.AttackMax * effect);
             break;
         case TrickProperty.PROPERTY_DEFENSE:
             resModel.Defense = (int)(resModel.Defense * effect);
@@ -362,9 +398,11 @@ public abstract class BaseController : MonoBehaviour {
             Debug.Log("can trigger trick " + canTrigger + ": " + IsMy + "," + ev.IsMy + "," + ev.IsSelf);
             if(canTrigger){
                 Debug.Assert(ev.Tricks.Length == 1, "error trick length");
-                AddTrickBuff(ev.Tricks[0]);
-                Debug.Log((IsMy?"my ":"enemy ")+"base:     " + model);
-                Debug.Log((IsMy?"my ":"enemy ")+"start id" + ev.Tricks[0] + ": " + Model);
+                if(TroopValid(ConfigManager.share().TrickConfig.GetModel(ev.Tricks[0]).Target)){
+                    AddTrickBuff(ev.Tricks[0]);
+                    Debug.Log((IsMy?"my ":"enemy ")+"base:     " + model);
+                    Debug.Log((IsMy?"my ":"enemy ")+"start id" + ev.Tricks[0] + ": " + Model);
+                }
             }
         }else{
             RemoveTrickBuff(ev.Tricks);
@@ -376,9 +414,7 @@ public abstract class BaseController : MonoBehaviour {
 
     // 加应该是单个的，一个个处理，而移除却是一群的，而且还有可能在敌方。。。卧槽。。。
     void AddTrickBuff(int trickId){
-        if(TroopValid(ConfigManager.share().TrickConfig.GetModel(trickId).Target)){
-            trickingIds.Add(trickId);
-        }
+        trickingIds.Add(trickId);
     }
 
      bool TroopValid(TroopType[] target){
