@@ -5,6 +5,7 @@ using Spine.Unity;
 using System;
 
 public abstract class BaseController : MonoBehaviour {
+    public TroopType troopType;
     protected BaseModel model;
     public BaseModel Model{
         get{
@@ -27,7 +28,10 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     public bool IsMy{get;set;}
-    protected abstract void InitModel();
+    protected void InitModel(){
+        Model = ConfigManager.share().CharacterConfig.GetModel(troopType);
+        // Debug.Log(Model);
+    }
     // public float speed = 0.1f;
     private GameObject attackedTarget;
     public PlayerTroopController OtherTroopController{get; set;}
@@ -53,7 +57,9 @@ public abstract class BaseController : MonoBehaviour {
     }
 
 	public TrickController TrickController{ get; set; }
-    protected abstract void InitTrickController();
+    protected void InitTrickController(){
+        TrickController = new TrickController (Model.Tricks);
+    }
 
 
     public Vector3 startPos;
@@ -225,7 +231,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     public void BeingAttacked(){
-        Debug.Log("BeingAttacked");
+        // Debug.Log("BeingAttacked");
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
         if(CanMiss()){
             // miss anim

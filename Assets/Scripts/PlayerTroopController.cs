@@ -5,13 +5,27 @@ using System;
 using UnityEngine.UI;
 
 public class PlayerTroopController : MonoBehaviour {
+    private const int CHARACTER_MAX_COUNT = 9; // 目前九种兵
     public bool isMy = true;
-    float[] posConfig = {-2.5f, -5f, -3.0f, -4.5f};
+    public bool IsMy{
+        get{return isMy;}
+        set{isMy = value;}
+    }
+    float[] posConfig = {-1.5f, -3.0f, -4.5f, -6.0f};
     int maxCount = 4; // 最多能带四个兵团
     Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
 	Dictionary<TroopType, List<GameObject>> troops = new Dictionary<TroopType, List<GameObject>>();
-	public GameObject saber;
-	public GameObject archer;
+    Dictionary<TroopType, int> rankMap = new Dictionary<TroopType, int>(); 
+	// public GameObject saber;
+	// public GameObject archer;
+ //    public GameObject recover;
+ //    public GameObject dancer;
+ //    public GameObject spyer;
+ //    public GameObject rider;
+ //    public GameObject flyer;
+ //    public GameObject magician;
+ //    public GameObject titan;
+    public GameObject[] prefabs; // 注意！！！这个prefabs的下标就是Trooptype来索引的
     public bool IsGameOver{get; set;}
 
     public GameObject otherTroopObj;
@@ -29,8 +43,18 @@ public class PlayerTroopController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        data.Add(TroopType.TROOP_SABER, 1);
-        data.Add(TroopType.TROOP_ARCHER, 1);
+        Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
+        if(IsMy){
+            data.Add(TroopType.TROOP_SABER, 1);
+            data.Add(TroopType.TROOP_ARCHER, 1);
+            data.Add(TroopType.TROOP_RECOVER, 1);
+            data.Add(TroopType.TROOP_DANCER, 1);
+        }else{
+            data.Add(TroopType.TROOP_RIDER, 1);
+            data.Add(TroopType.TROOP_FLYER, 1);
+            data.Add(TroopType.TROOP_MAGICICAN, 1);
+            data.Add(TroopType.TROOP_TITAN, 1);
+        }
         OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
         InitTroops();
         // Debug.Log("my is my " + isMy + " other is my " + OtherTroopController.isMy);
@@ -40,11 +64,21 @@ public class PlayerTroopController : MonoBehaviour {
         }
     }
 
+
+
     void SetController(ref GameObject obj){
         obj.GetComponent<BaseController>().IsMy = isMy;
         obj.GetComponent<BaseController>().OtherTroopController = OtherTroopController;
         obj.GetComponent<BaseController>().MyTroopController = this;
         obj.GetComponent<BaseController>().MyTroopController.TrickEventHandler += obj.GetComponent<BaseController>().OnTrickEvent;
+    }
+
+    void InstantiateObject(TroopType type, int count, ref List<GameObject> characters){
+        for(int i = 0; i < count; i++){
+			GameObject obj = Instantiate(prefabs[(int)type]);
+            SetController(ref obj);
+            characters.Add(obj);
+        }
     }
 
     void InitTroops(){
@@ -54,25 +88,11 @@ public class PlayerTroopController : MonoBehaviour {
             int count = item.Value;
             // Debug.Log("key=" + item.Key.ToString() + "；value=" + item.Value.ToString());  
             List<GameObject> characters = new List<GameObject>();
-            switch (troopType){
-            case TroopType.TROOP_SABER:
-                for(int i = 0; i < count; i++){
-					GameObject obj = Instantiate(saber);
-                    SetController(ref obj);
-                    characters.Add(obj);
-                }
-                break;
-            case TroopType.TROOP_ARCHER:
-                for(int i = 0; i < count; i++){
-                    GameObject obj = Instantiate(archer);
-                    SetController(ref obj);
-                    characters.Add(obj);
-                }
-                break;
-            }
+            InstantiateObject(troopType, count, ref characters);
             troops.Add(troopType, characters);
             // Debug.Log(textIndex + " / " + countText.Count);
             countText[textIndex].text = "" + count;
+            rankMap.Add(troopType, textIndex);
             textIndex++;
         }
 
@@ -81,7 +101,7 @@ public class PlayerTroopController : MonoBehaviour {
             Destroy(countText[last]);
             countText.RemoveAt(last);
         }
-        Debug.Assert(troops.Count > 0 && troops.Count < maxCount, "troops count error");
+        Debug.Assert(troops.Count > 0 && troops.Count <= maxCount, "troops count error " + troops.Count);
         Resort();
     }
 
@@ -116,7 +136,7 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
     Text GetTextByTroopType(TroopType type){
-        return countText[(int)type]; // 这里应该要根据rank来的。。。先简单写
+        return countText[rankMap[type]]; // 这里应该要根据rank来的。。。先简单写
     }
 
     void CleanDeadObj(){
@@ -216,18 +236,7 @@ public class PlayerTroopController : MonoBehaviour {
 
     double GetTroopInterval(TroopType type){
         double res = 0.0;
-        switch (type) 
-        {
-		case TroopType.TROOP_SABER:
-			res = ConfigManager.share ().CharacterConfig.GetModel(TroopType.TROOP_SABER).Interval;
-			break;
-		case TroopType.TROOP_ARCHER:
-			res = ConfigManager.share ().CharacterConfig.GetModel(TroopType.TROOP_ARCHER).Interval;
-			break;
-        default:
-            Debug.Assert(false);
-            break;
-        }
+		res = ConfigManager.share ().CharacterConfig.GetModel(type).Interval;
         return res;
     }
 

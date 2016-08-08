@@ -2,6 +2,16 @@
 rank: 兵团外部的排序，站位是按照rank顺序来的
 interval: 兵团内部的排序，每个小兵直接的距离
 注意最后一个字段不能接逗号。。。否则报错：JsonException: Invalid token '125' in input string
+type:
+0: 长枪兵
+1：弓箭手
+2：医疗兵
+3：舞者
+4：侦察兵
+5：骑兵
+6：飞行兵
+7：法术兵
+8：巨人
 */
 [
     {
@@ -17,12 +27,124 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
-        "tricks":[3]
+        "tricks":[0]
+    },
+    
+    {
+        "type":1,
+        "life":30,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":4.0,
+        "hitRate":0.9,
+        "tricks":[]
     },
 
     {
-        "type":1,
-        "life":15,
+        "type":2,
+        "life":40,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":4.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":3,
+        "life":50,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":4.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":4,
+        "life":60,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":4.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":5,
+        "life":70,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":4.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":6,
+        "life":80,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":4.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":7,
+        "life":90,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":4.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":8,
+        "life":100,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -35,4 +157,5 @@ interval: 兵团内部的排序，每个小兵直接的距离
         "hitRate":0.9,
         "tricks":[]
     }
+
 ]

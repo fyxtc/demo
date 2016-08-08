@@ -84,12 +84,13 @@ public class BaseModel : ICloneable{
     }
 
     public override string ToString(){
-		return "type:" + type + ", attackMin:" + attackMin + ", attackMax:" + attackMax + ", defense:" + defense + ", speed:" + speed + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
+		return "type:" + type + ", life:" + life + ", attackMin:" + attackMin + ", attackMax:" + attackMax + ", defense:" + defense + ", speed:" + speed + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
     }
 }
 
 public enum TroopType{
-    TROOP_SABER=0, TROOP_ARCHER=1, TROOP_ALL=100
+    TROOP_SABER=0, TROOP_ARCHER, TROOP_RECOVER, TROOP_DANCER, TROOP_SPYER, TROOP_RIDER, TROOP_FLYER, TROOP_MAGICICAN, TROOP_TITAN
+    ,TROOP_ALL=100
 }
 
 public class Saber : BaseModel{
