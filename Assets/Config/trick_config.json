@@ -70,7 +70,7 @@ opponent：和这种类型的对战才会产生的特技，一般配合status使
         "property":1,
         "effect":0.5,
         "rate":1.0,
-        "skill":0,
+        "skill":1,
         "target":[3],
         "isSelf":true
     }
