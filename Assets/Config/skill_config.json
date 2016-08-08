@@ -4,6 +4,7 @@ type:
 0: attack
 1: defense
 2: hitrate
+3: life
 */
 [
 	{
@@ -27,6 +28,12 @@ type:
 		"attack":0.0,
 		"defense":0.0,
 		"hitRate":0.1,
+		"time":3.0,
+		"cd":5.0
+	},
+	{
+		"type":3,
+		"life":2,
 		"time":3.0,
 		"cd":5.0
 	}

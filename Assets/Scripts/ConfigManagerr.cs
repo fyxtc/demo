@@ -141,6 +141,7 @@ public class SkillModel{
     public double attack;
     public double defense;
     public double hitRate;
+    public int life;
     public double time;
     public double cd;
 
@@ -160,6 +161,10 @@ public class SkillModel{
         get{return hitRate;} 
         set{hitRate = value;}
     }
+    public int Life{ 
+        get{return life;} 
+        set{life = value;}
+    }    
     public double Time{ 
         get{return time;} 
         set{time = value;}
@@ -175,7 +180,8 @@ public class SkillModel{
 }
 
 public enum SkillType{
-    SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_HIT, SKILL_INVALID=-1
+    SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_HIT, SKILL_LIFE
+    , SKILL_INVALID=-1
 }
 
 public class SkillEvent : EventArgs{

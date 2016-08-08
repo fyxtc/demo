@@ -43,6 +43,7 @@ public abstract class BaseController : MonoBehaviour {
     bool isBuffing = false;
     List<int> trickingIds = new List<int>();
     protected TrickConfig trickConfig = ConfigManager.share().TrickConfig;
+    protected CharacterConfig characterConfig = ConfigManager.share().CharacterConfig;
 
     public GameObject skillTip;
 
@@ -234,7 +235,7 @@ public abstract class BaseController : MonoBehaviour {
             TrickModel m = trickConfig.GetModel(id);
             bool isSelfCall = m.Target.Length == 1 && m.Target[0] == TroopType.TROOP_SELF;
             if(isSelfCall){
-                Debug.Log("self call: " + id);
+                // Debug.Log("self call: " + id);
                 if(isStart){
                     bool isRightOppo = false;
                     if(attackedTarget != null){
@@ -301,7 +302,9 @@ public abstract class BaseController : MonoBehaviour {
             // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
             // Model.Life -= harm;
             model.Life -= harm;
-            // Debug.Log("Life : " + Model.Life + ", harm:-" + harm);
+            if(IsMy){
+                // Debug.Log("Life : " + Model.Life + ", harm:-" + harm);
+            }
             if(Model.Life <= 0){
                 Dead();
             }
@@ -315,7 +318,7 @@ public abstract class BaseController : MonoBehaviour {
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
         if(!IsMy){
-            Debug.Log("att: " + att + ", def:" + def);
+            // Debug.Log("att: " + att + ", def:" + def);
         }
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
@@ -365,9 +368,12 @@ public abstract class BaseController : MonoBehaviour {
             SpriteRenderer spr = skillTip.GetComponent<SpriteRenderer>();  
             if(isBuffing){
                 skillBuffModel = ConfigManager.share().SkillConfig.GetModel(ev.Type);
-				spr.sprite = skillTip.GetComponent<SkillTipController>().tipImages[(int)ev.Type];
+                spr.sprite = skillTip.GetComponent<SkillTipController>().tipImages[(int)ev.Type];
             }else{
                 spr.sprite = null;
+            }
+            if(skillBuffModel.Type == SkillType.SKILL_LIFE){
+                AddLifeBuff(isBuffing);   
             }
             List<int> trickIds = TrickController.GetSkillTrick(ev.Type);
             MyTroopController.DispatchTricks(trickIds, isBuffing);
@@ -387,6 +393,27 @@ public abstract class BaseController : MonoBehaviour {
         }
         // Debug.Log("buff: attack " + resModel.Attack);
         return resModel;
+    }
+
+    void AddLifeBuff(bool isStart){
+        if(isStart){
+            if(!IsInvoking("AddLifeTimer")){
+                InvokeRepeating("AddLifeTimer", 0, 1.0f);
+            }
+        }else{
+            CancelInvoke("AddLifeTimer");
+        }
+    }
+
+    void AddLifeTimer(){
+        Debug.Assert(isBuffing && skillBuffModel != null, "what the fuck life buff ?");
+        BaseModel config = characterConfig.GetModel(model.Type);
+        Debug.Log(model.Life + " add life " + skillBuffModel.Life);
+        model.Life += skillBuffModel.Life;
+        if(model.Life > config.Life){
+            model.Life = config.Life;
+        }
+
     }
 
     BaseModel AddTrickModels(BaseModel afterBuffModel){

@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
+// 增加一个技能需要在editor里面修改skillButtons，每个兵种skill_tip里面的images
+
 public class SkillController : MonoBehaviour {
 	public SkillType skillType;
 	public SkillType SkillType{
@@ -52,6 +54,7 @@ public class SkillController : MonoBehaviour {
 		Invoke("SkillReset", (float)Model.CD);
 
 		SkillEvent.Status = status;
+		// Debug.Log(SkillEventHandler + ", " + SkillEvent);
 		SkillEventHandler(this, SkillEvent);
 	}
 
