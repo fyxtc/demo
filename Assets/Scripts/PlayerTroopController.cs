@@ -132,6 +132,7 @@ public class PlayerTroopController : MonoBehaviour {
                     TrickEvent ev = new TrickEvent();
                     ev.Tricks = controller.Model.Tricks;
                     ev.IsStart = false;
+                    ev.IsSelf = false; // 这个值其实无所谓吧。。反正都是移除特技的事件
                     TrickEventHandler(this, ev);
                     Destroy(obj);
                     troop.RemoveAt(i);
@@ -176,7 +177,7 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
     public void DispatchTrick(int trickId, bool isStart, bool isSelf){
-        Debug.Log("DispatchTrick " + trickId + ", " + isStart);
+        Debug.Log("DispatchTrick " + trickId + ", " + isStart + ", " + isSelf);
         TrickEvent ev = new TrickEvent();
         ev.Tricks = new int[1]{trickId};
         ev.IsStart = isStart;

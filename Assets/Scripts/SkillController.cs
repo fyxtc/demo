@@ -18,7 +18,7 @@ public class SkillController : MonoBehaviour {
 	SkillStatus status;
 
 	void InitModel(){
-		Model = ConfigManager.share().SkillConfig.GetSkillModel(SkillType);
+		Model = ConfigManager.share().SkillConfig.GetModel(SkillType);
 		SkillEvent = new SkillEvent();
 		SkillEvent.Type = SkillType;
 		SkillEvent.IsMy = isMy;

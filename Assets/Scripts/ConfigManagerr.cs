@@ -124,11 +124,41 @@ public enum SkillStatus{
 }
 
 public class SkillModel{
-	public double Attack{ get; set;}
-	public double Defense{ get; set;}
-	public double HitRate{ get; set;}
-    public double Time{ get; set;}
-    public double CD{ get; set;}
+    public SkillType type;
+    public double attack;
+    public double defense;
+    public double hitRate;
+    public double time;
+    public double cd;
+
+    public SkillType Type{
+        get{return type;}
+        set{type = value;}
+    }
+	public double Attack{ 
+        get{return attack;} 
+        set{attack = value;}
+    }
+	public double Defense{ 
+        get{return defense;} 
+        set{defense = value;}
+    }
+	public double HitRate{ 
+        get{return hitRate;} 
+        set{hitRate = value;}
+    }
+    public double Time{ 
+        get{return time;} 
+        set{time = value;}
+    }
+    public double CD{ 
+        get{return cd;} 
+        set{cd = value;}
+    }
+
+    public override string ToString(){
+        return "type:"+Type+", attack:"+attack+", defense:"+defense+", hitRate:"+hitRate+", time:"+time+", cd"+cd;
+    }
 }
 
 public enum SkillType{
@@ -142,33 +172,21 @@ public class SkillEvent : EventArgs{
 }
 
 public class SkillConfig{
-    int skillCount = 3;
     public const string SKILL_CONFIG_FILE = "skill_config.json";
-    List<SkillModel> skillModels = new List<SkillModel>();
+    private SkillModel[] models;
 
     public void LoadConfig(){
         string str = DemoUtil.ReadConfigFile(SKILL_CONFIG_FILE);
         JsonData data = JsonMapper.ToObject(str);
-        for(int i = 0; i < skillCount; i++){
-            string key = "skill"+i;
-            SkillModel model = new SkillModel();
-            JsonData skillType = data[key];
-            model.Attack = (double)skillType["attack"];
-            model.Defense = (double)skillType["defense"];
-            model.HitRate = (double)skillType["hitRate"];
-            model.Time = (double)skillType["time"];
-            model.CD = (double)skillType["cd"];
-            skillModels.Add(model);
-        }
+        models = JsonMapper.ToObject<SkillModel[]>(str);
+        // foreach (SkillModel m in models){
+        //     Debug.Log(m);
+        // }
     }
 
-    public SkillModel GetSkillModel(SkillType type){
-        if(skillModels.Count == 0){
-            LoadConfig();
-        }
-        return skillModels[(int)type];
+    public SkillModel GetModel(SkillType type){
+        return models[(int)type];
     }
-
 }
 
 

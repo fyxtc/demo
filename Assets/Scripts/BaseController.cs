@@ -263,7 +263,7 @@ public abstract class BaseController : MonoBehaviour {
             isBuffing = ev.Status == SkillStatus.STATUS_USING;
             SpriteRenderer spr = skillTip.GetComponent<SpriteRenderer>();  
             if(isBuffing){
-                skillBuffModel = ConfigManager.share().SkillConfig.GetSkillModel(ev.Type);
+                skillBuffModel = ConfigManager.share().SkillConfig.GetModel(ev.Type);
 				spr.sprite = skillTip.GetComponent<SkillTipController>().tipImages[(int)ev.Type];
             }else{
                 spr.sprite = null;
@@ -354,16 +354,18 @@ public abstract class BaseController : MonoBehaviour {
         // 或者如果发送放和接收方不等，且是对别人产生作用的特技的话
         bool condition2 = IsMy != ev.IsMy && !ev.IsSelf;
         bool canTrigger = condition1 || condition2;
-        Debug.Log("can trigger trick " + canTrigger + ": " + IsMy + "," + ev.IsMy + "," + ev.IsSelf);
-        if(canTrigger){
-            if(ev.IsStart){
+        if(ev.IsStart){
+            Debug.Log("can trigger trick " + canTrigger + ": " + IsMy + "," + ev.IsMy + "," + ev.IsSelf);
+            if(canTrigger){
                 Debug.Assert(ev.Tricks.Length == 1, "error trick length");
                 AddTrickBuff(ev.Tricks[0]);
                 Debug.Log("base:     " + model);
                 Debug.Log("start id" + ev.Tricks[0] + ": " + Model);
-            }else{
-                RemoveTrickBuff(ev.Tricks);
-                Debug.Log("stop  id" + ev.Tricks[0] + ": " + Model);
+            }
+        }else{
+            RemoveTrickBuff(ev.Tricks);
+            foreach(int id in ev.Tricks){
+                Debug.Log("stop  id" + id + ": " + Model);
             }
         }
     }

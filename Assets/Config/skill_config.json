@@ -1,29 +1,33 @@
 /**
 按百分比的加成
+type:
 0: attack
 1: defense
 2: hitrate
 */
-{
-	"skill0":{
+[
+	{
+		"type":0,
 		"attack":0.5,
 		"defense":0.0,
 		"hitRate":0.0,
 		"time":3.0,
 		"cd":5.0
 	},
-	"skill1":{
+	{
+		"type":1,
 		"attack":0.0,
 		"defense":0.5,
 		"hitRate":0.0,
 		"time":3.0,
 		"cd":5.0
 	},
-	"skill2":{
+	{
+		"type":2,
 		"attack":0.0,
 		"defense":0.0,
 		"hitRate":0.1,
 		"time":3.0,
 		"cd":5.0
 	}
-}
+]
