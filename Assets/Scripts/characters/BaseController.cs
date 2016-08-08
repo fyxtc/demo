@@ -225,6 +225,8 @@ public abstract class BaseController : MonoBehaviour {
 
 
     void DispatchStatusTricks(TrickStatusType type, bool isStart){
+        // 像那种什么自己爆炸的效果啥的，还不如在SpyController里面重写dead然后炸了，这种是固定触发的，没必要也来这里分发，复杂死了。。。
+        // 按理说，那种瞬时的且不改变属性的那种特教，都不应该放这里分发
         if(!isStart){
             RemoveLastStatusBuff();
         }
@@ -332,7 +334,7 @@ public abstract class BaseController : MonoBehaviour {
 
     void Dead(){
         Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
-        Model.Life = 0;
+        model.Life = 0;
         Status = TroopStatus.STATUS_DEAD;
         IsDead = true;
         // Destroy(gameObject);

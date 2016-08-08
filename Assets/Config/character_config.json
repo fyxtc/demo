@@ -91,7 +91,7 @@ type:
         "attackRange":3.0,
         "attackCD":4.0,
         "hitRate":0.9,
-        "tricks":[]
+        "tricks":[6]
     },
 
     {
