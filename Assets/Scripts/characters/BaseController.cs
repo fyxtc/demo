@@ -345,7 +345,7 @@ public abstract class BaseController : MonoBehaviour {
             if(Model.Life <= 0){
                 Dead();
             }
-            transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + 0.0f, transform.position.z);
         }
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, false);
     }
