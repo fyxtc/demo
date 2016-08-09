@@ -12,6 +12,8 @@ target: 可适用的目标，对应character_config里面的type，100 所有兵
 self: 表示是否给己方部队
 opponent：和这种类型的对战才会产生的特技，一般配合status使用
 raidus: 伤害半径
+
+注意：针对全场的buff才需要放在这来配置，如果是针对自己或者对手的，只要放在相应的controller里面处理就可以了
 */
 
 [
@@ -59,23 +61,33 @@ raidus: 伤害半径
         "id":4,
         "type":0,
         "property":0,
-        "effect":0.5,
+        "effect":2,
         "rate":1.0,
         "skill":0,
-        "target":[3],
+        "target":[100],
         "isSelf":true
     },
     {
         "id":5,
         "type":0,
         "property":1,
+        "effect":2,
+        "rate":1.0,
+        "skill":1,
+        "target":[100],
+        "isSelf":true
+    },
+    {
+        "id":6,
+        "type":1,
+        "status":1,
+        "property":3,
         "effect":0.5,
         "rate":1.0,
         "skill":1,
-        "target":[3],
+        "target":[-1],
         "isSelf":true
-    },
-  
+    },  
 
 
 

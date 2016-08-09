@@ -2,5 +2,13 @@
 using System.Collections;
 
 public class RiderController : BaseController {
-
+	private double missBuff = 0.5;
+	protected override bool CanMiss(){
+    	double hitRate = Attacker.GetComponent<BaseController>().Model.HitRate;
+    	if(Status == TroopStatus.STATUS_FORWARD || Status == TroopStatus.STATUS_BACK){
+    		hitRate = hitRate * (1.0 - missBuff);
+	    	// Debug.Log("miss buff hitRate: " + hitRate);
+    	}
+        return UnityEngine.Random.value > hitRate; 
+    }
 }

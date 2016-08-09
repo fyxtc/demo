@@ -113,7 +113,7 @@ public abstract class BaseController : MonoBehaviour {
         HandleCommand(TroopCommand.CMD_IDLE);
 
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
-        InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
+        // InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
         // Invoke("Test", 5);
     }
 
@@ -232,8 +232,9 @@ public abstract class BaseController : MonoBehaviour {
         }
 
         List<int> trickIds = TrickController.OnStatusTrick(type, isStart);
+        MyTroopController.DispatchTricks(trickIds, isStart);
         // Debug.Log(type + ", " + isStart + ", count:" + trickIds.Count);
-        List<int> needDispatchIds = new List<int>();
+        /*List<int> needDispatchIds = new List<int>();
         foreach(int id in trickIds){
             // 如果目标是自己（注意是自己，不是自己类型，这是两个概念），就不转发了
             TrickModel m = trickConfig.GetModel(id);
@@ -261,7 +262,7 @@ public abstract class BaseController : MonoBehaviour {
                 needDispatchIds.Add(id);
             }
         }
-        MyTroopController.DispatchTricks(needDispatchIds, isStart);
+        MyTroopController.DispatchTricks(needDispatchIds, isStart);*/
     }
 
     void RemoveLastStatusBuff(){
@@ -290,11 +291,12 @@ public abstract class BaseController : MonoBehaviour {
         }
         Invoke("DoBackDelay", 0.5f); // 注意这个时间应该要大于攻击cd
         attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
+        // 这里的beingattacked应该放在动画碰撞时候，比如投弹，弓箭之类
         attackedTarget.GetComponent<BaseController>().BeingAttacked();
         // attackedTarget = null;
     }
 
-    public void BeingAttacked(){
+    public virtual void BeingAttacked(){
         // Debug.Log("BeingAttacked");
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
         if(CanMiss()){
@@ -317,27 +319,30 @@ public abstract class BaseController : MonoBehaviour {
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, false);
     }
 
-    int CalcHarm(){
+    protected virtual int CalcHarm(){
         float att = Attacker.GetComponent<BaseController>().Model.Attack;
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
-        if(!IsMy){
-            // Debug.Log("att: " + att + ", def:" + def);
-        }
+        // Debug.Log((IsMy?"my ":"enemy ") Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
     }
 
-    bool CanMiss(){
+    protected virtual bool CanMiss(){
         return UnityEngine.Random.value > Attacker.GetComponent<BaseController>().Model.HitRate; 
     }
 
-    void Dead(){
+    protected virtual void Dead(){
         Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
         model.Life = 0;
         Status = TroopStatus.STATUS_DEAD;
         IsDead = true;
         // Destroy(gameObject);
+    }
+
+    // 需要处理的碰撞信息，放在被撞的物体身上
+    void OnParticleCollision(GameObject other) {
+        Debug.Log("collision");     
     }
 
     void Back(){
@@ -386,7 +391,7 @@ public abstract class BaseController : MonoBehaviour {
         }
     }
 
-    BaseModel AddSkillModel(){
+    protected BaseModel AddSkillModel(){
         BaseModel resModel = (BaseModel)model.Clone(); // 用Model，就无限递归了。。。，还有，不能用model，因为是引用，直接修改model的值了。。fuck
         resModel.AttackMin = (int)(resModel.AttackMin * (1.0 + skillBuffModel.Attack));
         resModel.AttackMax = (int)(resModel.AttackMax * (1.0 + skillBuffModel.Attack));
@@ -399,28 +404,22 @@ public abstract class BaseController : MonoBehaviour {
         return resModel;
     }
 
-    void AddSkillLifeBuff(bool isStart){
+    protected void AddSkillLifeBuff(bool isStart){
         if(isStart){
             if(!IsInvoking("AddSkillLifeTimer")){
                 InvokeRepeating("AddSkillLifeTimer", 0, 1.0f);
+            }else{
+                Debug.Assert(false, "call skill life timer twice");
             }
         }else{
             CancelInvoke("AddSkillLifeTimer");
         }
     }
 
-    void AddSkillLifeTimer(){
+    protected void AddSkillLifeTimer(){
         Debug.Assert(isBuffing && skillBuffModel != null, "what the fuck life buff ?");
         BaseModel config = characterConfig.GetModel(model.Type);
-        Debug.Log(Model.Type + ":" + model.Life + " add skill life " + skillBuffModel.Life);
-        model.Life += skillBuffModel.Life;
-        if(model.Life > config.Life){
-            model.Life = config.Life;
-        }
-
-    }
-
-    void AddTrickLifeTimer(){
+        int skillLife = skillBuffModel.Life;
         int trickLife = 0;
         foreach(int id in trickingIds){
             TrickModel m = trickConfig.GetModel(id);
@@ -428,18 +427,15 @@ public abstract class BaseController : MonoBehaviour {
                 trickLife += (int)m.Effect;
             }
         }
-        if(trickLife != 0){
-            Debug.Log(Model.Type + ":" + model.Life + " add trick life " + trickLife);
-        }
-        model.Life += trickLife;
-        BaseModel config = characterConfig.GetModel(model.Type);
-        // Debug.Log("current:" + model.Life + ", max:" + config.Life);
+        int buffLife = skillLife + trickLife;
+        // 一开始这里log还选了collapse，所以特么我还说为毛后面部队的timer怎么不跑了。。。orz
+        Debug.Log(Model.Type + ": " + model.Life + " skilllife+" + skillBuffModel.Life + ", tricklife+" + trickLife);
+        model.Life += buffLife;
         if(model.Life > config.Life){
             model.Life = config.Life;
         }
 
     }
-
 
     BaseModel AddTrickModels(BaseModel afterBuffModel){
         List<TrickModel> tricks = GetTrickingModels();
@@ -453,17 +449,18 @@ public abstract class BaseController : MonoBehaviour {
     BaseModel AddTrickModel(BaseModel originModel, TrickModel trickModel){
         // 注意这里不能用Model去隐式调用get方法，这样会无限递归了。。。
         BaseModel resModel = (BaseModel)originModel.Clone();
-		double effect = 1.0 + trickModel.Effect;
+		double effect = trickModel.Effect;
+        // effect都是固定值，而不是百分比，直接加
 		switch(trickModel.Property){
         case TrickProperty.PROPERTY_ATTACK:
-            resModel.AttackMin = (int)(resModel.AttackMin * effect);
-            resModel.AttackMax = (int)(resModel.AttackMax * effect);
+            resModel.AttackMin += (int)effect;
+            resModel.AttackMax += (int)effect;
             break;
         case TrickProperty.PROPERTY_DEFENSE:
-            resModel.Defense = (int)(resModel.Defense * effect);
+            resModel.Defense += (int)effect;
             break;
         case TrickProperty.PROPERTY_SPEED:
-            resModel.Speed = resModel.Speed * effect;
+            resModel.Speed += (int)effect;
             break;
         case TrickProperty.PROPERTY_HIT:
             resModel.HitRate = resModel.HitRate * effect;
@@ -484,7 +481,7 @@ public abstract class BaseController : MonoBehaviour {
             // model.Life = resModel.Life;
             break;
         case TrickProperty.PROPERTY_ATTACK_CD:
-            resModel.AttackCD = resModel.AttackCD * effect;
+            resModel.AttackCD += (int)effect;
             break;
         default:
             Debug.Assert(false, "error trick property");
@@ -564,8 +561,12 @@ public abstract class BaseController : MonoBehaviour {
 
     }
 
-    bool IsFlyCategory(){
+    public bool IsFlyCategory(){
         return DemoUtil.GetTroopCategory(Model.Type) == TroopCategory.CATEGORY_FLY;
+    }
+
+    public bool IsRemoteCategory(){
+        return DemoUtil.GetTroopCategory(Model.Type) == TroopCategory.CATEGORY_REMOTE;
     }
         
     /// <summary>This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.</summary>

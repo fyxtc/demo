@@ -47,14 +47,19 @@ public class PlayerTroopController : MonoBehaviour {
         if(IsMy){
             // data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
-            // data.Add(TroopType.TROOP_RECOVER, 1);
-            // data.Add(TroopType.TROOP_DANCER, 1);
-            data.Add(TroopType.TROOP_SPYER, 1);
-        }else{
+            data.Add(TroopType.TROOP_DANCER, 1);
+            data.Add(TroopType.TROOP_RECOVER, 1);
+            // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
-            data.Add(TroopType.TROOP_TITAN, 1);
+        }else{
+            // data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_ARCHER, 1);
+            // data.Add(TroopType.TROOP_RIDER, 1);
+            data.Add(TroopType.TROOP_FLYER, 1);
+            // data.Add(TroopType.TROOP_MAGICICAN, 1);
+            // data.Add(TroopType.TROOP_TITAN, 1);
         }
         OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
         InitTroops();

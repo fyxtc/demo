@@ -94,7 +94,7 @@ public enum TroopType{
 }
 
 public enum TroopCategory{
-    CATEGORY_LAND, CATEGORY_FLY
+    CATEGORY_LAND, CATEGORY_FLY, CATEGORY_NEAR, CATEGORY_REMOTE,
 }
 
 public class Saber : BaseModel{
