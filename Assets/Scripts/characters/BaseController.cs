@@ -73,6 +73,10 @@ public abstract class BaseController : MonoBehaviour {
         TrickController = new TrickController (Model.Tricks);
     }
 
+    public Rigidbody2D flyWeapon;
+    // public float flyWeaponSpeed = 20.0f; 
+
+
 
     public Vector3 startPos;
     public Vector3 endPos;
@@ -291,9 +295,35 @@ public abstract class BaseController : MonoBehaviour {
         }
         Invoke("DoBackDelay", 0.5f); // 注意这个时间应该要大于攻击cd
         attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
-        // 这里的beingattacked应该放在动画碰撞时候，比如投弹，弓箭之类
-        attackedTarget.GetComponent<BaseController>().BeingAttacked();
+        // 这里的beingattacked应该放在必要的动画碰撞时候，比如投弹，弓箭之类
+        if(!IsNeedFlyWeapon()){
+            attackedTarget.GetComponent<BaseController>().BeingAttacked();
+        }else{
+            CreateFlyWeapon();
+        }
         // attackedTarget = null;
+    }
+
+    protected virtual void CreateFlyWeapon(){
+        Rigidbody2D weapon;
+        if(IsMy)
+        {
+            weapon = Instantiate(flyWeapon, transform.position, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
+            weapon.velocity = new Vector2(weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+        }
+        else
+        {
+            weapon = Instantiate(flyWeapon, transform.position, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
+            weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+        }
+        BaseFlyWeapon controller = weapon.GetComponent<BaseFlyWeapon>();
+        controller.Owner = this;
+        controller.IsMy = IsMy;
+        controller.SettingFin = true;
+    }
+
+    protected bool IsNeedFlyWeapon(){
+        return (Model.Type == TroopType.TROOP_ARCHER);
     }
 
     public virtual void BeingAttacked(){
@@ -304,6 +334,7 @@ public abstract class BaseController : MonoBehaviour {
             // Debug.Log("attack miss");
         }else{
             int harm = CalcHarm();
+            // Debug.Log("total harm: " + harm);
             // Debug.Log("Life: " + Model.Life);
             // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
             // Model.Life -= harm;
@@ -323,7 +354,7 @@ public abstract class BaseController : MonoBehaviour {
         float att = Attacker.GetComponent<BaseController>().Model.Attack;
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
-        // Debug.Log((IsMy?"my ":"enemy ") Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
+        // Debug.Log((IsMy?"my ":"enemy ") + Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
     }
