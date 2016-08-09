@@ -46,17 +46,18 @@ public class PlayerTroopController : MonoBehaviour {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
             // data.Add(TroopType.TROOP_SABER, 1);
-            data.Add(TroopType.TROOP_ARCHER, 1);
+            // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
-            // data.Add(TroopType.TROOP_SPYER, 1);
+            data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
         }else{
             // data.Add(TroopType.TROOP_SABER, 1);
-            // data.Add(TroopType.TROOP_ARCHER, 1);
-            // data.Add(TroopType.TROOP_RIDER, 1);
+            data.Add(TroopType.TROOP_ARCHER, 1);
+            data.Add(TroopType.TROOP_RIDER, 1);
+            data.Add(TroopType.TROOP_SPYER, 1);
             data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
@@ -71,12 +72,34 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
 
+    public void OnExplodeEvent(object sender, EventArgs e){
+        ExplodeEvent ev = e as ExplodeEvent;
+        Debug.Log((IsMy?"my get ": "enemy get ") + "OnExplodeEvent: " + ev);
+        foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
+            TroopType troopType = item.Key;
+            List<GameObject> troop = item.Value;
+            foreach(GameObject obj in troop){
+                if(IsInExplode(ev.Center, ev.Radius, obj.transform.position)){
+                    Debug.Log("explode in " + obj.GetComponent<BaseController>().Model.Type);
+                    obj.GetComponent<BaseController>().BeingAttacked(ev.Harm);
+                }
+            }
+        }
+    }
+
+    bool IsInExplode(Vector3 center, double radius, Vector3 point){
+        return Vector3.Distance(center, point) <= radius;
+    }
+
 
     void SetController(ref GameObject obj){
-        obj.GetComponent<BaseController>().IsMy = isMy;
-        obj.GetComponent<BaseController>().OtherTroopController = OtherTroopController;
-        obj.GetComponent<BaseController>().MyTroopController = this;
-        obj.GetComponent<BaseController>().MyTroopController.TrickEventHandler += obj.GetComponent<BaseController>().OnTrickEvent;
+        BaseController controller = obj.GetComponent<BaseController>();
+        controller.IsMy = isMy;
+        controller.OtherTroopController = OtherTroopController;
+        controller.MyTroopController = this;
+        controller.MyTroopController.TrickEventHandler += controller.OnTrickEvent;
+        // 注意这里的爆炸事件应该是让对方来接
+        controller.ExplodeEventHandler += OtherTroopController.OnExplodeEvent;
     }
 
     void InstantiateObject(TroopType type, int count, ref List<GameObject> characters){
@@ -114,6 +137,7 @@ public class PlayerTroopController : MonoBehaviour {
 
     public GameObject GetAttackTarget(){
         if(troops.Count == 0){
+            // 这里涉及到平局的概念，比如空中还有技能在飞呢。。。
             Debug.Log(isMy ? "you lose" : "you win");
             return null;
         }

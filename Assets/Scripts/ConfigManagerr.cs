@@ -350,4 +350,14 @@ public class ConfigManager{
 }
 
 
+public class ExplodeEvent : EventArgs{
+	public Vector3 Center{ get; set; }
+	public double Radius{ get; set; }
+    public bool IsMy{ get; set; }
+    public int Harm{ get; set; }
+
+    public override string ToString(){
+        return "center:"+ Center + ", radisu:" + Radius + ", isMy:" + IsMy + ", harm:" + Harm;
+    }
+}
 

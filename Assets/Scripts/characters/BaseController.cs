@@ -27,6 +27,8 @@ public abstract class BaseController : MonoBehaviour {
         }
     }
 
+    public Vector3 startPos;
+    public Vector3 endPos;
     public bool IsMy{get;set;}
     protected void InitModel(){
         // 不然直接影响到配置的值，卧槽，这怎么会返回引用啊，日了狗了
@@ -75,32 +77,10 @@ public abstract class BaseController : MonoBehaviour {
 
     public Rigidbody2D flyWeapon;
     // public float flyWeaponSpeed = 20.0f; 
+    protected ExplodeEvent explodeEvent = new ExplodeEvent();
+    public event EventHandler ExplodeEventHandler;
 
 
-
-    public Vector3 startPos;
-    public Vector3 endPos;
-
-    #region Inspector
-    // [SpineAnimation] attribute allows an Inspector dropdown of Spine animation names coming form SkeletonAnimation.
-    [SpineAnimation]
-    public string runAnimationName;
-
-    [SpineAnimation]
-    public string idleAnimationName;
-
-    [SpineAnimation]
-    public string walkAnimationName;
-
-    [SpineAnimation]
-    public string shootAnimationName;
-    #endregion
-
-    SkeletonAnimation skeletonAnimation;
-
-    // Spine.AnimationState and Spine.Skeleton are not Unity-serialized objects. You will not see them as fields in the inspector.
-    public Spine.AnimationState spineAnimationState;
-    public Spine.Skeleton skeleton;
 
     void Start () {
         // Make sure you get these AnimationState and Skeleton references in Start or Later. Getting and using them in Awake is not guaranteed by default execution order.
@@ -326,15 +306,26 @@ public abstract class BaseController : MonoBehaviour {
         return (Model.Type == TroopType.TROOP_ARCHER);
     }
 
-    public virtual void BeingAttacked(){
+    public virtual void BeingAttacked(int directHarm = -1){
+        // 之前没加这个判断，结果两个spyer互爆，无限循环dead.....
+        if(Status == TroopStatus.STATUS_DEAD){
+            return;
+        }
         // Debug.Log("BeingAttacked");
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
-        if(CanMiss()){
+        // 有直接伤害的时候不能miss，directHarm放前面去短路，如果是直接伤害就没必要判断对方的model来取到hitRate算miss率了，避免一定程度的对象已死获取不到的问题
+        if( directHarm == -1 && CanMiss()){
             // miss anim
             // Debug.Log("attack miss");
         }else{
-            int harm = CalcHarm();
-            // Debug.Log("total harm: " + harm);
+            int harm = 0;
+            if(directHarm != -1){
+                harm = directHarm;
+                // Debug.Log(Model.Type + ": direct harm: " + harm);
+            }else{
+                harm = CalcHarm();
+                // Debug.Log("calc total harm: " + harm);
+            }
             // Debug.Log("Life: " + Model.Life);
             // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
             // Model.Life -= harm;
@@ -599,7 +590,42 @@ public abstract class BaseController : MonoBehaviour {
     public bool IsRemoteCategory(){
         return DemoUtil.GetTroopCategory(Model.Type) == TroopCategory.CATEGORY_REMOTE;
     }
-        
+
+
+    protected void SendExplodeEvent(Vector3 center, double radius, bool isMy, int harm){
+        explodeEvent.Center = center;
+        explodeEvent.Radius = radius;
+        explodeEvent.IsMy = isMy;
+        explodeEvent.Harm = harm;
+        ExplodeEventHandler(this, explodeEvent);
+    }
+
+
+
+
+    // spine  line -----------------------------------------------------------------------------------------------------------
+
+    #region Inspector
+    // [SpineAnimation] attribute allows an Inspector dropdown of Spine animation names coming form SkeletonAnimation.
+    [SpineAnimation]
+    public string runAnimationName;
+
+    [SpineAnimation]
+    public string idleAnimationName;
+
+    [SpineAnimation]
+    public string walkAnimationName;
+
+    [SpineAnimation]
+    public string shootAnimationName;
+    #endregion
+
+    SkeletonAnimation skeletonAnimation;
+
+    // Spine.AnimationState and Spine.Skeleton are not Unity-serialized objects. You will not see them as fields in the inspector.
+    public Spine.AnimationState spineAnimationState;
+    public Spine.Skeleton skeleton;
+    
     /// <summary>This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.</summary>
     IEnumerator DoDemoRoutine () {
         
