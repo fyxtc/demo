@@ -33,7 +33,7 @@ public abstract class BaseController : MonoBehaviour {
     protected void InitModel(){
         // 不然直接影响到配置的值，卧槽，这怎么会返回引用啊，日了狗了
         Model = (BaseModel)ConfigManager.share().CharacterConfig.GetModel(troopType).Clone();
-        Debug.Log(Model);
+        // Debug.Log(Model);
     }
     // public float speed = 0.1f;
     private GameObject attackedTarget;
@@ -143,13 +143,14 @@ public abstract class BaseController : MonoBehaviour {
 
     GameObject FindAttackedTarget(){
         // Debug.Log(OtherTroopController);
-        GameObject obj = OtherTroopController.GetAttackTarget();
+        GameObject obj = OtherTroopController.GetAttackedTarget(Model.Type);
         if (obj == null) {
             return null;
         }
         if(obj.GetComponent<BaseController>().IsDead){
             return null;
         }
+
         if(IsMy){
             if(transform.position.x + Model.AttackRange >= obj.transform.position.x){
                 return obj;
@@ -284,7 +285,7 @@ public abstract class BaseController : MonoBehaviour {
         Invoke("DoBackDelay", 0.5f); // 注意这个时间应该要大于攻击cd
         attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
         // 不能依赖这个类的任何东西，只能把伤害提取出来发过去，那问题是，如果是传引用，那这个类消失了还会在吗。。harmmodel会消失吗。。
-        HarmModel harmModel = createHarmModel();
+        HarmModel harmModel = CreateHarmModel(attackedTarget.GetComponent<BaseController>().Model.Type);
         // 这里的beingattacked应该放在必要的动画碰撞时候，比如投弹，弓箭之类
         if(!IsNeedFlyWeapon()){
             attackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
@@ -294,9 +295,18 @@ public abstract class BaseController : MonoBehaviour {
         // attackedTarget = null;
     }
 
-    HarmModel createHarmModel(){
-        HarmModel m = new HarmModel(Model.Type, Model.Attack, Model.HitRate, IsRemoteCategory());
+    // 各种加成的特技buff都放在里对应controller去重写
+    protected virtual HarmModel CreateHarmModel(TroopType enemyType){
+        TroopType type = Model.Type;
+        int attack = Model.Attack;
+        double hitRate = Model.HitRate;
+        HarmModel m = new HarmModel(type, attack, hitRate);
+        AddTrickHarm(ref m, enemyType);
         return m;
+    }
+
+    protected virtual void AddTrickHarm(ref HarmModel harmModel, TroopType enemyType){
+        // base do nothing
     }
 
     protected virtual void CreateFlyWeapon(HarmModel model){
@@ -328,7 +338,7 @@ public abstract class BaseController : MonoBehaviour {
         if(Status == TroopStatus.STATUS_DEAD){
             return;
         }
-        // Debug.Log("BeingAttacked");
+        // Debug.Log(harmModel.Type + " attack " + Model.Type);
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
         // 有直接伤害的时候不能miss，directHarm放前面去短路，如果是直接伤害就没必要判断对方的model来取到hitRate算miss率了，避免一定程度的对象已死获取不到的问题
         if( harmModel.DirectHarm == -1 && CanMiss(harmModel)){
@@ -608,15 +618,6 @@ public abstract class BaseController : MonoBehaviour {
 		Debug.Log((IsMy?"my ":"enemy ") + "stop  id" + trickId + ": " + Model);
 
     }
-
-    public bool IsFlyCategory(){
-        return DemoUtil.GetTroopCategory(Model.Type) == TroopCategory.CATEGORY_FLY;
-    }
-
-    public bool IsRemoteCategory(){
-        return DemoUtil.GetTroopCategory(Model.Type) == TroopCategory.CATEGORY_REMOTE;
-    }
-
 
     protected void SendExplodeEvent(Vector3 center, double radius, bool isMy, int harm){
         explodeEvent.Center = center;

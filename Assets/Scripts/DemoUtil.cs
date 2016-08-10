@@ -22,4 +22,24 @@ public class DemoUtil{
             return TroopCategory.CATEGORY_LAND;
         }
     }
+
+    public static bool IsFlyCategory(TroopType type){
+        bool res = (type == TroopType.TROOP_FLYER || type == TroopType.TROOP_FLYER_SUPER1 || type == TroopType.TROOP_FLYER_SUPER2
+                    || type == TroopType.TROOP_SABER_SUPER1);
+        return res;
+    }
+
+    public static bool IsRemoteCategory(TroopType type){
+        bool res = (type == TroopType.TROOP_ARCHER || type == TroopType.TROOP_ARCHER_SUPER1 || type == TroopType.TROOP_ARCHER_SUPER2);
+        return res;
+    }
+
+    public static bool IsAttackIgnoreType(TroopType attackerType, TroopType enemyType){
+        // 近战都打不到飞行兵
+        if(!DemoUtil.IsRemoteCategory(attackerType) && DemoUtil.IsFlyCategory(enemyType)){
+            // Debug.Log("ingore " + attackerType + " to " + enemyType);
+            return true;
+        }
+        return false;
+    }
 }

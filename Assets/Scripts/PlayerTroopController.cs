@@ -45,8 +45,8 @@ public class PlayerTroopController : MonoBehaviour {
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
-            // data.Add(TroopType.TROOP_SABER, 2);
-            // data.Add(TroopType.TROOP_ARCHER, 2);
+            data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
@@ -55,7 +55,7 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
 
-            data.Add(TroopType.TROOP_SABER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_SABER_SUPER1, 1);
             // data.Add(TroopType.TROOP_ARCHER_SUPER1, 2);
             // data.Add(TroopType.TROOP_DANCER_SUPER1, 1);
             // data.Add(TroopType.TROOP_RECOVER_SUPER1, 1);
@@ -65,12 +65,12 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_MAGICICAN_SUPER1, 1);
             // data.Add(TroopType.TROOP_TITAN_SUPER1, 1);
         }else{
-            data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 2);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
-            // data.Add(TroopType.TROOP_FLYER, 1);
-            // data.Add(TroopType.TROOP_MAGICICAN, 1);
+            data.Add(TroopType.TROOP_FLYER, 1);
+            data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
         }
         OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
@@ -146,7 +146,7 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
 
-    public GameObject GetAttackTarget(){
+    public GameObject GetAttackedTarget(TroopType attackerType){
         if(troops.Count == 0){
             // 这里涉及到平局的概念，比如空中还有技能在飞呢。。。
             Debug.Log(isMy ? "you lose" : "you win");
@@ -158,7 +158,7 @@ public class PlayerTroopController : MonoBehaviour {
             if(troop.Count == 0){
                 continue;
             }else{
-                if(!target){
+                if(!target && !DemoUtil.IsAttackIgnoreType(attackerType, troop[0].GetComponent<BaseController>().Model.Type)){
                     target = troop[0];
                 }
             }
@@ -168,9 +168,12 @@ public class PlayerTroopController : MonoBehaviour {
                 if(obj.GetComponent<BaseController>().IsDead){
                     continue;
                 }
-                if(isMy ? obj.transform.position.x > target.transform.position.x : obj.transform.position.x < target.transform.position.x){
-                    target = obj;
-                }                
+                TroopType enemyType = obj.GetComponent<BaseController>().Model.Type;
+                if(!DemoUtil.IsAttackIgnoreType(attackerType, enemyType)){
+                    if(isMy ? obj.transform.position.x > target.transform.position.x : obj.transform.position.x < target.transform.position.x){
+                        target = obj;
+                    }                
+                }
             }
         }
 		return target;
