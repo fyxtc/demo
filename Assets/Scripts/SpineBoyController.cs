@@ -17,6 +17,9 @@ public class SpineBoyController : MonoBehaviour {
 
     [SpineAnimation]
     public string shootAnimationName;
+
+    [SpineAnimation]
+    public string dieAnimationName;
     #endregion
 
     SkeletonAnimation skeletonAnimation;

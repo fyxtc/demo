@@ -99,6 +99,11 @@ public abstract class BaseController : MonoBehaviour {
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
         // InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
         // Invoke("Test", 5);
+
+        skeletonAnimation.state.Start += delegate (Spine.AnimationState state, int trackIndex) {
+             // 你也可以使用一个匿名代理
+            Debug.Log(string.Format("track {0} started a new animation.", trackIndex));
+        };
     }
 
     void DispatchNaturalTricks(){
@@ -163,6 +168,10 @@ public abstract class BaseController : MonoBehaviour {
 
     void HandleCommand(TroopCommand cmd){
         // Debug.Log("HandleCommand " + cmd);
+        // 如果死了，就不能再接受任何命令了
+        if(Status == TroopStatus.STATUS_DEAD){
+            return;
+        }
         switch(cmd){
         case TroopCommand.CMD_IDLE:
             Idle();
@@ -358,8 +367,13 @@ public abstract class BaseController : MonoBehaviour {
         Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
         model.Life = 0;
         Status = TroopStatus.STATUS_DEAD;
+        // IsDead = true; // 这个应该放在anim完成的回调里做，现在先自己手动延时调用
+        Invoke("MarkCanClear", 1);
+        spineAnimationState.SetAnimation(0, dieAnimationName, false);
+    }
+
+    void MarkCanClear(){
         IsDead = true;
-        // Destroy(gameObject);
     }
 
     // 需要处理的碰撞信息，放在被撞的物体身上
@@ -618,6 +632,9 @@ public abstract class BaseController : MonoBehaviour {
 
     [SpineAnimation]
     public string shootAnimationName;
+
+    [SpineAnimation]
+    public string dieAnimationName;
     #endregion
 
     SkeletonAnimation skeletonAnimation;
@@ -625,6 +642,9 @@ public abstract class BaseController : MonoBehaviour {
     // Spine.AnimationState and Spine.Skeleton are not Unity-serialized objects. You will not see them as fields in the inspector.
     public Spine.AnimationState spineAnimationState;
     public Spine.Skeleton skeleton;
+    [SpineEvent] public string dieEventName = "die"; 
+
+
     
     /// <summary>This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.</summary>
     IEnumerator DoDemoRoutine () {
