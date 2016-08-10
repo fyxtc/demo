@@ -45,20 +45,20 @@ public class PlayerTroopController : MonoBehaviour {
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
-            // data.Add(TroopType.TROOP_SABER, 1);
-            // data.Add(TroopType.TROOP_ARCHER, 1);
+            data.Add(TroopType.TROOP_SABER, 2);
+            data.Add(TroopType.TROOP_ARCHER, 2);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
-            data.Add(TroopType.TROOP_SPYER, 1);
+            // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
         }else{
-            // data.Add(TroopType.TROOP_SABER, 1);
-            data.Add(TroopType.TROOP_ARCHER, 1);
-            data.Add(TroopType.TROOP_RIDER, 1);
-            data.Add(TroopType.TROOP_SPYER, 1);
-            data.Add(TroopType.TROOP_FLYER, 1);
+            data.Add(TroopType.TROOP_SABER, 2);
+            data.Add(TroopType.TROOP_ARCHER, 2);
+            // data.Add(TroopType.TROOP_RIDER, 1);
+            // data.Add(TroopType.TROOP_SPYER, 1);
+            // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
         }
@@ -76,12 +76,12 @@ public class PlayerTroopController : MonoBehaviour {
         ExplodeEvent ev = e as ExplodeEvent;
         Debug.Log((IsMy?"my get ": "enemy get ") + "OnExplodeEvent: " + ev);
         foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
-            TroopType troopType = item.Key;
             List<GameObject> troop = item.Value;
             foreach(GameObject obj in troop){
                 if(IsInExplode(ev.Center, ev.Radius, obj.transform.position)){
                     Debug.Log("explode in " + obj.GetComponent<BaseController>().Model.Type);
-                    obj.GetComponent<BaseController>().BeingAttacked(ev.Harm);
+                    HarmModel m = new HarmModel(ev.Harm);
+                    obj.GetComponent<BaseController>().BeingAttacked(m);
                 }
             }
         }
@@ -178,7 +178,7 @@ public class PlayerTroopController : MonoBehaviour {
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
                 BaseController controller = obj.GetComponent<BaseController>();
-                if(controller.IsDead){
+                if(controller.IsCanBeClean){
                     TrickEvent ev = new TrickEvent();
                     ev.Tricks = controller.Model.Tricks;
                     ev.IsStart = false;

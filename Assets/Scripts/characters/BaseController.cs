@@ -41,6 +41,7 @@ public abstract class BaseController : MonoBehaviour {
     public PlayerTroopController MyTroopController{get; set;}
     public GameObject Attacker{get; set;}
     public bool IsDead{ get; set;}
+    public bool IsCanBeClean{get; set;}
     // unity好像默认访问级别不是private是protected
     SkillModel skillBuffModel = new SkillModel();
     bool isBuffing = false;
@@ -99,11 +100,6 @@ public abstract class BaseController : MonoBehaviour {
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
         // InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
         // Invoke("Test", 5);
-
-        skeletonAnimation.state.Start += delegate (Spine.AnimationState state, int trackIndex) {
-             // 你也可以使用一个匿名代理
-            Debug.Log(string.Format("track {0} started a new animation.", trackIndex));
-        };
     }
 
     void DispatchNaturalTricks(){
@@ -149,6 +145,9 @@ public abstract class BaseController : MonoBehaviour {
         // Debug.Log(OtherTroopController);
         GameObject obj = OtherTroopController.GetAttackTarget();
         if (obj == null) {
+            return null;
+        }
+        if(obj.GetComponent<BaseController>().IsDead){
             return null;
         }
         if(IsMy){
@@ -284,38 +283,47 @@ public abstract class BaseController : MonoBehaviour {
         }
         Invoke("DoBackDelay", 0.5f); // 注意这个时间应该要大于攻击cd
         attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
+        // 不能依赖这个类的任何东西，只能把伤害提取出来发过去，那问题是，如果是传引用，那这个类消失了还会在吗。。harmmodel会消失吗。。
+        HarmModel harmModel = createHarmModel();
         // 这里的beingattacked应该放在必要的动画碰撞时候，比如投弹，弓箭之类
         if(!IsNeedFlyWeapon()){
-            attackedTarget.GetComponent<BaseController>().BeingAttacked();
+            attackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
         }else{
-            CreateFlyWeapon();
+            CreateFlyWeapon(harmModel);
         }
         // attackedTarget = null;
     }
 
-    protected virtual void CreateFlyWeapon(){
+    HarmModel createHarmModel(){
+        HarmModel m = new HarmModel(Model.Type, Model.Attack, Model.HitRate, IsRemoteCategory());
+        return m;
+    }
+
+    protected virtual void CreateFlyWeapon(HarmModel model){
         Rigidbody2D weapon;
+        Vector3 weaponPos = new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z);
         if(IsMy)
         {
-            weapon = Instantiate(flyWeapon, transform.position, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
+            weapon = Instantiate(flyWeapon, weaponPos, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
             weapon.velocity = new Vector2(weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
         }
         else
         {
-            weapon = Instantiate(flyWeapon, transform.position, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
+            weapon = Instantiate(flyWeapon, weaponPos, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
             weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
         }
         BaseFlyWeapon controller = weapon.GetComponent<BaseFlyWeapon>();
         controller.Owner = this;
         controller.IsMy = IsMy;
         controller.SettingFin = true;
+        controller.HarmModel = model;
     }
 
     protected bool IsNeedFlyWeapon(){
         return (Model.Type == TroopType.TROOP_ARCHER);
     }
 
-    public virtual void BeingAttacked(int directHarm = -1){
+    public virtual void BeingAttacked(HarmModel harmModel){
         // 之前没加这个判断，结果两个spyer互爆，无限循环dead.....
         if(Status == TroopStatus.STATUS_DEAD){
             return;
@@ -323,16 +331,16 @@ public abstract class BaseController : MonoBehaviour {
         // Debug.Log("BeingAttacked");
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
         // 有直接伤害的时候不能miss，directHarm放前面去短路，如果是直接伤害就没必要判断对方的model来取到hitRate算miss率了，避免一定程度的对象已死获取不到的问题
-        if( directHarm == -1 && CanMiss()){
+        if( harmModel.DirectHarm == -1 && CanMiss(harmModel)){
             // miss anim
             // Debug.Log("attack miss");
         }else{
             int harm = 0;
-            if(directHarm != -1){
-                harm = directHarm;
+            if(harmModel.DirectHarm != -1){
+                harm = harmModel.DirectHarm;
                 // Debug.Log(Model.Type + ": direct harm: " + harm);
             }else{
-                harm = CalcHarm();
+                harm = CalcHarm(harmModel);
                 // Debug.Log("calc total harm: " + harm);
             }
             // Debug.Log("Life: " + Model.Life);
@@ -350,8 +358,8 @@ public abstract class BaseController : MonoBehaviour {
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, false);
     }
 
-    protected virtual int CalcHarm(){
-        float att = Attacker.GetComponent<BaseController>().Model.Attack;
+    protected virtual int CalcHarm(HarmModel harmModel){
+        float att = harmModel.Attack;
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
         // Debug.Log((IsMy?"my ":"enemy ") + Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
@@ -359,21 +367,25 @@ public abstract class BaseController : MonoBehaviour {
         return res;
     }
 
-    protected virtual bool CanMiss(){
-        return UnityEngine.Random.value > Attacker.GetComponent<BaseController>().Model.HitRate; 
+    protected virtual bool CanMiss(HarmModel harmModel){
+        // 这里很有问题啊，这个时候attacker可能已经GG了。。
+        // Debug.Log("CanMiss " + harmModel);
+        return UnityEngine.Random.value > harmModel.HitRate; 
     }
 
     protected virtual void Dead(){
         Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
         model.Life = 0;
         Status = TroopStatus.STATUS_DEAD;
-        // IsDead = true; // 这个应该放在anim完成的回调里做，现在先自己手动延时调用
-        Invoke("MarkCanClear", 1);
+        IsDead = true; 
         spineAnimationState.SetAnimation(0, dieAnimationName, false);
-    }
-
-    void MarkCanClear(){
-        IsDead = true;
+		// spineAnimationState.Data.SetMix (shootAnimationName, dieAnimationName, 0.2f);
+        // 注意不能在End的回调里再调用setanim，因为setanim总是会触发end，所以会无限递归
+        spineAnimationState.Complete += delegate (Spine.AnimationState state, int trackIndex, int loopCount) {
+             // 你也可以使用一个匿名代理
+            // Debug.Log(string.Format("track {0} started a new animation.", trackIndex));
+            IsCanBeClean = true;
+        };
     }
 
     // 需要处理的碰撞信息，放在被撞的物体身上

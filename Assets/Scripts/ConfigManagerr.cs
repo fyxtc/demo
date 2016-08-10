@@ -361,3 +361,28 @@ public class ExplodeEvent : EventArgs{
     }
 }
 
+public class HarmModel{
+    public int DirectHarm{get; set;}
+    public TroopType Type{get; set;}
+    public int Attack{get; set;}
+    public double HitRate{get; set;}
+    public bool IsRemoteCategory{get; set;}
+
+    public HarmModel(TroopType type, int attack, double hitRate, bool isRemoteCategory){
+        DirectHarm = -1;
+        Type = type;
+        Attack = attack;
+        HitRate = hitRate;
+        IsRemoteCategory = isRemoteCategory;
+    }
+
+    public HarmModel(int directHarm){
+        DirectHarm = directHarm;
+    }
+
+    public override string ToString(){
+        return "Type:"+Type+", Attack:"+Attack+", HitRate:"+HitRate+", IsRemoteCategory:"+IsRemoteCategory+", DirectHarm:"+DirectHarm;
+    }
+}
+
+

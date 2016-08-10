@@ -7,6 +7,7 @@ public class BaseFlyWeapon : MonoBehaviour {
 	public float speed = 20.0f;
 	public bool IsMy{get; set;}
 	public bool SettingFin{get; set;}
+	public HarmModel HarmModel{get; set;}
 
 	public virtual float GetSpeed(){
 		return speed;
