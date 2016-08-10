@@ -5,7 +5,7 @@ using System;
 using UnityEngine.UI;
 
 public class PlayerTroopController : MonoBehaviour {
-    private const int CHARACTER_MAX_COUNT = 9; // 目前九种兵
+    private const int CHARACTER_MAX_COUNT = 27; // 目前9*3种兵
     public bool isMy = true;
     public bool IsMy{
         get{return isMy;}
@@ -45,17 +45,28 @@ public class PlayerTroopController : MonoBehaviour {
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
-            data.Add(TroopType.TROOP_SABER, 2);
-            data.Add(TroopType.TROOP_ARCHER, 2);
+            // data.Add(TroopType.TROOP_SABER, 2);
+            // data.Add(TroopType.TROOP_ARCHER, 2);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
+            // data.Add(TroopType.TROOP_TITAN, 1);
+
+            data.Add(TroopType.TROOP_SABER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_ARCHER_SUPER1, 2);
+            // data.Add(TroopType.TROOP_DANCER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_RECOVER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_SPYER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_RIDER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_FLYER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_MAGICICAN_SUPER1, 1);
+            // data.Add(TroopType.TROOP_TITAN_SUPER1, 1);
         }else{
-            data.Add(TroopType.TROOP_SABER, 2);
-            data.Add(TroopType.TROOP_ARCHER, 2);
+            data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_ARCHER, 2);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);

@@ -141,7 +141,6 @@ type:
         "hitRate":0.9,
         "tricks":[]
     },
-
     {
         "type":8,
         "life":100,
@@ -156,6 +155,154 @@ type:
         "attackCD":2.0,
         "hitRate":0.9,
         "tricks":[]
+    },
+
+
+
+
+   {
+        "type":9,
+        "life":20,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5, 
+        "rank":1,
+        "interval":0.3,
+        "attackRange":1.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+    
+    {
+        "type":10,
+        "life":30,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":11,
+        "life":40,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[1]
+    },
+
+    {
+        "type":12,
+        "life":50,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[4,5]
+    },
+
+    {
+        "type":13,
+        "life":1,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":14,
+        "life":70,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":1.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":15,
+        "life":80,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+
+    {
+        "type":16,
+        "life":90,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[]
+    },
+    {
+        "type":17,
+        "life":100,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":3.0,
+        "attackCD":2.0,
+        "hitRate":0.9,
+        "tricks":[]
     }
+
+
 
 ]

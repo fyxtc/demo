@@ -16,7 +16,7 @@ public class DemoUtil{
     }
 
     public static TroopCategory GetTroopCategory(TroopType type){
-        if(type == TroopType.TROOP_FLYER){
+        if(type == TroopType.TROOP_FLYER || type == TroopType.TROOP_SABER_SUPER1){
             return TroopCategory.CATEGORY_FLY;
         }else{
             return TroopCategory.CATEGORY_LAND;

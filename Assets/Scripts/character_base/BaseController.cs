@@ -33,7 +33,7 @@ public abstract class BaseController : MonoBehaviour {
     protected void InitModel(){
         // 不然直接影响到配置的值，卧槽，这怎么会返回引用啊，日了狗了
         Model = (BaseModel)ConfigManager.share().CharacterConfig.GetModel(troopType).Clone();
-        // Debug.Log(Model);
+        Debug.Log(Model);
     }
     // public float speed = 0.1f;
     private GameObject attackedTarget;
@@ -338,7 +338,7 @@ public abstract class BaseController : MonoBehaviour {
             int harm = 0;
             if(harmModel.DirectHarm != -1){
                 harm = harmModel.DirectHarm;
-                // Debug.Log(Model.Type + ": direct harm: " + harm);
+                Debug.Log(Model.Type + ": direct harm: " + harm);
             }else{
                 harm = CalcHarm(harmModel);
                 // Debug.Log("calc total harm: " + harm);
