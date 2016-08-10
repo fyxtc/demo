@@ -2,14 +2,8 @@
 using System.Collections;
 
 public class DancerSuper1Controller : BaseController {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    protected override void AddTrickHarm(ref HarmModel harmModel, TroopType enemyType){
+        // 直接取最大攻击力
+        harmModel.Attack = Model.AttackMax;
+    }
 }

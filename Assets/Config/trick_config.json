@@ -80,12 +80,11 @@ raidus: 伤害半径
     {
         "id":6,
         "type":1,
-        "status":1,
-        "property":3,
+        "status":0,
+        "property":1,
         "effect":0.5,
         "rate":1.0,
-        "skill":1,
-        "target":[-1],
+        "target":[100],
         "isSelf":true
     },  
 

@@ -13,6 +13,10 @@ public class BaseFlyWeapon : MonoBehaviour {
 		return speed;
 	}
 
+
+
+
+
 	// Use this for initialization
 	void Start () {
 

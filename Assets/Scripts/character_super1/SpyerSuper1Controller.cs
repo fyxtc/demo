@@ -2,14 +2,7 @@
 using System.Collections;
 
 public class SpyerSuper1Controller : BaseController {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    protected override void AddTrickHarm(ref HarmModel harmModel, TroopType enemyType){
+        harmModel.HitRate = 1.0;
+    }
 }

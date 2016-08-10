@@ -1,15 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DancerSuper2Controller : BaseController {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+public class DancerSuper2Controller : DancerController {
+    protected virtual bool CanMiss(HarmModel harmModel){
+        double hitRate = harmModel.HitRate * 0.8;
+        return UnityEngine.Random.value >= hitRate; 
+    }
 }

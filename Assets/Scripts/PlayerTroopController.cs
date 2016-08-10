@@ -148,7 +148,6 @@ public class PlayerTroopController : MonoBehaviour {
 
     public GameObject GetAttackedTarget(TroopType attackerType){
         if(troops.Count == 0){
-            // 这里涉及到平局的概念，比如空中还有技能在飞呢。。。
             Debug.Log(isMy ? "you lose" : "you win");
             return null;
         }
@@ -165,7 +164,8 @@ public class PlayerTroopController : MonoBehaviour {
 
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
-                if(obj.GetComponent<BaseController>().IsDead){
+                // 死亡和zombie都不能成为目标
+                if(obj.GetComponent<BaseController>().IsDead || obj.GetComponent<BaseController>().IsZombie){
                     continue;
                 }
                 TroopType enemyType = obj.GetComponent<BaseController>().Model.Type;
@@ -203,11 +203,13 @@ public class PlayerTroopController : MonoBehaviour {
                 }
             }
             GetTextByTroopType(troopType).text = troop.Count + "";
-			if (troop.Count > 0) {
+            // 如果数量大于0，而且必须不是zombie才行
+			if (troop.Count > 0 && !troop[0].GetComponent<BaseController>().IsZombie) {
 				isOver = false;
 			}
         }
         if(isOver){
+            // 这里涉及到平局的概念，比如空中还有技能在飞呢。。。
             IsGameOver = true;
             Debug.Log(isMy ? "you lose" : "you win");
         }

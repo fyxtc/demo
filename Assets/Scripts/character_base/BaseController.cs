@@ -80,6 +80,8 @@ public abstract class BaseController : MonoBehaviour {
     // public float flyWeaponSpeed = 20.0f; 
     protected ExplodeEvent explodeEvent = new ExplodeEvent();
     public event EventHandler ExplodeEventHandler;
+    protected int addedHarm = 0; // 默认没有额外伤害
+    public bool IsZombie{get; set;}
 
 
 
@@ -176,7 +178,7 @@ public abstract class BaseController : MonoBehaviour {
     void FixedUpdate(){
     }
 
-    void HandleCommand(TroopCommand cmd){
+    protected void HandleCommand(TroopCommand cmd){
         // Debug.Log("HandleCommand " + cmd);
         // 如果死了，就不能再接受任何命令了
         if(Status == TroopStatus.STATUS_DEAD){
@@ -337,6 +339,11 @@ public abstract class BaseController : MonoBehaviour {
         controller.IsMy = IsMy;
         controller.SettingFin = true;
         controller.HarmModel = model;
+
+        FlyWeaponRocket2 r = controller as FlyWeaponRocket2;
+        if(r){
+            r.ExplodeEventHandler += OtherTroopController.OnExplodeEvent;
+        }
     }
 
     protected bool IsNeedFlyWeapon(){
@@ -472,7 +479,7 @@ public abstract class BaseController : MonoBehaviour {
         return resModel;
     }
 
-    protected void AddSkillLifeBuff(bool isStart){
+    protected virtual void AddSkillLifeBuff(bool isStart){
         if(isStart){
             if(!IsInvoking("AddSkillLifeTimer")){
                 InvokeRepeating("AddSkillLifeTimer", 0, 1.0f);

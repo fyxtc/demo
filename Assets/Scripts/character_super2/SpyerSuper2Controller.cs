@@ -2,14 +2,19 @@
 using System.Collections;
 
 public class SpyerSuper2Controller : BaseController {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    protected virtual int CalcHarm(HarmModel harmModel){
+        float att = harmModel.Attack;
+        float def = Model.Defense;
+        int res = (int)(att * (att / (att + def)));
+        if(def > att){
+            if(Attacker.GetComponent<BaseController>()){
+                int directHarm = (int)((def - att) * 2); //双倍反弹
+                HarmModel harm = new HarmModel(directHarm);
+                Attacker.GetComponent<BaseController>().BeingAttacked(harm);
+            }
+        }
+        // Debug.Log((IsMy?"my ":"enemy ") + Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
+        Debug.Assert(res >= 0, "CalcHarm error");
+        return res;
+    }
 }
