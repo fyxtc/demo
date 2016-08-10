@@ -93,13 +93,23 @@ public abstract class BaseController : MonoBehaviour {
 
         InitModel ();
         InitTrickController();
-        startPos = transform.position;
-        endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
         HandleCommand(TroopCommand.CMD_IDLE);
 
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
         // InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
         // Invoke("Test", 5);
+
+        SetPosition();
+    }
+
+    void SetPosition(){
+       float offsetY = 0.0f;
+        if(DemoUtil.IsFlyCategory(Model.Type)){
+            offsetY = 3.0f;
+        }
+        transform.position = new Vector3(transform.position.x, transform.position.y+offsetY, transform.position.z);
+        startPos = transform.position;
+        endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
     }
 
     void DispatchNaturalTricks(){

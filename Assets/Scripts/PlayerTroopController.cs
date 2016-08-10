@@ -51,7 +51,7 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_RECOVER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
-            // data.Add(TroopType.TROOP_FLYER, 1);
+            data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
 
