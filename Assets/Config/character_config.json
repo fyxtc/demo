@@ -80,7 +80,7 @@ type:
 
     {
         "type":4,
-        "life":1,
+        "life":60,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -226,7 +226,7 @@ type:
 
     {
         "type":13,
-        "life":1,
+        "life":60,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -242,7 +242,7 @@ type:
 
     {
         "type":14,
-        "life":70,
+        "life":5,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -371,10 +371,10 @@ type:
 
     {
         "type":22,
-        "life":1,
+        "life":60,
         "attackMin":10,
         "attackMax":20,
-        "defense":10,
+        "defense":50,
         "speed":0.05,
         "maxCount":5,
         "rank":2,
@@ -387,7 +387,7 @@ type:
 
     {
         "type":23,
-        "life":70,
+        "life":5,
         "attackMin":10,
         "attackMax":20,
         "defense":10,

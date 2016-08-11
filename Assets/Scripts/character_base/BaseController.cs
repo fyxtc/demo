@@ -85,7 +85,7 @@ public abstract class BaseController : MonoBehaviour {
 
 
 
-    void Start () {
+    protected virtual void Start () {
         // Make sure you get these AnimationState and Skeleton references in Start or Later. Getting and using them in Awake is not guaranteed by default execution order.
         skeletonAnimation = GetComponent<SkeletonAnimation>();
         spineAnimationState = skeletonAnimation.state;
@@ -138,7 +138,12 @@ public abstract class BaseController : MonoBehaviour {
             //     HandleCommand(TroopCommand.CMD_ATTACK);
             // }
             if(attackedTarget = FindAttackedTarget()){
+                Debug.Assert(!attackedTarget.GetComponent<BaseController>().IsZombie, "attackedTarget cann't be zombie");
+                // Debug.Log("attackedTarget " + attackedTarget + ", zombie " + attackedTarget.GetComponent<BaseController>().IsZombie);
                 HandleCommand(TroopCommand.CMD_ATTACK);
+            }else if(Vector3.Distance(transform.position, Vector3.zero) >= 5 ){
+                // 走远了，该回来了，其实更好的是在发现前方没目标就回来，待做
+                HandleCommand(TroopCommand.CMD_BACK);
             }
             break;
         case TroopStatus.STATUS_ATTACK:
@@ -153,24 +158,24 @@ public abstract class BaseController : MonoBehaviour {
 
     }
 
+    // 如果发现前进方向都没有可攻击的敌人了，应该就往回走了back，如果是自己打不到飞行兵更好的效果应该是走到和他一样的位置
     GameObject FindAttackedTarget(){
         // Debug.Log(OtherTroopController);
         GameObject obj = OtherTroopController.GetAttackedTarget(Model.Type);
         if (obj == null) {
+            // Debug.Log("fuck1");
             return null;
         }
         if(obj.GetComponent<BaseController>().IsDead){
+            // Debug.Log("fuck2 " + obj.GetComponent<BaseController>().Model.Type);
             return null;
         }
 
-        if(IsMy){
-            if(transform.position.x + Model.AttackRange >= obj.transform.position.x){
-                return obj;
-            }
-        }else{
-            if(transform.position.x - Model.AttackRange <= obj.transform.position.x){
-                return obj;
-            }
+        Vector3 pos1 = transform.position;
+        Vector3 pos2 = obj.transform.position;
+        // Debug.Log("Distance: " + Vector3.Distance(pos1, pos2));
+        if(Vector3.Distance(pos1, pos2) <= Model.AttackRange){
+            return obj;
         }
         return null;
     }
@@ -352,11 +357,13 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     public virtual void BeingAttacked(HarmModel harmModel){
+        // 按理说，被打的zombie都在GetAttackedTarget里面过滤了，但是这里还有有可能是飞行道具过来的，所以还要baseflyweanpon过滤
+        Debug.Assert(!IsZombie, "IsZombie cann't be true");
         // 之前没加这个判断，结果两个spyer互爆，无限循环dead.....
         if(Status == TroopStatus.STATUS_DEAD){
             return;
         }
-        Debug.Log(harmModel.Type + " attack " + (IsMy?"my ":"enemy ") + Model.Type);
+        // Debug.Log(harmModel.Type + " attack " + (IsMy?"my ":"enemy ") + Model.Type);
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
         // 有直接伤害的时候不能miss，directHarm放前面去短路，如果是直接伤害就没必要判断对方的model来取到hitRate算miss率了，避免一定程度的对象已死获取不到的问题
         if( harmModel.DirectHarm == -1 && CanMiss(harmModel)){
@@ -390,7 +397,7 @@ public abstract class BaseController : MonoBehaviour {
         float att = harmModel.Attack;
         float def = DefenseBuff(harmModel);
         int res = (int)(att * (att / (att + def)));
-        Debug.Log((IsMy?"my ":"enemy ") + Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
+        // Debug.Log((IsMy?"my ":"enemy ") + Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
     }

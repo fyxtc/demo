@@ -1,22 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RiderSuper2Controller : RiderController {
-
-	protected override void Dead(){
-        Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
-        model.Life = 0;
-        Status = TroopStatus.STATUS_DEAD;
-        IsDead = true; 
-        spineAnimationState.SetAnimation(0, dieAnimationName, false);
-        spineAnimationState.Complete += delegate (Spine.AnimationState state, int trackIndex, int loopCount) {
-            // TODO: 神圣复活效果
-            model.Life = (int)(characterConfig.GetModel(model.Type).Life * 0.5); // 一半血量复活
-            IsDead = false;
-            HandleCommand(TroopCommand.CMD_IDLE);
-            IsZombie = true;
-        };
+public class RiderSuper2Controller : RiderSuper1Controller {
+    protected override void DeadAnimCompleteCallback(){
+        // TODO: zombie形态效果
+        IsDead = false;
+        Status = TroopStatus.STATUS_IDLE;
+        HandleCommand(TroopCommand.CMD_IDLE);
+        Debug.Log("Trick: " + Model.Type + " become zombie");
+        IsZombie = true;
     }
-
-
 }

@@ -9,6 +9,7 @@ public class SpyerSuper2Controller : BaseController {
         if(def > att){
             if(Attacker.GetComponent<BaseController>()){
                 int directHarm = (int)((def - att) * 2); //双倍反弹
+                Debug.Log("Trick: " + Model.Type + " reound harm " + directHarm);
                 HarmModel harm = new HarmModel(directHarm);
                 Attacker.GetComponent<BaseController>().BeingAttacked(harm);
             }

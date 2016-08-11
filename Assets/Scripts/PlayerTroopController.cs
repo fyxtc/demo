@@ -58,15 +58,16 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_SABER_SUPER2, 1);
             // data.Add(TroopType.TROOP_ARCHER_SUPER2, 1);
             // data.Add(TroopType.TROOP_RECOVER_SUPER1, 1);
-            data.Add(TroopType.TROOP_DANCER_SUPER2, 1);
-            // data.Add(TroopType.TROOP_SPYER_SUPER1, 1);
-            // data.Add(TroopType.TROOP_RIDER_SUPER1, 1);
+            // data.Add(TroopType.TROOP_DANCER_SUPER2, 1);
+            // data.Add(TroopType.TROOP_SPYER_SUPER2, 1);
+            data.Add(TroopType.TROOP_RIDER_SUPER2, 1);
+            data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_FLYER_SUPER1, 1);
             // data.Add(TroopType.TROOP_MAGICICAN_SUPER1, 1);
             // data.Add(TroopType.TROOP_TITAN_SUPER1, 1);
         }else{
-            data.Add(TroopType.TROOP_SABER, 1);
-            // data.Add(TroopType.TROOP_ARCHER, 1);
+            // data.Add(TroopType.TROOP_SABER, 1);
+            data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
@@ -158,8 +159,13 @@ public class PlayerTroopController : MonoBehaviour {
             if(troop.Count == 0){
                 continue;
             }else{
-                if(!target && !DemoUtil.IsAttackIgnoreType(attackerType, troop[0].GetComponent<BaseController>().Model.Type)){
+                BaseController controller = troop[0].GetComponent<BaseController>();
+                bool canChoose = !target && !DemoUtil.IsAttackIgnoreType(attackerType, controller.Model.Type)
+                                && !controller.IsZombie
+                                && !controller.IsDead;
+                if(canChoose){
                     target = troop[0];
+                    // Debug.Log("target 1 " + target.GetComponent<BaseController>().Model.Type + ": zombie " + target.GetComponent<BaseController>().IsZombie);
                 }
             }
 
@@ -172,6 +178,7 @@ public class PlayerTroopController : MonoBehaviour {
                 TroopType enemyType = obj.GetComponent<BaseController>().Model.Type;
                 if(!DemoUtil.IsAttackIgnoreType(attackerType, enemyType)){
                     if(isMy ? obj.transform.position.x > target.transform.position.x : obj.transform.position.x < target.transform.position.x){
+                        // Debug.Log("target 2");
                         target = obj;
                     }                
                 }
