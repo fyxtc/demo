@@ -108,7 +108,7 @@ public abstract class BaseController : MonoBehaviour {
     void SetPosition(){
        float offsetY = 0.0f;
         if(DemoUtil.IsFlyCategory(Model.Type)){
-            // offsetY = 3.0f;
+            offsetY = 3.0f;
         }
         transform.position = new Vector3(transform.position.x, transform.position.y+offsetY, transform.position.z);
         startPos = transform.position;
@@ -128,6 +128,13 @@ public abstract class BaseController : MonoBehaviour {
         }
     }
 
+    bool IsNearBorder(){
+        Vector3 pixelsPos = Camera.main.WorldToScreenPoint(transform.position);
+        // Debug.Log(pixelsPos);
+        float gap = 50;
+        return (pixelsPos.x < gap || pixelsPos.x > (Screen.width-gap));
+    }
+
     void Update(){
         switch(status){
         case TroopStatus.STATUS_IDLE:
@@ -142,7 +149,7 @@ public abstract class BaseController : MonoBehaviour {
                 Debug.Assert(!AttackedTarget.GetComponent<BaseController>().IsZombie, "AttackedTarget cann't be zombie");
                 // Debug.Log("AttackedTarget " + AttackedTarget + ", zombie " + AttackedTarget.GetComponent<BaseController>().IsZombie);
                 HandleCommand(TroopCommand.CMD_ATTACK);
-            }else if(Vector3.Distance(transform.position, Vector3.zero) >= 5 ){
+            }else if(IsNearBorder()){
                 // 走远了，该回来了，其实更好的是在发现前方没目标就回来，待做
                 HandleCommand(TroopCommand.CMD_BACK);
             }
@@ -334,12 +341,17 @@ public abstract class BaseController : MonoBehaviour {
         if(IsMy)
         {
             weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
-            weapon.velocity = new Vector2(weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+            // 飞行部队靠重力自由落体
+            if(!DemoUtil.IsFlyCategory(Model.Type)){
+                weapon.velocity = new Vector2(weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+            }
         }
         else
         {
             weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
-            weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+            if(!DemoUtil.IsFlyCategory(Model.Type)){
+                weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+            }
         }
         BaseFlyWeapon controller = weapon.GetComponent<BaseFlyWeapon>();
         controller.Owner = this;
@@ -354,6 +366,9 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected Rigidbody2D GetFlyWeapon(){
+        if(DemoUtil.IsFlyCategory(Model.Type)){
+            Debug.Assert(flyWeapon != null, "fly weapon can't be null in fly category");
+        }
         if(flyWeapon){
             return flyWeapon;
         }else if(isBuffing && skillBuffModel.Type == SkillType.SKILL_THROW){
@@ -512,10 +527,11 @@ public abstract class BaseController : MonoBehaviour {
         resModel.AttackMax = (int)(resModel.AttackMax * (1.0 + skillBuffModel.Attack));
         resModel.Defense = (int)(resModel.Defense * (1.0 + skillBuffModel.Defense));
         resModel.HitRate = resModel.HitRate * (1.0 + skillBuffModel.HitRate);
+        resModel.AttackRange = skillBuffModel.AttackRange;
         if(resModel.HitRate > 1.0){
             resModel.HitRate = 1.0;
         }
-        // Debug.Log("buff: attack " + resModel.Attack);
+        // Debug.Log("SkillModel " + resModel);
         return resModel;
     }
 

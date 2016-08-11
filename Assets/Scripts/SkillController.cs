@@ -49,12 +49,12 @@ public class SkillController : MonoBehaviour {
 		// Debug.Log ("skill " + SkillType + " start");
         // Debug.Log(Model.Attack + ", " + Model.Defense + ", " + Model.HitRate);
 		status = SkillStatus.STATUS_USING;
-		Debug.Assert(Model.CD > Model.Time, "error cd time");
+		Debug.Assert(Model.CD >= Model.Time, "error cd time");
 		Invoke("SkillStop", (float)Model.Time);
 		Invoke("SkillReset", (float)Model.CD);
 
 		SkillEvent.Status = status;
-		// Debug.Log(SkillEventHandler + ", " + SkillEvent);
+		// Debug.Log(SkillEventHandler + ", " + SkillEvent + ", this: " + this);
 		SkillEventHandler(this, SkillEvent);
 	}
 

@@ -133,6 +133,7 @@ public class SkillModel{
     public double defense;
     public double hitRate;
     public int life;
+    public double attackRange;
     public double time;
     public double cd;
 
@@ -156,6 +157,10 @@ public class SkillModel{
         get{return life;} 
         set{life = value;}
     }    
+    public double AttackRange{
+        get{return attackRange;}
+        set{attackRange = value;}
+    }
     public double Time{ 
         get{return time;} 
         set{time = value;}
@@ -166,7 +171,7 @@ public class SkillModel{
     }
 
     public override string ToString(){
-        return "type:"+Type+", attack:"+attack+", defense:"+defense+", hitRate:"+hitRate+", time:"+time+", cd"+cd;
+        return "type:"+Type+", attack:"+attack+", defense:"+defense+", hitRate:"+hitRate+", life"+life+", attackRange"+attackRange+", time:"+time+", cd"+cd;
     }
 }
 

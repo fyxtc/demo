@@ -46,13 +46,13 @@ public class PlayerTroopController : MonoBehaviour {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
             data.Add(TroopType.TROOP_SABER, 1);
-            data.Add(TroopType.TROOP_ARCHER, 1);
+            // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
-            data.Add(TroopType.TROOP_FLYER, 1);
-            data.Add(TroopType.TROOP_MAGICICAN, 1);
+            // data.Add(TroopType.TROOP_FLYER, 1);
+            // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
 
             // data.Add(TroopType.TROOP_SABER_SUPER2, 1);
@@ -65,13 +65,13 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_MAGICICAN_SUPER1, 1);
             // data.Add(TroopType.TROOP_TITAN_SUPER2, 1);
         }else{
-            // data.Add(TroopType.TROOP_SABER, 1);
-            data.Add(TroopType.TROOP_ARCHER, 1);
+            data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
-            data.Add(TroopType.TROOP_TITAN, 1);
+            // data.Add(TroopType.TROOP_TITAN, 1);
         }
         Debug.Assert(data.Count > 0 && data.Count <= maxCount, "troops count error " + data.Count);
         OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();

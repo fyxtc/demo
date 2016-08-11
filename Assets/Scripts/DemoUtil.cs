@@ -31,7 +31,8 @@ public class DemoUtil{
 
     public static bool IsRemoteCategory(TroopType type){
         bool res = (type == TroopType.TROOP_ARCHER || type == TroopType.TROOP_ARCHER_SUPER1 || type == TroopType.TROOP_ARCHER_SUPER2
-                    || type == TroopType.TROOP_SABER_SUPER2 || type == TroopType.TROOP_TITAN_SUPER2);
+                    || type == TroopType.TROOP_SABER_SUPER2 || type == TroopType.TROOP_TITAN_SUPER2
+                    || type == TroopType.TROOP_MAGICICAN || type == TroopType.TROOP_MAGICICAN_SUPER1 || type == TroopType.TROOP_MAGICICAN_SUPER2);
         return res;
     }
 

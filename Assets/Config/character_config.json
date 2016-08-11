@@ -56,7 +56,7 @@ type:
         "maxCount":5,
         "rank":2,
         "interval":0.3,
-        "attackRange":3.0,
+        "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
         "tricks":[1]
@@ -72,7 +72,7 @@ type:
         "maxCount":5,
         "rank":2,
         "interval":0.3,
-        "attackRange":3.0,
+        "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
         "tricks":[4,5]
@@ -88,7 +88,7 @@ type:
         "maxCount":5,
         "rank":2,
         "interval":0.3,
-        "attackRange":3.0,
+        "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
         "tricks":[]
@@ -120,7 +120,7 @@ type:
         "maxCount":5,
         "rank":2,
         "interval":0.3,
-        "attackRange":3.0,
+        "attackRange":2.0,
         "attackCD":2.0,
         "hitRate":0.9,
         "tricks":[]
@@ -151,7 +151,7 @@ type:
         "maxCount":5,
         "rank":2,
         "interval":0.3,
-        "attackRange":3.0,
+        "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
         "tricks":[]
