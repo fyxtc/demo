@@ -3,7 +3,7 @@ using System.Collections;
 
 public class RiderSuper2Controller : RiderController {
 
-    protected virtual void Dead(){
+	protected override void Dead(){
         Debug.Log("dead " + (IsMy?"my ":"enemy ")  + Model.Type );
         model.Life = 0;
         Status = TroopStatus.STATUS_DEAD;

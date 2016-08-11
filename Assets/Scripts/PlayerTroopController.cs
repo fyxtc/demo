@@ -45,18 +45,18 @@ public class PlayerTroopController : MonoBehaviour {
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
-            data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
-            data.Add(TroopType.TROOP_FLYER, 1);
+            // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
 
-            // data.Add(TroopType.TROOP_SABER_SUPER1, 1);
-            // data.Add(TroopType.TROOP_ARCHER_SUPER1, 2);
+            data.Add(TroopType.TROOP_SABER_SUPER2, 1);
+            // data.Add(TroopType.TROOP_ARCHER_SUPER2, 1);
             // data.Add(TroopType.TROOP_DANCER_SUPER1, 1);
             // data.Add(TroopType.TROOP_RECOVER_SUPER1, 1);
             // data.Add(TroopType.TROOP_SPYER_SUPER1, 1);
@@ -66,11 +66,11 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_TITAN_SUPER1, 1);
         }else{
             // data.Add(TroopType.TROOP_SABER, 1);
-            // data.Add(TroopType.TROOP_ARCHER, 2);
+            // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             data.Add(TroopType.TROOP_FLYER, 1);
-            data.Add(TroopType.TROOP_MAGICICAN, 1);
+            // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
         }
         OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
@@ -92,6 +92,7 @@ public class PlayerTroopController : MonoBehaviour {
                 if(IsInExplode(ev.Center, ev.Radius, obj.transform.position)){
                     Debug.Log("explode in " + obj.GetComponent<BaseController>().Model.Type);
                     HarmModel m = new HarmModel(ev.Harm);
+                    m.Type = obj.GetComponent<BaseController>().Model.Type;
                     obj.GetComponent<BaseController>().BeingAttacked(m);
                 }
             }
@@ -99,7 +100,7 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
     bool IsInExplode(Vector3 center, double radius, Vector3 point){
-        return Vector3.Distance(center, point) <= radius;
+        return (Vector3.Distance(center, point) <= radius);
     }
 
 

@@ -35,7 +35,7 @@ public class FlyWeaponRocket2 : BaseFlyWeapon
 		// 释放者和碰撞目标不是同一方才应该产生效果
 		if(target.IsMy != IsMy){
 			target.BeingAttacked(HarmModel);
-			SendExplodeEvent(transform.position, 5, IsMy, 10);
+			SendExplodeEvent(transform.position, 5, IsMy, 100);
 			Destroy(gameObject);
 			// Debug.Log("Target: " + target.IsMy + " isMy " + IsMy);
 			// Debug.Log("collisions: " + (target.IsMy?"my ":"enemy ") + target.Model.Type);

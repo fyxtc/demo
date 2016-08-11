@@ -3,13 +3,5 @@ using System.Collections;
 
 public class FlyerSuper1Controller : BaseController {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

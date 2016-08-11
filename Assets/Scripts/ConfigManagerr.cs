@@ -110,17 +110,6 @@ public class Archer: BaseModel{
 public class CharacterConfig{
     public const string CHARACTER_CONFIG_FILE = "character_config.json";
     public BaseModel[] models;
-    private Saber saber = new Saber();
-    private Archer archer = new Archer();
-    public Saber Saber{
-        set{saber = value;}
-        get{return saber;}
-    }
-    public Archer Archer{
-        set{archer = value;}
-        get{return archer;}
-    }
-
     public void LoadConfig(){
         string str = DemoUtil.ReadConfigFile(CHARACTER_CONFIG_FILE);
 		models = JsonMapper.ToObject<BaseModel[]>(str);

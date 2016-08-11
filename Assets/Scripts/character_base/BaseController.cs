@@ -107,7 +107,7 @@ public abstract class BaseController : MonoBehaviour {
     void SetPosition(){
        float offsetY = 0.0f;
         if(DemoUtil.IsFlyCategory(Model.Type)){
-            offsetY = 3.0f;
+            // offsetY = 3.0f;
         }
         transform.position = new Vector3(transform.position.x, transform.position.y+offsetY, transform.position.z);
         startPos = transform.position;
@@ -347,7 +347,8 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected bool IsNeedFlyWeapon(){
-        return (Model.Type == TroopType.TROOP_ARCHER);
+        // return (Model.Type == TroopType.TROOP_ARCHER);
+        return flyWeapon != null;
     }
 
     public virtual void BeingAttacked(HarmModel harmModel){
@@ -355,7 +356,7 @@ public abstract class BaseController : MonoBehaviour {
         if(Status == TroopStatus.STATUS_DEAD){
             return;
         }
-        // Debug.Log(harmModel.Type + " attack " + Model.Type);
+        Debug.Log(harmModel.Type + " attack " + (IsMy?"my ":"enemy ") + Model.Type);
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, true);
         // 有直接伤害的时候不能miss，directHarm放前面去短路，如果是直接伤害就没必要判断对方的model来取到hitRate算miss率了，避免一定程度的对象已死获取不到的问题
         if( harmModel.DirectHarm == -1 && CanMiss(harmModel)){

@@ -11,8 +11,8 @@ public class ArcherSuper1Controller : ArcherController {
     }
 
     private bool CanAddHarm(){
-        double rate = 0.5;
-        bool res = UnityEngine.Random.value >= rate; 
+        double rate = 0.5; // 0 得给-1，因为value范围[0,1]
+        bool res = UnityEngine.Random.value <= rate; 
         return res;
     }
 }

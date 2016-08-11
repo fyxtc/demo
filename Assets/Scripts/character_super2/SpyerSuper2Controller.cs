@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class SpyerSuper2Controller : BaseController {
-    protected virtual int CalcHarm(HarmModel harmModel){
+	protected override int CalcHarm(HarmModel harmModel){
         float att = harmModel.Attack;
         float def = Model.Defense;
         int res = (int)(att * (att / (att + def)));
