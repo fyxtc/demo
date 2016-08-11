@@ -43,8 +43,8 @@ public abstract class BaseController : MonoBehaviour {
     public bool IsDead{ get; set;}
     public bool IsCanBeClean{get; set;}
     // unity好像默认访问级别不是private是protected
-    SkillModel skillBuffModel = new SkillModel();
-    bool isBuffing = false;
+    protected SkillModel skillBuffModel = new SkillModel();
+    protected bool isBuffing = false;
     List<int> trickingIds = new List<int>();
     protected TrickConfig trickConfig = ConfigManager.share().TrickConfig;
     protected CharacterConfig characterConfig = ConfigManager.share().CharacterConfig;

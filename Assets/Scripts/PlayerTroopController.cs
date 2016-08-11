@@ -62,11 +62,11 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_SPYER_SUPER2, 1);
             // data.Add(TroopType.TROOP_RIDER_SUPER2, 1);
             // data.Add(TroopType.TROOP_FLYER_SUPER1, 1);
-            data.Add(TroopType.TROOP_MAGICICAN_SUPER1, 1);
-            // data.Add(TroopType.TROOP_TITAN_SUPER1, 1);
+            // data.Add(TroopType.TROOP_MAGICICAN_SUPER1, 1);
+            data.Add(TroopType.TROOP_TITAN_SUPER2, 1);
         }else{
-            data.Add(TroopType.TROOP_SABER, 1);
-            // data.Add(TroopType.TROOP_ARCHER, 1);
+            // data.Add(TroopType.TROOP_SABER, 1);
+            data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
