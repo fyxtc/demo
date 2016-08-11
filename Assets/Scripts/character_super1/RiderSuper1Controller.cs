@@ -10,7 +10,7 @@ public class RiderSuper1Controller : RiderController {
     void SetRelifeDelegate(){
         spineAnimationState.Complete += delegate (Spine.AnimationState state, int trackIndex, int loopCount) {
             // TODO: 神圣复活效果
-            if(state.GetCurrent(trackIndex).Animation.Name == "death"){
+            if(state.GetCurrent(trackIndex).Animation.Name == dieAnimationName){
                 DeadAnimCompleteCallback();
             }
         };
