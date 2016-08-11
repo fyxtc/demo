@@ -77,6 +77,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     public Rigidbody2D flyWeapon;
+    public Rigidbody2D throwWeapon;
     // public float flyWeaponSpeed = 20.0f; 
     protected ExplodeEvent explodeEvent = new ExplodeEvent();
     public event EventHandler ExplodeEventHandler;
@@ -304,10 +305,11 @@ public abstract class BaseController : MonoBehaviour {
         // 不能依赖这个类的任何东西，只能把伤害提取出来发过去，那问题是，如果是传引用，那这个类消失了还会在吗。。harmmodel会消失吗。。
         HarmModel harmModel = CreateHarmModel(AttackedTarget.GetComponent<BaseController>().Model.Type);
         // 这里的beingattacked应该放在必要的动画碰撞时候，比如投弹，弓箭之类
-        if(!IsNeedFlyWeapon()){
-            AttackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
+        Rigidbody2D weaponObject = GetFlyWeapon();
+        if(weaponObject){
+            CreateFlyWeapon(harmModel, weaponObject);
         }else{
-            CreateFlyWeapon(harmModel);
+            AttackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
         }
         // AttackedTarget = null;
     }
@@ -326,17 +328,17 @@ public abstract class BaseController : MonoBehaviour {
         // base do nothing
     }
 
-    protected virtual void CreateFlyWeapon(HarmModel model){
-        Rigidbody2D weapon;
+    protected virtual void CreateFlyWeapon(HarmModel model, Rigidbody2D weaponObject){
+        Rigidbody2D weapon; 
         Vector3 weaponPos = new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z);
         if(IsMy)
         {
-            weapon = Instantiate(flyWeapon, weaponPos, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
+            weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
             weapon.velocity = new Vector2(weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
         }
         else
         {
-            weapon = Instantiate(flyWeapon, weaponPos, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
+            weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
             weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
         }
         BaseFlyWeapon controller = weapon.GetComponent<BaseFlyWeapon>();
@@ -348,6 +350,16 @@ public abstract class BaseController : MonoBehaviour {
         FlyWeaponRocket2 r = controller as FlyWeaponRocket2;
         if(r){
             r.ExplodeEventHandler += OtherTroopController.OnExplodeEvent;
+        }
+    }
+
+    protected Rigidbody2D GetFlyWeapon(){
+        if(flyWeapon){
+            return flyWeapon;
+        }else if(isBuffing && skillBuffModel.Type == SkillType.SKILL_THROW){
+            return throwWeapon;
+        }else{
+            return null;
         }
     }
 

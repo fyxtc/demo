@@ -13,10 +13,11 @@ public class FlyerSuper1Controller : FlyerController {
         spineAnimationState.SetAnimation(0, shootAnimationName, false);
         AttackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
         HarmModel harmModel = CreateHarmModel(AttackedTarget.GetComponent<BaseController>().Model.Type);
-        if(!IsNeedFlyWeapon()){
-            AttackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
+        Rigidbody2D weaponObject = GetFlyWeapon();
+        if(weaponObject){
+            CreateFlyWeapon(harmModel, weaponObject);
         }else{
-            CreateFlyWeapon(harmModel);
+            AttackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
         }
 
         if(attackCount == 1){
