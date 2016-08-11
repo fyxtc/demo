@@ -388,15 +388,30 @@ public abstract class BaseController : MonoBehaviour {
 
     protected virtual int CalcHarm(HarmModel harmModel){
         float att = harmModel.Attack;
-        float def = Model.Defense;
+        float def = DefenseBuff(harmModel);
         int res = (int)(att * (att / (att + def)));
-        // Debug.Log((IsMy?"my ":"enemy ") + Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
+        Debug.Log((IsMy?"my ":"enemy ") + Model.Type + " CalcHarm: " + res + "  ->  " + "att: " + att + ", def:" + def);
         Debug.Assert(res >= 0, "CalcHarm error");
         return res;
     }
 
+    protected virtual float AttackBuff(HarmModel harmModel){
+        float att = harmModel.Attack;
+        return att;
+    }
+
+    // 这里应该会用到装饰模式来优化一下~~
+    protected virtual float DefenseBuff(HarmModel harmModel){
+        float def = Model.Defense;
+        if(harmModel.Type == TroopType.TROOP_RECOVER_SUPER1){
+            // 注意加成的debuff情况都应该max一下
+            Debug.Log("attacked by " + harmModel.Type + ": def -3.0");
+            def = Mathf.Max(0.0f, def-3.0f);
+        }
+        return def;
+    }
+
     protected virtual bool CanMiss(HarmModel harmModel){
-        // 这里很有问题啊，这个时候attacker可能已经GG了。。
         // Debug.Log("CanMiss " + harmModel);
         return UnityEngine.Random.value > harmModel.HitRate; 
     }

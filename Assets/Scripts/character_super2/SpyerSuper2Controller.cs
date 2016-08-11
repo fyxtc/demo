@@ -4,7 +4,7 @@ using System.Collections;
 public class SpyerSuper2Controller : BaseController {
 	protected override int CalcHarm(HarmModel harmModel){
         float att = harmModel.Attack;
-        float def = Model.Defense;
+        float def = DefenseBuff(harmModel);
         int res = (int)(att * (att / (att + def)));
         if(def > att){
             if(Attacker.GetComponent<BaseController>()){
