@@ -36,7 +36,7 @@ public abstract class BaseController : MonoBehaviour {
         // Debug.Log(Model);
     }
     // public float speed = 0.1f;
-    private GameObject attackedTarget;
+    public GameObject AttackedTarget{get; set;}
     public PlayerTroopController OtherTroopController{get; set;}
     public PlayerTroopController MyTroopController{get; set;}
     public GameObject Attacker{get; set;}
@@ -137,9 +137,9 @@ public abstract class BaseController : MonoBehaviour {
             // if(transform.position == endPos){
             //     HandleCommand(TroopCommand.CMD_ATTACK);
             // }
-            if(attackedTarget = FindAttackedTarget()){
-                Debug.Assert(!attackedTarget.GetComponent<BaseController>().IsZombie, "attackedTarget cann't be zombie");
-                // Debug.Log("attackedTarget " + attackedTarget + ", zombie " + attackedTarget.GetComponent<BaseController>().IsZombie);
+            if(AttackedTarget = FindAttackedTarget()){
+                Debug.Assert(!AttackedTarget.GetComponent<BaseController>().IsZombie, "AttackedTarget cann't be zombie");
+                // Debug.Log("AttackedTarget " + AttackedTarget + ", zombie " + AttackedTarget.GetComponent<BaseController>().IsZombie);
                 HandleCommand(TroopCommand.CMD_ATTACK);
             }else if(Vector3.Distance(transform.position, Vector3.zero) >= 5 ){
                 // 走远了，该回来了，其实更好的是在发现前方没目标就回来，待做
@@ -253,8 +253,8 @@ public abstract class BaseController : MonoBehaviour {
                 // Debug.Log("self call: " + id);
                 if(isStart){
                     bool isRightOppo = false;
-                    if(attackedTarget != null){
-                        TroopType oppoType = attackedTarget.GetComponent<BaseController>().Model.Type;
+                    if(AttackedTarget != null){
+                        TroopType oppoType = AttackedTarget.GetComponent<BaseController>().Model.Type;
                         foreach(TroopType t in m.Opponent){
                             if(t == oppoType){
                                 isRightOppo = true;
@@ -293,23 +293,23 @@ public abstract class BaseController : MonoBehaviour {
         spineAnimationState.SetAnimation(0, walkAnimationName, true);
     }
 
-    void Attack(){
+    protected virtual void Attack(){
         Status = TroopStatus.STATUS_ATTACK;
         spineAnimationState.SetAnimation(0, shootAnimationName, false);
         if(IsMy){
-            // Debug.Log("my x:" + transform.position.x + " target x:" + attackedTarget.transform.position.x);
+            // Debug.Log("my x:" + transform.position.x + " target x:" + AttackedTarget.transform.position.x);
         }
         Invoke("DoBackDelay", 0.5f); // 注意这个时间应该要大于攻击cd
-        attackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
+        AttackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
         // 不能依赖这个类的任何东西，只能把伤害提取出来发过去，那问题是，如果是传引用，那这个类消失了还会在吗。。harmmodel会消失吗。。
-        HarmModel harmModel = CreateHarmModel(attackedTarget.GetComponent<BaseController>().Model.Type);
+        HarmModel harmModel = CreateHarmModel(AttackedTarget.GetComponent<BaseController>().Model.Type);
         // 这里的beingattacked应该放在必要的动画碰撞时候，比如投弹，弓箭之类
         if(!IsNeedFlyWeapon()){
-            attackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
+            AttackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
         }else{
             CreateFlyWeapon(harmModel);
         }
-        // attackedTarget = null;
+        // AttackedTarget = null;
     }
 
     // 各种加成的特技buff都放在里对应controller去重写
@@ -358,7 +358,7 @@ public abstract class BaseController : MonoBehaviour {
 
     public virtual void BeingAttacked(HarmModel harmModel){
         // 按理说，被打的zombie都在GetAttackedTarget里面过滤了，但是这里还有有可能是飞行道具过来的，所以还要baseflyweanpon过滤
-        Debug.Assert(!IsZombie, "IsZombie cann't be true");
+        Debug.Assert(!IsZombie && !IsDead, "IsDead or IsZombie cann't be true");
         // 之前没加这个判断，结果两个spyer互爆，无限循环dead.....
         if(Status == TroopStatus.STATUS_DEAD){
             return;
@@ -370,20 +370,25 @@ public abstract class BaseController : MonoBehaviour {
             // miss anim
             // Debug.Log("attack miss");
         }else{
-            int harm = 0;
-            if(harmModel.DirectHarm != -1){
-                harm = harmModel.DirectHarm;
-                Debug.Log(Model.Type + ": direct harm: " + harm);
+            // 暴击致死
+            if(harmModel.IsCritical){
+                model.Life = 0;
             }else{
-                harm = CalcHarm(harmModel);
-                // Debug.Log("calc total harm: " + harm);
-            }
-            // Debug.Log("Life: " + Model.Life);
-            // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
-            // Model.Life -= harm;
-            model.Life -= harm;
-            if(IsMy){
-                // Debug.Log("Life : " + Model.Life + ", harm:-" + harm);
+                int harm = 0;
+                if(harmModel.DirectHarm != -1){
+                    harm = harmModel.DirectHarm;
+                    Debug.Log(Model.Type + ": direct harm: " + harm);
+                }else{
+                    harm = CalcHarm(harmModel);
+                    // Debug.Log("calc total harm: " + harm);
+                }
+                // Debug.Log("Life: " + Model.Life);
+                // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
+                // Model.Life -= harm;
+                model.Life -= harm;
+                if(IsMy){
+                    // Debug.Log("Life : " + Model.Life + ", harm:-" + harm);
+                }
             }
             if(Model.Life <= 0){
                 Dead();

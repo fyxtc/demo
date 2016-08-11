@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FlyerSuper2Controller : BaseController {
+public class FlyerSuper2Controller : FlyerController {
 
 
 }

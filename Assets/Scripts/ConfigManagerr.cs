@@ -358,6 +358,7 @@ public class HarmModel{
     public TroopType Type{get; set;}
     public int Attack{get; set;}
     public double HitRate{get; set;}
+    public bool IsCritical{get; set;} // default false
 
     public HarmModel(TroopType type, int attack, double hitRate){
         DirectHarm = -1;
@@ -371,7 +372,7 @@ public class HarmModel{
     }
 
     public override string ToString(){
-        return "DirectHarm:"+DirectHarm+", AddedHarm:"+AddedHarm+ ", Type:"+Type+", Attack:"+Attack+", HitRate:"+HitRate;
+        return "DirectHarm:"+DirectHarm+", AddedHarm:"+AddedHarm+ ", Type:"+Type+", Attack:"+Attack+", HitRate:"+HitRate+", IsCritical:"+IsCritical;
     }
 }
 
