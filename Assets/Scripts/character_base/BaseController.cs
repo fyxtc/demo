@@ -360,6 +360,7 @@ public abstract class BaseController : MonoBehaviour {
     protected virtual void CreateFlyWeapon(HarmModel model, Rigidbody2D weaponObject){
         Rigidbody2D weapon; 
         Vector3 weaponPos = new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z);
+        bool isThrowWeapon = false;
         if(IsMy)
         {
             weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
@@ -370,6 +371,7 @@ public abstract class BaseController : MonoBehaviour {
         }
         else
         {
+            isThrowWeapon = true;
             weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
             if(!DemoUtil.IsFlyCategory(Model.Type)){
                 weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
@@ -378,8 +380,12 @@ public abstract class BaseController : MonoBehaviour {
         BaseFlyWeapon controller = weapon.GetComponent<BaseFlyWeapon>();
         controller.Owner = this;
         controller.IsMy = IsMy;
-        controller.SettingFin = true;
         controller.HarmModel = model;
+        // 飞行部队和投技都必须设置攻击目标，追踪至死
+        if(DemoUtil.IsRemoteCategory(Model.Type) || isThrowWeapon){
+            controller.Target = AttackedTarget;
+        }
+        controller.SettingFin = true;
 
         FlyWeaponRocket2 r = controller as FlyWeaponRocket2;
         if(r){
