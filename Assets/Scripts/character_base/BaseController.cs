@@ -83,6 +83,7 @@ public abstract class BaseController : MonoBehaviour {
     public event EventHandler ExplodeEventHandler;
     protected int addedHarm = 0; // 默认没有额外伤害
     public bool IsZombie{get; set;}
+    public bool HadAttacked{get; set;}
 
 
 
@@ -113,6 +114,7 @@ public abstract class BaseController : MonoBehaviour {
         transform.position = new Vector3(transform.position.x, transform.position.y+offsetY, transform.position.z);
         startPos = transform.position;
         endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
+
     }
 
     void DispatchNaturalTricks(){
@@ -129,10 +131,11 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     bool IsNearBorder(){
-        Vector3 pixelsPos = Camera.main.WorldToScreenPoint(transform.position);
+        Vector3 pixelsMyPos = Camera.main.WorldToScreenPoint(transform.position);
+        Vector3 pixelsEndPos = Camera.main.WorldToScreenPoint(endPos);
         // Debug.Log(pixelsPos);
-        float gap = 50;
-        return (pixelsPos.x < gap || pixelsPos.x > (Screen.width-gap));
+        // float gap = 10;
+        return (IsMy ? pixelsMyPos.x >= pixelsEndPos.x : pixelsMyPos.x <= pixelsEndPos.x);
     }
 
     void Update(){
@@ -141,10 +144,6 @@ public abstract class BaseController : MonoBehaviour {
             break;
         case TroopStatus.STATUS_FORWARD:
             transform.position = Vector3.Lerp(transform.position, endPos, (float)(1/((transform.position - endPos).magnitude) * Model.Speed));
-            // Debug.Log(transform.position.x + ", " + endPos.x);
-            // if(transform.position == endPos){
-            //     HandleCommand(TroopCommand.CMD_ATTACK);
-            // }
             if(AttackedTarget = FindAttackedTarget()){
                 Debug.Assert(!AttackedTarget.GetComponent<BaseController>().IsZombie, "AttackedTarget cann't be zombie");
                 // Debug.Log("AttackedTarget " + AttackedTarget + ", zombie " + AttackedTarget.GetComponent<BaseController>().IsZombie);
@@ -157,6 +156,7 @@ public abstract class BaseController : MonoBehaviour {
         case TroopStatus.STATUS_ATTACK:
             break;
         case TroopStatus.STATUS_BACK:
+            BackAttack();
             transform.position = Vector3.Lerp(transform.position, startPos, (float)(1/((transform.position - startPos).magnitude) * Model.Speed));
             if(transform.position == startPos){
                 HandleCommand(TroopCommand.CMD_IDLE);
@@ -164,6 +164,17 @@ public abstract class BaseController : MonoBehaviour {
             break;
         }
 
+    }
+
+    void BackAttack(){
+        if(HadAttacked){
+            return;
+        }else{
+            if(AttackedTarget = FindAttackedTarget()){
+                Debug.Assert(!AttackedTarget.GetComponent<BaseController>().IsZombie, "AttackedTarget cann't be zombie");
+                HandleCommand(TroopCommand.CMD_ATTACK);
+            }
+        }
     }
 
     // 如果发现前进方向都没有可攻击的敌人了，应该就往回走了back，如果是自己打不到飞行兵更好的效果应该是走到和他一样的位置
@@ -182,7 +193,9 @@ public abstract class BaseController : MonoBehaviour {
         Vector3 pos1 = transform.position;
         Vector3 pos2 = obj.transform.position;
         // Debug.Log("Distance: " + Vector3.Distance(pos1, pos2));
-        if(Vector3.Distance(pos1, pos2) <= Model.AttackRange){
+        // 这里应该用distance还是算abs(posX)呢。。。distance的话飞行兵算有问题
+        // if(Vector3.Distance(pos1, pos2) <= Model.AttackRange){
+		if(Mathf.Abs(pos1.x - pos2.x) <= Model.AttackRange){
             return obj;
         }
         return null;
@@ -299,6 +312,7 @@ public abstract class BaseController : MonoBehaviour {
         Status = TroopStatus.STATUS_FORWARD;
         skeleton.FlipX = !IsMy;
         spineAnimationState.SetAnimation(0, walkAnimationName, true);
+        HadAttacked = false;
     }
 
     protected virtual void Attack(){
@@ -318,6 +332,7 @@ public abstract class BaseController : MonoBehaviour {
         }else{
             AttackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
         }
+        HadAttacked = true;
         // AttackedTarget = null;
     }
 
@@ -473,6 +488,7 @@ public abstract class BaseController : MonoBehaviour {
     // 需要处理的碰撞信息，放在被撞的物体身上
     void OnParticleCollision(GameObject other) {
         Debug.Log("collision");     
+
     }
 
     void Back(){
@@ -497,7 +513,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
 
-    public void OnSkillEvent(object sender, EventArgs e)
+    public virtual void OnSkillEvent(object sender, EventArgs e)
     {
         SkillEvent ev = (SkillEvent)e;
         // 给自己的小兵加
@@ -521,7 +537,7 @@ public abstract class BaseController : MonoBehaviour {
         }
     }
 
-    protected BaseModel AddSkillModel(){
+    protected virtual BaseModel AddSkillModel(){
         BaseModel resModel = (BaseModel)model.Clone(); // 用Model，就无限递归了。。。，还有，不能用model，因为是引用，直接修改model的值了。。fuck
         resModel.AttackMin = (int)(resModel.AttackMin * (1.0 + skillBuffModel.Attack));
         resModel.AttackMax = (int)(resModel.AttackMax * (1.0 + skillBuffModel.Attack));
@@ -568,7 +584,7 @@ public abstract class BaseController : MonoBehaviour {
 
     }
 
-    BaseModel AddTrickModels(BaseModel afterBuffModel){
+    protected virtual BaseModel AddTrickModels(BaseModel afterBuffModel){
         List<TrickModel> tricks = GetTrickingModels();
         BaseModel resModel = afterBuffModel;
         foreach(TrickModel m in tricks){
@@ -633,7 +649,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
 
-    public void OnTrickEvent(object sender, EventArgs e){
+    public virtual void OnTrickEvent(object sender, EventArgs e){
         TrickEvent ev = (TrickEvent)e;
         // 如果发送放和接收方相等，且是对自己产生作用的特技的话
         bool condition1 = IsMy == ev.IsMy && ev.IsSelf;
