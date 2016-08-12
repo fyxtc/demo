@@ -84,6 +84,8 @@ public abstract class BaseController : MonoBehaviour {
     protected int addedHarm = 0; // 默认没有额外伤害
     public bool IsZombie{get; set;}
     public bool HadAttacked{get; set;}
+    public event EventHandler SummonHandler;
+    protected SummonEvent summonEvent = new SummonEvent();
 
 
 
@@ -104,6 +106,7 @@ public abstract class BaseController : MonoBehaviour {
         // Invoke("Test", 5);
 
         SetPosition();
+        spineAnimationState.Complete += OnAnimComplete;
     }
 
     void SetPosition(){
@@ -311,7 +314,11 @@ public abstract class BaseController : MonoBehaviour {
     void Forward(){
         Status = TroopStatus.STATUS_FORWARD;
         skeleton.FlipX = !IsMy;
-        spineAnimationState.SetAnimation(0, walkAnimationName, true);
+        if(Model.Speed >= 0.1){
+            spineAnimationState.SetAnimation(0, runAnimationName, true);
+        }else{
+            spineAnimationState.SetAnimation(0, walkAnimationName, true);
+        }
         HadAttacked = false;
     }
 
@@ -478,11 +485,24 @@ public abstract class BaseController : MonoBehaviour {
         spineAnimationState.SetAnimation(0, dieAnimationName, false);
 		// spineAnimationState.Data.SetMix (shootAnimationName, dieAnimationName, 0.2f);
         // 注意不能在End的回调里再调用setanim，因为setanim总是会触发end，所以会无限递归
-        spineAnimationState.Complete += delegate (Spine.AnimationState state, int trackIndex, int loopCount) {
-             // 你也可以使用一个匿名代理
-            // Debug.Log(string.Format("track {0} started a new animation.", trackIndex));
-            IsCanBeClean = true;
-        };
+        // spineAnimationState.Complete += delegate (Spine.AnimationState state, int trackIndex, int loopCount) {
+        //      // 你也可以使用一个匿名代理
+        //     // Debug.Log(string.Format("track {0} started a new animation.", trackIndex));
+        // };
+    }
+
+    protected virtual void OnAnimComplete(Spine.AnimationState state, int trackIndex, int loopCount){
+        if(state.GetCurrent(trackIndex).Animation.Name == dieAnimationName){
+            OnDeadAnimComplete();
+        }
+    }
+
+    protected virtual void OnDeadAnimComplete(){
+        IsCanBeClean = true;
+        if(SummonHandler != null){
+            summonEvent.Type = Model.Type;
+            SummonHandler(this, summonEvent);
+        }
     }
 
     // 需要处理的碰撞信息，放在被撞的物体身上
@@ -494,7 +514,11 @@ public abstract class BaseController : MonoBehaviour {
     void Back(){
         Status = TroopStatus.STATUS_BACK;
         skeleton.FlipX = IsMy;
-        spineAnimationState.SetAnimation(0, walkAnimationName, true);
+        if(Model.Speed >= 0.1){
+            spineAnimationState.SetAnimation(0, runAnimationName, true);
+        }else{
+            spineAnimationState.SetAnimation(0, walkAnimationName, true);
+        }
     }
 
     void Idle(){

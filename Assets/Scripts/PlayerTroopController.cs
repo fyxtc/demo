@@ -5,7 +5,7 @@ using System;
 using UnityEngine.UI;
 
 public class PlayerTroopController : MonoBehaviour {
-    private const int CHARACTER_MAX_COUNT = 27; // 目前9*3种兵
+    private const int CHARACTER_MAX_COUNT = 28; // 目前9*3种兵 + 1servant
     public bool isMy = true;
     public bool IsMy{
         get{return isMy;}
@@ -45,7 +45,7 @@ public class PlayerTroopController : MonoBehaviour {
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
-            // data.Add(TroopType.TROOP_SABER, 1);
+            data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
@@ -61,17 +61,17 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_DANCER_SUPER2, 1);
             // data.Add(TroopType.TROOP_SPYER_SUPER2, 1);
             // data.Add(TroopType.TROOP_RIDER_SUPER2, 1);
-            data.Add(TroopType.TROOP_FLYER_SUPER2, 1);
-            // data.Add(TroopType.TROOP_MAGICICAN_SUPER1, 1);
+            // data.Add(TroopType.TROOP_FLYER_SUPER2, 1);
+            data.Add(TroopType.TROOP_MAGICICAN_SUPER2, 1);
             // data.Add(TroopType.TROOP_TITAN_SUPER2, 1);
         }else{
-            data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
             // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
-            // data.Add(TroopType.TROOP_TITAN, 1);
+            data.Add(TroopType.TROOP_TITAN, 1);
         }
         Debug.Assert(data.Count > 0 && data.Count <= maxCount, "troops count error " + data.Count);
         OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
@@ -105,7 +105,7 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
 
-    void SetController(ref GameObject obj){
+    void SetController(ref GameObject obj, TroopType type){
         BaseController controller = obj.GetComponent<BaseController>();
         controller.IsMy = isMy;
         controller.OtherTroopController = OtherTroopController;
@@ -113,12 +113,18 @@ public class PlayerTroopController : MonoBehaviour {
         controller.MyTroopController.TrickEventHandler += controller.OnTrickEvent;
         // 注意这里的爆炸事件应该是让对方来接
         controller.ExplodeEventHandler += OtherTroopController.OnExplodeEvent;
+        // servant死了不能再触发了
+        if(type != TroopType.TROOP_SERVANT){
+            controller.SummonHandler += controller.MyTroopController.OnSummonEvent;
+        }/*else{
+            controller.SummonHandler += null;   
+        }*/
     }
 
     void InstantiateObject(TroopType type, int count, ref List<GameObject> characters){
         for(int i = 0; i < count; i++){
 			GameObject obj = Instantiate(prefabs[(int)type]);
-            SetController(ref obj);
+            SetController(ref obj, type);
             characters.Add(obj);
         }
     }
@@ -260,7 +266,24 @@ public class PlayerTroopController : MonoBehaviour {
         TrickEventHandler(this, ev);
     }
 
+    void OnSummonEvent(object sender, EventArgs e){
+        // 这个servant由this维护比较好
+        foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
+            TroopType troopType = item.Key;
+            List<GameObject> troop = item.Value;
+            foreach(GameObject obj in troop){
+                if(troopType == TroopType.TROOP_MAGICICAN_SUPER2){
+                    MagicianSuper2Controller m2 = obj.GetComponent<MagicianSuper2Controller>();
+                    // 死了的召唤师（包括自己死了）不能再调用自己的summon
+                    if(!m2.IsDead){
+                        // m2.Summon(sender, e);
+                        // TODO: create servant
+                    }
+                }
+            }
+        }
 
+    }
     
     void Resort(){
         int rank = 0;

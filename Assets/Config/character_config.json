@@ -16,7 +16,7 @@ type:
 [
     {
         "type":0,
-        "life":20,
+        "life":2,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -419,7 +419,7 @@ type:
 
     {
         "type":25,
-        "life":90,
+        "life":9,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -446,7 +446,25 @@ type:
         "attackCD":2.0,
         "hitRate":0.9,
         "tricks":[]
+    }, 
+
+
+    {
+        "type":27,
+        "life":1,
+        "attackMin":10,
+        "attackMax":20,
+        "defense":10,
+        "speed":0.05,
+        "maxCount":5,
+        "rank":2,
+        "interval":0.3,
+        "attackRange":1.0,
+        "attackCD":2.0,
+        "hitRate":0.5,
+        "tricks":[]
     }
+
 
 
 
