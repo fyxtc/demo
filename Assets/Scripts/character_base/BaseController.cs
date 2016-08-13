@@ -570,7 +570,7 @@ public abstract class BaseController : MonoBehaviour {
             }else{
                 spr.sprite = null;
             }
-            if(skillBuffModel.Type == SkillType.SKILL_LIFE){
+            if(skillBuffModel.Type == SkillType.SKILL_LIFE || skillBuffModel.Type == SkillType.SKILL_LIFE_DEBUFF){
                 AddSkillLifeBuff(isBuffing);   
             }
             List<int> trickIds = TrickController.GetSkillTrick(ev.Type);

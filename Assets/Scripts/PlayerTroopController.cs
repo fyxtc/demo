@@ -11,7 +11,7 @@ public class PlayerTroopController : MonoBehaviour {
         get{return isMy;}
         set{isMy = value;}
     }
-    float[] posConfig = {-6.5f, -3.0f, -4.5f, -6.0f};
+    float[] posConfig = {-1.5f, -3.0f, -4.5f, -6.0f};
     int maxCount = 4; // 最多能带四个兵团
     Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
 	Dictionary<TroopType, List<GameObject>> troops = new Dictionary<TroopType, List<GameObject>>();
@@ -45,8 +45,8 @@ public class PlayerTroopController : MonoBehaviour {
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
-            // data.Add(TroopType.TROOP_SABER, 1);
-            data.Add(TroopType.TROOP_ARCHER, 1);
+            data.Add(TroopType.TROOP_SABER, 1);
+            // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
@@ -65,11 +65,11 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_MAGICICAN_SUPER2, 1);
             // data.Add(TroopType.TROOP_TITAN_SUPER2, 1);
         }else{
-            // data.Add(TroopType.TROOP_SABER, 1);
+            data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);
-            data.Add(TroopType.TROOP_FLYER, 1);
+            // data.Add(TroopType.TROOP_FLYER, 1);
             // data.Add(TroopType.TROOP_MAGICICAN, 1);
             // data.Add(TroopType.TROOP_TITAN, 1);
             // data.Add(TroopType.TROOP_FLYER_SUPER2, 1);

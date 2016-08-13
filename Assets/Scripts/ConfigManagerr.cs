@@ -147,6 +147,7 @@ public class SkillModel{
     public double attackRange;
     public double time;
     public double cd;
+    public bool isDebuff;
 
     public SkillType Type{
         get{return type;}
@@ -180,6 +181,10 @@ public class SkillModel{
         get{return cd;} 
         set{cd = value;}
     }
+    public bool IsDebuff{
+        get{return isDebuff;}
+        set{isDebuff = value;}
+    }
 
     public override string ToString(){
         return "type:"+Type+", attack:"+attack+", defense:"+defense+", hitRate:"+hitRate+", life"+life+", attackRange"+attackRange+", time:"+time+", cd"+cd;
@@ -187,7 +192,7 @@ public class SkillModel{
 }
 
 public enum SkillType{
-    SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_HIT, SKILL_LIFE, SKILL_THROW
+    SKILL_ATTACK=0, SKILL_DEFENSE, SKILL_LIFE, SKILL_HIT_DEBUFF, SKILL_LIFE_DEBUFF, SKILL_THROW
     , SKILL_INVALID=-1
 }
 
@@ -195,6 +200,7 @@ public class SkillEvent : EventArgs{
     public SkillType Type{get; set;}
     public SkillStatus Status{get; set;}
     public bool IsMy{get; set;}
+    public bool IsDebuff{get; set;}
 }
 
 public class SkillConfig{

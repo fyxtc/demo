@@ -3,45 +3,48 @@
 type:
 0: attack
 1: defense
-2: hitrate
-3: life
-4: throw
+2: life
+3: debuff hit rate 
+4: debuff life 
+5: throw
 */
 [
 	{
 		"type":0,
 		"attack":0.5,
-		"defense":0.0,
-		"hitRate":0.0,
-		"time":10.0,
-		"cd":10.0
+		"time":3.0,
+		"cd":5.0
 	},
 	{
 		"type":1,
-		"attack":0.0,
 		"defense":0.5,
-		"hitRate":0.0,
 		"time":3.0,
 		"cd":5.0
 	},
 	{
 		"type":2,
-		"attack":0.0,
-		"defense":0.0,
-		"hitRate":0.1,
-		"time":3.0,
-		"cd":5.0
-	},
-	{
-		"type":3,
 		"life":2,
 		"time":3.0,
 		"cd":5.0
 	},
 	{
+		"type":3,
+		"hitRate":-0.1,
+		"debuff":true,
+		"time":3.0,
+		"cd":5.0
+	},
+	{
 		"type":4,
+		"life":-2,
+		"debuff":true,
+		"time":3.0,
+		"cd":5.0
+	},
+	{
+		"type":5,
 		"attackRange":3.0,
-		"time":10.0,
-		"cd":10.0
+		"time":3.0,
+		"cd":5.0
 	}
 ]

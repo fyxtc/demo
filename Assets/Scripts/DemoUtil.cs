@@ -5,13 +5,24 @@ using System.Text;
 
 public class DemoUtil{
     public static string ReadConfigFile(string file){
-        StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + file,Encoding.Default);
-        string line;
         string res = "";
+        // 第一种
+        StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Resources"/*+Path.DirectorySeparatorChar+"Config"*/+Path.DirectorySeparatorChar + file,Encoding.Default);
+        string line;
         while ((line = sr.ReadLine()) != null) 
         {
             res += line;
         }
+
+        // 第二种
+        // res = ((TextAsset)Resources.Load(file)).text; // Resources里面的文件夹不行，只能直接放，不能嵌套
+
+        // 第三种
+        // string sPath= Application.streamingAssetsPath + Path.DirectorySeparatorChar + file;
+        // WWW www = new WWW(sPath);
+        // res = www.text;
+
+        // Debug.Log(res);
         return res;
     }
 

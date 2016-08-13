@@ -10,6 +10,14 @@ public class CamerController : MonoBehaviour {
 		// Debug.Log("saber: " + configManager.CharacterConfig.Saber.Life);
 		// Debug.Log("archer: " + configManager.CharacterConfig.Archer.Attack);
 	}
+
+    // IEnumerator LoadConfig(string file)
+    // {
+    //     string sPath= Application.streamingAssetsPath + Path.DirectorySeparatorChar + file;
+    //     WWW www = new WWW(sPath);
+    //     yield return www;
+    //     _result = www.text;
+    // }
 	
 	// Update is called once per frame
 	void Update () {
