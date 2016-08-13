@@ -11,6 +11,7 @@ public class BaseModel : ICloneable{
     public int life;
     public int attackMin;
     public int attackMax;
+    public bool canMaxAttack;
     public int defense;   
     public double speed;
     public int maxCount;
@@ -37,8 +38,18 @@ public class BaseModel : ICloneable{
         set{attackMax = value;}
         get{return attackMax;}
     }
+    public bool CanMaxAttack{
+        set{canMaxAttack = value;}
+        get{return canMaxAttack;}
+    }
     public int Attack{
-        get{return (int)(UnityEngine.Random.Range(attackMin, attackMax));}
+        get{
+            if(canMaxAttack){
+                return attackMax;
+            }else{
+                return (int)(UnityEngine.Random.Range(attackMin, attackMax));
+            }
+        }
     }
     public int Defense{
         set{defense = value;}
@@ -84,7 +95,7 @@ public class BaseModel : ICloneable{
     }
 
     public override string ToString(){
-		return "type:" + type + ", attackMin:" + attackMin + ", attackMax:" + attackMax + ", defense:" + defense + ", speed:" + speed + ", life:" + life + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
+		return "type:" + type + ", attackMin:" + attackMin + ", attackMax:" + attackMax + ", max:" + canMaxAttack + ", defense:" + defense + ", speed:" + speed + ", life:" + life + ", maxCount:" + maxCount + ", rank:" + rank + ", interval:" + interval + ", attackRange:" + attackRange + ", attackCD:" + attackCD + ", hitRate:" + hitRate + ", tricks:" + tricks.Length;
     }
 }
 
@@ -205,7 +216,7 @@ public class SkillConfig{
 
 
 public enum TrickProperty{
-    PROPERTY_ATTACK=0, PROPERTY_DEFENSE, PROPERTY_SPEED, PROPERTY_HIT, PROPERTY_LIFE, PROPERTY_ATTACK_CD
+    PROPERTY_ATTACK=0, PROPERTY_DEFENSE, PROPERTY_SPEED, PROPERTY_HIT, PROPERTY_LIFE, PROPERTY_ATTACK_CD, PROPERTY_ATTACK_MAX
 }
 
 public enum TrickType{

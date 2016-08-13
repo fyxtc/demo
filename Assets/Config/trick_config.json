@@ -88,7 +88,16 @@ raidus: 伤害半径
         "isSelf":true
     },  
 
-
+    {
+        "id":7,
+        "type":0,
+        "property":6,
+        "rate":1.0,
+        "skill":0,
+        "target":[100],
+        "isSelf":true
+    }, 
+       
 
 
     {

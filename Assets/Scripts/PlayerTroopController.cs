@@ -58,7 +58,7 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_SABER_SUPER2, 1);
             // data.Add(TroopType.TROOP_ARCHER_SUPER2, 1);
             // data.Add(TroopType.TROOP_RECOVER_SUPER1, 1);
-            // data.Add(TroopType.TROOP_DANCER_SUPER2, 1);
+            // data.Add(TroopType.TROOP_DANCER_SUPER1, 1);
             // data.Add(TroopType.TROOP_SPYER_SUPER2, 1);
             // data.Add(TroopType.TROOP_RIDER_SUPER2, 1);
             // data.Add(TroopType.TROOP_FLYER_SUPER2, 1);

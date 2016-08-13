@@ -41,6 +41,8 @@ public class DemoUtil{
         if(!DemoUtil.IsRemoteCategory(attackerType) && DemoUtil.IsFlyCategory(enemyType)){
             // Debug.Log("ingore " + attackerType + " to " + enemyType);
             return true;
+        }else if(DemoUtil.IsFlyCategory(attackerType) && DemoUtil.IsFlyCategory(enemyType)){
+            return true;
         }
         return false;
     }

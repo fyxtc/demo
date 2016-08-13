@@ -3,8 +3,6 @@ using System.Collections;
 
 public class FlyWeaponRocket : BaseFlyWeapon 
 {
-	private new float speed = 10.0f;
-	public override float GetSpeed(){
-		return this.speed;
-	}
+    // 如果代码指定了值，是以代码为主了。。。编辑器改没有用...
+	private new float speed;// = 1.0f;
 }

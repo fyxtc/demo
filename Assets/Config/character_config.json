@@ -16,7 +16,7 @@ type:
 [
     {
         "type":0,
-        "life":2,
+        "life":20,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -205,12 +205,12 @@ type:
         "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
-        "tricks":[1]
+        "tricks":[]
     },
 
     {
         "type":12,
-        "life":50,
+        "life":5,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -221,7 +221,7 @@ type:
         "attackRange":1.0,
         "attackCD":2.0,
         "hitRate":0.9,
-        "tricks":[4,5]
+        "tricks":[7]
     },
 
     {

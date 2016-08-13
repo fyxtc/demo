@@ -86,6 +86,7 @@ public abstract class BaseController : MonoBehaviour {
     public bool HadAttacked{get; set;}
     public event EventHandler SummonHandler;
     protected SummonEvent summonEvent = new SummonEvent();
+    protected bool IsThrowWeapon{get; set;}
 
 
 
@@ -99,7 +100,9 @@ public abstract class BaseController : MonoBehaviour {
 
         InitModel ();
         InitTrickController();
-        HandleCommand(TroopCommand.CMD_IDLE);
+        // if(IsMy){
+            HandleCommand(TroopCommand.CMD_IDLE);
+        // }
 
         Invoke("DispatchNaturalTricks", 0.1f); //不能马上调用，因为这个时候可能别的basecontroller还没有Start，也就还没有Initmodel了
         // InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
@@ -185,17 +188,23 @@ public abstract class BaseController : MonoBehaviour {
         // Debug.Log(OtherTroopController);
         GameObject obj = OtherTroopController.GetAttackedTarget(Model.Type);
         if (obj == null) {
-            // Debug.Log("fuck1");
+            if(IsMy){
+                // Debug.Log("fuck1");
+            }
             return null;
         }
         if(obj.GetComponent<BaseController>().IsDead){
-            // Debug.Log("fuck2 " + obj.GetComponent<BaseController>().Model.Type);
+            if(IsMy){
+                // Debug.Log("fuck2 " + obj.GetComponent<BaseController>().Model.Type);
+            }
             return null;
         }
 
         Vector3 pos1 = transform.position;
         Vector3 pos2 = obj.transform.position;
-        // Debug.Log("Distance: " + Vector3.Distance(pos1, pos2));
+        if(IsMy){
+            // Debug.Log("Distance: " + Vector3.Distance(pos1, pos2));
+        }
         // 这里应该用distance还是算abs(posX)呢。。。distance的话飞行兵算有问题
         // if(Vector3.Distance(pos1, pos2) <= Model.AttackRange){
 		if(Mathf.Abs(pos1.x - pos2.x) <= Model.AttackRange){
@@ -360,29 +369,26 @@ public abstract class BaseController : MonoBehaviour {
     protected virtual void CreateFlyWeapon(HarmModel model, Rigidbody2D weaponObject){
         Rigidbody2D weapon; 
         Vector3 weaponPos = new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z);
-        bool isThrowWeapon = false;
         if(IsMy)
         {
             weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,0))) as Rigidbody2D;
-            // 飞行部队靠重力自由落体
             if(!DemoUtil.IsFlyCategory(Model.Type)){
-                weapon.velocity = new Vector2(weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+                // weapon.velocity = new Vector2(weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
             }
         }
         else
         {
-            isThrowWeapon = true;
             weapon = Instantiate(weaponObject, weaponPos, Quaternion.Euler(new Vector3(0,0,180f))) as Rigidbody2D;
             if(!DemoUtil.IsFlyCategory(Model.Type)){
-                weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
+                // weapon.velocity = new Vector2(-weapon.GetComponent<BaseFlyWeapon>().GetSpeed(), 0);
             }
         }
         BaseFlyWeapon controller = weapon.GetComponent<BaseFlyWeapon>();
         controller.Owner = this;
         controller.IsMy = IsMy;
         controller.HarmModel = model;
-        // 飞行部队和投技都必须设置攻击目标，追踪至死
-        if(DemoUtil.IsRemoteCategory(Model.Type) || isThrowWeapon){
+        // 只要不是飞行部队，而且还有飞行道具，说明是远程部队或投技，都必须设置攻击目标，追踪至死
+        if(!DemoUtil.IsFlyCategory(Model.Type)){
             controller.Target = AttackedTarget;
         }
         controller.SettingFin = true;
@@ -398,10 +404,13 @@ public abstract class BaseController : MonoBehaviour {
             Debug.Assert(flyWeapon != null, "fly weapon can't be null in fly category");
         }
         if(flyWeapon){
+            IsThrowWeapon = false;
             return flyWeapon;
         }else if(isBuffing && skillBuffModel.Type == SkillType.SKILL_THROW){
+            IsThrowWeapon = true;
             return throwWeapon;
         }else{
+            IsThrowWeapon = false;
             return null;
         }
     }
@@ -489,6 +498,10 @@ public abstract class BaseController : MonoBehaviour {
         Status = TroopStatus.STATUS_DEAD;
         IsDead = true; 
         spineAnimationState.SetAnimation(0, dieAnimationName, false);
+
+        // 移除自己的所有特技
+        MyTroopController.DispatchTricks(new List<int>(Model.Tricks), false);
+
 		// spineAnimationState.Data.SetMix (shootAnimationName, dieAnimationName, 0.2f);
         // 注意不能在End的回调里再调用setanim，因为setanim总是会触发end，所以会无限递归
         // spineAnimationState.Complete += delegate (Spine.AnimationState state, int trackIndex, int loopCount) {
@@ -573,7 +586,10 @@ public abstract class BaseController : MonoBehaviour {
         resModel.AttackMax = (int)(resModel.AttackMax * (1.0 + skillBuffModel.Attack));
         resModel.Defense = (int)(resModel.Defense * (1.0 + skillBuffModel.Defense));
         resModel.HitRate = resModel.HitRate * (1.0 + skillBuffModel.HitRate);
-        resModel.AttackRange = skillBuffModel.AttackRange;
+        // 因为这是直接赋值的，所有需要做判断0情况
+        if(skillBuffModel.AttackRange > 0.1){
+            resModel.AttackRange = skillBuffModel.AttackRange;
+        }
         if(resModel.HitRate > 1.0){
             resModel.HitRate = 1.0;
         }
@@ -659,6 +675,10 @@ public abstract class BaseController : MonoBehaviour {
             break;
         case TrickProperty.PROPERTY_ATTACK_CD:
             resModel.AttackCD += (int)effect;
+            break;
+        case TrickProperty.PROPERTY_ATTACK_MAX:
+            // Debug.Log(model.Type + " max attack "); // Model死循环。。。
+            resModel.CanMaxAttack = true;
             break;
         default:
             Debug.Assert(false, "error trick property");

@@ -5,6 +5,7 @@ type:
 1: defense
 2: hitrate
 3: life
+4: throw
 */
 [
 	{
@@ -12,8 +13,8 @@ type:
 		"attack":0.5,
 		"defense":0.0,
 		"hitRate":0.0,
-		"time":3.0,
-		"cd":5.0
+		"time":10.0,
+		"cd":10.0
 	},
 	{
 		"type":1,
