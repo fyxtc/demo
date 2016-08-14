@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Spine.Unity;
 using System;
+using UnityEngine.UI;
 
 public abstract class BaseController : MonoBehaviour {
     public TroopType troopType;
@@ -50,6 +51,9 @@ public abstract class BaseController : MonoBehaviour {
     protected CharacterConfig characterConfig = ConfigManager.share().CharacterConfig;
 
     public GameObject skillTip;
+    public GameObject harmLabel;
+    public GameObject hpBar;
+    private GameObject hpBarInstance;
 
     public enum TroopStatus{
         STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD,
@@ -87,7 +91,8 @@ public abstract class BaseController : MonoBehaviour {
     public event EventHandler SummonHandler;
     protected SummonEvent summonEvent = new SummonEvent();
     protected bool IsThrowWeapon{get; set;}
-
+    private GameObject canvas;
+    private Renderer rend;
 
 
     protected virtual void Start () {
@@ -110,6 +115,8 @@ public abstract class BaseController : MonoBehaviour {
 
         SetPosition();
         spineAnimationState.Complete += OnAnimComplete;
+        canvas = GameObject.Find("Canvas");
+        rend = GetComponent<Renderer>();
     }
 
     void SetPosition(){
@@ -170,7 +177,59 @@ public abstract class BaseController : MonoBehaviour {
             break;
         }
 
+        HandleTouch();
     }
+
+    void HandleTouch(){
+        // if (Input.touchCount > 0) { 
+        if(Input.GetMouseButtonDown(0)){
+            Bounds rect = rend.bounds;
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+            // Debug.Log("mouse down " + rect + " contains " + mousePos + " : " + rect.Contains(mousePos));
+            if(rect.Contains(mousePos)){
+                // Debug.Log("show hp " + hpBarInstance);
+                if(hpBarInstance){
+                    hpBarInstance.SetActive(true);
+                }else{
+                    CreateHPBar();
+                }
+            }
+        }
+
+        if(Input.GetMouseButtonUp(0)){
+            if(hpBarInstance){
+                hpBarInstance.SetActive(false);
+            }
+            // Debug.Log("mouse up");
+        }
+
+        if(Input.GetMouseButton(0)){
+            // Debug.Log("mouse hold");
+        }
+    }
+
+    void CreateHPBar(){
+        // Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(1, 2, 0));
+        // pos = new Vector3(0, 0, 0);
+        // Debug.Log("hp bar pos " + pos);
+        hpBarInstance = (GameObject)Instantiate(hpBar, transform.position, transform.rotation);
+        hpBarInstance.transform.position += hpBarInstance.GetComponent<HPBarController>().diffVec;
+        hpBarInstance.transform.SetParent(canvas.transform);
+        hpBarInstance.GetComponent<HPBarController>().Character = gameObject;
+        hpBarInstance.SetActive(true);
+    }
+
+
+     // public Rect BoundsToScreenRect(Bounds bounds)
+     // {
+     //     // Get mesh origin and farthest extent (this works best with simple convex meshes)
+     //     Vector3 origin = Camera.main.WorldToScreenPoint(new Vector3(bounds.min.x, bounds.max.y, 0f));
+     //     Vector3 extent = Camera.main.WorldToScreenPoint(new Vector3(bounds.max.x, bounds.min.y, 0f));
+         
+     //     // Create rect in screen space and return - does not account for camera perspective
+     //     return new Rect(origin.x, Screen.height - origin.y, extent.x - origin.x, origin.y - extent.y);
+     // }
 
     void BackAttack(){
         if(HadAttacked){
@@ -433,6 +492,7 @@ public abstract class BaseController : MonoBehaviour {
         if( harmModel.DirectHarm == -1 && CanMiss(harmModel)){
             // miss anim
             // Debug.Log("attack miss");
+            CreateHarmLabel("miss");
         }else{
             // 暴击致死
             if(harmModel.IsCritical){
@@ -446,6 +506,11 @@ public abstract class BaseController : MonoBehaviour {
                     harm = CalcHarm(harmModel);
                     // Debug.Log("calc total harm: " + harm);
                 }
+                
+                CreateHarmLabel("-"+harm);
+
+                // label.transform.position = new Vector3(0, 1, 0);
+
                 // Debug.Log("Life: " + Model.Life);
                 // 注意！！只有生命值这个玩意必须直接改model底层数据，而不能通过Model，因为这个取到的是副本，改也只是在副本上改
                 // Model.Life -= harm;
@@ -460,6 +525,20 @@ public abstract class BaseController : MonoBehaviour {
             transform.position = new Vector3(transform.position.x, transform.position.y + 0.0f, transform.position.z);
         }
         DispatchStatusTricks(TrickStatusType.STATUS_DEFENSE, false);
+    }
+
+    protected void CreateHarmLabel(string text){
+        // Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 2, 0));
+        // Debug.Log("harm label pos " + pos);
+        GameObject label = (GameObject)Instantiate(harmLabel, Camera.main.WorldToScreenPoint(transform.position), transform.rotation);
+        label.GetComponent<HarmLabelController>().Character = gameObject;
+        label.transform.position += label.GetComponent<HarmLabelController>().diffVec;
+        label.transform.SetParent(canvas.transform);
+        Text l = label.GetComponent<Text>();
+        l.text = text;    
+		if (text == "miss") {
+			l.color = Color.yellow;
+		}
     }
 
     protected virtual int CalcHarm(HarmModel harmModel){
@@ -766,7 +845,9 @@ public abstract class BaseController : MonoBehaviour {
         ExplodeEventHandler(this, explodeEvent);
     }
 
-
+    void OnGUI() {
+        // GUI.Label(new Rect(10, 10, 100, 20), "Hello World!");
+    }
 
 
     // spine  line -----------------------------------------------------------------------------------------------------------
