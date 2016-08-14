@@ -45,7 +45,14 @@ public class PlayerTroopController : MonoBehaviour {
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         if(IsMy){
-            data.Add(TroopType.TROOP_SABER, 1);
+            int[] my = ConfigManager.share().TestConfig.TestModels[0].troops;
+            for(int i = 0; i < my.Length; i++){
+                if(my[i] !=0){
+                    data.Add((TroopType)i, my[i]);
+                }
+            }
+
+            // data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_DANCER, 1);
             // data.Add(TroopType.TROOP_RECOVER, 1);
@@ -65,7 +72,13 @@ public class PlayerTroopController : MonoBehaviour {
             // data.Add(TroopType.TROOP_MAGICICAN_SUPER2, 1);
             // data.Add(TroopType.TROOP_TITAN_SUPER2, 1);
         }else{
-            data.Add(TroopType.TROOP_SABER, 1);
+            int[] enemy = ConfigManager.share().TestConfig.TestModels[1].troops;
+            for(int i = 0; i < enemy.Length; i++){
+                if(enemy[i] !=0){
+                    data.Add((TroopType)i, enemy[i]);
+                }
+            }
+            // data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
             // data.Add(TroopType.TROOP_SPYER, 1);

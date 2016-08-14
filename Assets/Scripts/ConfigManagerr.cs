@@ -327,17 +327,34 @@ public class TrickConfig{
 
 }
 
+public class TestModel{
+    public int[] troops;
+}
+
+public class TestConfig{
+    public const string TEST_FILE = "troops_config.json";
+    public TestModel[] TestModels{get; set;}
+    public void LoadConfig(){
+        string str = DemoUtil.ReadConfigFile(TEST_FILE);
+        TestModels = JsonMapper.ToObject<TestModel[]>(str);
+        Debug.Log(TestModels.Length + ", " + TestModels[0].troops[0]);
+    }
+
+}
+
 public class ConfigManager{
     public static ConfigManager instance;
 	public CharacterConfig CharacterConfig{ get; set;}
 	public SkillConfig SkillConfig{ get; set;}
     public TrickConfig TrickConfig{ get; set;}
+    public TestConfig TestConfig{ get; set;}
     bool isLoaded = false;
 
     public ConfigManager(){
         CharacterConfig = new CharacterConfig();
         SkillConfig = new SkillConfig();
         TrickConfig = new TrickConfig();
+        TestConfig = new TestConfig();
         LoadConfig();
     }
 
@@ -353,6 +370,7 @@ public class ConfigManager{
             CharacterConfig.LoadConfig();
             SkillConfig.LoadConfig();
             TrickConfig.LoadConfig();
+            TestConfig.LoadConfig();
         }
     }
 

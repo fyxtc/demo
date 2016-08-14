@@ -6,8 +6,13 @@ using System.Text;
 public class DemoUtil{
     public static string ReadConfigFile(string file){
         string res = "";
+        // string path = "Assets"+Path.DirectorySeparatorChar+"Resources"/*+Path.DirectorySeparatorChar+"Config"*/+Path.DirectorySeparatorChar + file;
+        string DPath = Application.dataPath;
+        // int num = DPath.LastIndexOf("/");
+        // DPath = DPath.Substring(0, num);
+        string path = DPath + Path.DirectorySeparatorChar + file;
         // 第一种
-        StreamReader sr = new StreamReader("Assets"+Path.DirectorySeparatorChar+"Resources"/*+Path.DirectorySeparatorChar+"Config"*/+Path.DirectorySeparatorChar + file,Encoding.Default);
+        StreamReader sr = new StreamReader(path, Encoding.Default);
         string line;
         while ((line = sr.ReadLine()) != null) 
         {
@@ -21,6 +26,8 @@ public class DemoUtil{
         // string sPath= Application.streamingAssetsPath + Path.DirectorySeparatorChar + file;
         // WWW www = new WWW(sPath);
         // res = www.text;
+
+        // 第四种
 
         // Debug.Log(res);
         return res;
