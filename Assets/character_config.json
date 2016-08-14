@@ -16,7 +16,7 @@ type:
 [
     {
         "type":0,
-        "life":80,
+        "life":1,
         "attackMin":10,
         "attackMax":20,
         "defense":10,
@@ -419,7 +419,7 @@ type:
 
     {
         "type":25,
-        "life":9,
+        "life":90,
         "attackMin":10,
         "attackMax":20,
         "defense":10,

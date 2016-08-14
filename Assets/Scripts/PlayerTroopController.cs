@@ -171,6 +171,7 @@ public class PlayerTroopController : MonoBehaviour {
     public GameObject GetAttackedTarget(TroopType attackerType){
         if(troops.Count == 0){
             Debug.Log(isMy ? "you lose" : "you win");
+            IsGameOver = true;
             return null;
         }
         GameObject target = null;
@@ -193,6 +194,10 @@ public class PlayerTroopController : MonoBehaviour {
                 GameObject obj = troop[i];
                 // 死亡和zombie都不能成为目标
                 if(obj.GetComponent<BaseController>().IsDead || obj.GetComponent<BaseController>().IsZombie){
+                    continue;
+                }
+                if(!target){
+                    target = obj;
                     continue;
                 }
                 TroopType enemyType = obj.GetComponent<BaseController>().Model.Type;
@@ -230,7 +235,9 @@ public class PlayerTroopController : MonoBehaviour {
                     troop.RemoveAt(i);
                 }
             }
-            GetTextByTroopType(troopType).text = troop.Count + "";
+            if(troopType != TroopType.TROOP_SERVANT){
+                GetTextByTroopType(troopType).text = troop.Count + "";
+            }
             // 如果数量大于0，而且必须不是zombie才行
 			if (troop.Count > 0 && !troop[0].GetComponent<BaseController>().IsZombie) {
 				isOver = false;
@@ -282,6 +289,7 @@ public class PlayerTroopController : MonoBehaviour {
 
     void OnSummonEvent(object sender, EventArgs e){
         // 这个servant由this维护比较好
+        List<GameObject> servants = new List<GameObject>();
         foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
             TroopType troopType = item.Key;
             List<GameObject> troop = item.Value;
@@ -290,10 +298,21 @@ public class PlayerTroopController : MonoBehaviour {
                     MagicianSuper2Controller m2 = obj.GetComponent<MagicianSuper2Controller>();
                     // 死了的召唤师（包括自己死了）不能再调用自己的summon
                     if(!m2.IsDead){
-                        // m2.Summon(sender, e);
-                        // TODO: create servant
+                        GameObject servant = m2.Summon(sender, e);
+                        SetController(ref servant, TroopType.TROOP_SERVANT);
+                        servants.Add(servant);
                     }
                 }
+            }
+        }
+
+        if(servants.Count > 0){
+            Debug.Assert(servants.Count == 1, "servants Count > 1:" + servants.Count);
+            if(troops.ContainsKey(TroopType.TROOP_SERVANT)){
+                List<GameObject> existedServants = troops[TroopType.TROOP_SERVANT];
+                existedServants.Add(servants[0]);
+            }else{
+                troops.Add(TroopType.TROOP_SERVANT, servants);
             }
         }
 

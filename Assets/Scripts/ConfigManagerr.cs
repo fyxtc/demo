@@ -337,7 +337,7 @@ public class TestConfig{
     public void LoadConfig(){
         string str = DemoUtil.ReadConfigFile(TEST_FILE);
         TestModels = JsonMapper.ToObject<TestModel[]>(str);
-        Debug.Log(TestModels.Length + ", " + TestModels[0].troops[0]);
+        // Debug.Log(TestModels.Length + ", " + TestModels[0].troops[0]);
     }
 
 }
@@ -418,6 +418,7 @@ public class HarmModel{
 
 public class SummonEvent : EventArgs{
     public TroopType Type{get; set;}
+    public Vector3 Position{get; set;}
 }
 
 

@@ -334,6 +334,9 @@ public abstract class BaseController : MonoBehaviour {
         }
 
         List<int> trickIds = TrickController.OnStatusTrick(type, isStart);
+        if(!MyTroopController){
+            Debug.Log(Model.Type + ": MyTroopController " + MyTroopController);
+        }
         MyTroopController.DispatchTricks(trickIds, isStart);
         // Debug.Log(type + ", " + isStart + ", count:" + trickIds.Count);
         /*List<int> needDispatchIds = new List<int>();
@@ -599,6 +602,7 @@ public abstract class BaseController : MonoBehaviour {
         IsCanBeClean = true;
         if(SummonHandler != null){
             summonEvent.Type = Model.Type;
+            summonEvent.Position = transform.position;
             SummonHandler(this, summonEvent);
         }
     }
@@ -623,7 +627,12 @@ public abstract class BaseController : MonoBehaviour {
         Status = TroopStatus.STATUS_IDLE;
         skeleton.FlipX = !IsMy;
         spineAnimationState.SetAnimation(0, idleAnimationName, true);
-        Invoke("DoForwardDelay", (float)Model.AttackCD);
+        // 游戏结束就老老实实待着吧，以后会加原地胜利动画
+        if(MyTroopController.IsGameOver || OtherTroopController.IsGameOver){
+            Debug.Log("game over, stop moving");
+        }else{
+            Invoke("DoForwardDelay", (float)Model.AttackCD);
+        }
     }
 
     void DoBackDelay () {
