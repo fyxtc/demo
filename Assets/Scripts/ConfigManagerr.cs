@@ -342,26 +342,56 @@ public class TestConfig{
 
 }
 
+public class GateModel{
+    // 注意大小写也要和json里一样。。。。
+    public int gate;
+    public int[] troopsType;
+    public int[] troopsCount;
+    public int[] skills;
+    public Dictionary<TroopType, int> troops = new Dictionary<TroopType, int>(); 
+}
+
+public class GateConfig{
+    public const string GATE_CONFIG_FILE = "gate_config.json";
+    public GateModel[] GateModels{get; set;}
+    public void LoadConfig(){
+        string str = DemoUtil.ReadConfigFile(GATE_CONFIG_FILE);
+        GateModels = JsonMapper.ToObject<GateModel[]>(str);    
+
+        foreach(GateModel m in GateModels){
+            for(int i = 0; i < m.troopsType.Length; i++){
+                m.troops.Add((TroopType)i, m.troopsCount[i]);
+            }
+        }
+        // Debug.Log(GateModels.Length + ", " + GateModels[0].troopsType[3]);
+    }
+}
+
 public class ConfigManager{
-    public static ConfigManager instance;
+    // private static ConfigManager instance = null;
+    public static readonly ConfigManager instance = new ConfigManager();
 	public CharacterConfig CharacterConfig{ get; set;}
 	public SkillConfig SkillConfig{ get; set;}
     public TrickConfig TrickConfig{ get; set;}
     public TestConfig TestConfig{ get; set;}
+    public GateConfig GateConfig{ get; set;}
     bool isLoaded = false;
 
-    public ConfigManager(){
+    private ConfigManager(){
         CharacterConfig = new CharacterConfig();
         SkillConfig = new SkillConfig();
         TrickConfig = new TrickConfig();
         TestConfig = new TestConfig();
+        GateConfig = new GateConfig();
         LoadConfig();
     }
 
     public static ConfigManager share(){
-		if(instance == null){
-            instance = new ConfigManager();
-        }
+        // 尼玛这样写不行啊。。。每次都new,尼玛为毛啊。。。
+		// if(instance == null){
+  //           instance = new ConfigManager();
+  //       }
+  //       return instance;
         return instance;
     }
     public void LoadConfig(){
@@ -371,6 +401,7 @@ public class ConfigManager{
             SkillConfig.LoadConfig();
             TrickConfig.LoadConfig();
             TestConfig.LoadConfig();
+            GateConfig.LoadConfig();
         }
     }
 

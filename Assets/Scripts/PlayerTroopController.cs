@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
 
+public class TroopTypeComparer : IComparer<TroopType>
+{
+	public int Compare(TroopType lhs, TroopType rhs)
+	{
+		CharacterConfig config = ConfigManager.share ().CharacterConfig;
+		return config.GetModel (lhs).rank - config.GetModel (rhs).rank;
+	}
+}
+
 public class PlayerTroopController : MonoBehaviour {
     private const int CHARACTER_MAX_COUNT = 28; // 目前9*3种兵 + 1servant
     public bool isMy = true;
@@ -13,7 +22,8 @@ public class PlayerTroopController : MonoBehaviour {
     }
     float[] posConfig = {-1.5f, -3.0f, -4.5f, -6.0f};
     int maxCount = 4; // 最多能带四个兵团
-    Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
+    // SortedDictionary<TroopType, int> data = new SortedDictionary<TroopType, int>(new TroopTypeComparer()); 
+	Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
 	Dictionary<TroopType, List<GameObject>> troops = new Dictionary<TroopType, List<GameObject>>();
     Dictionary<TroopType, int> rankMap = new Dictionary<TroopType, int>(); 
 	// public GameObject saber;
@@ -78,6 +88,24 @@ public class PlayerTroopController : MonoBehaviour {
                     data.Add((TroopType)i, enemy[i]);
                 }
             }
+
+            // Debug.Assert(enemy.troopType.Length == enemy.troopsCount.Length, "error gate type and count");
+   //          int currentGate = 0;
+			// data = new SortedDictionary<TroopType, int >(ConfigManager.share().GateConfig.GateModels[currentGate].troops);
+   //          foreach (KeyValuePair<TroopType, int> item in data) {
+   //              TroopType troopType = item.Key;
+   //              int count = item.Value;
+   //              Debug.Log("troopType " + troopType + ": " + count);
+   //          }
+            // Dictionary<string, string> dic = new Dictionary<string, string>();
+            // dic.Add("aaaaa", "fdas");
+            // dic.Add("fr","afd");
+            // dic.Add("fraa", "afd");
+            // foreach (var item in dic.OrderBy(s => s.Key.Length))
+            // {
+            //     Console.WriteLine(item.Key);
+            // }
+
             // data.Add(TroopType.TROOP_SABER, 1);
             // data.Add(TroopType.TROOP_ARCHER, 1);
             // data.Add(TroopType.TROOP_RIDER, 1);
@@ -96,6 +124,7 @@ public class PlayerTroopController : MonoBehaviour {
             btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
         }
     }
+
 
 
     public void OnExplodeEvent(object sender, EventArgs e){
