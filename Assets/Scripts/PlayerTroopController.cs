@@ -15,7 +15,7 @@ public class TroopTypeComparer : IComparer<TroopType>
 }
 
 public class PlayerTroopController : MonoBehaviour {
-    private const int CHARACTER_MAX_COUNT = 28; // 目前9*3种兵 + 1servant
+    protected const int CHARACTER_MAX_COUNT = 28; // 目前9*3种兵 + 1servant
     public bool isMy = true;
     public bool IsMy{
         get{return isMy;}
@@ -27,15 +27,6 @@ public class PlayerTroopController : MonoBehaviour {
 	// Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
 	Dictionary<TroopType, List<GameObject>> troops = new Dictionary<TroopType, List<GameObject>>();
     Dictionary<TroopType, int> rankMap = new Dictionary<TroopType, int>(); 
-	// public GameObject saber;
-	// public GameObject archer;
- //    public GameObject recover;
- //    public GameObject dancer;
- //    public GameObject spyer;
- //    public GameObject rider;
- //    public GameObject flyer;
- //    public GameObject magician;
- //    public GameObject titan;
     public GameObject[] prefabs; // 注意！！！这个prefabs的下标就是Trooptype来索引的
     public bool IsGameOver{get; set;}
 
@@ -45,6 +36,7 @@ public class PlayerTroopController : MonoBehaviour {
     // UI
     public List<Text> countText;
     public List<Button> skillButtons;
+    public int[] skillIds;
     bool isBuffing = false;
     SkillController buffingController = null;
     public event EventHandler TrickEventHandler;
@@ -62,26 +54,6 @@ public class PlayerTroopController : MonoBehaviour {
                     data.Add((TroopType)i, my[i]);
                 }
             }
-
-            // data.Add(TroopType.TROOP_SABER, 1);
-            // data.Add(TroopType.TROOP_ARCHER, 1);
-            // data.Add(TroopType.TROOP_DANCER, 1);
-            // data.Add(TroopType.TROOP_RECOVER, 1);
-            // data.Add(TroopType.TROOP_SPYER, 1);
-            // data.Add(TroopType.TROOP_RIDER, 1);
-            // data.Add(TroopType.TROOP_FLYER, 1);
-            // data.Add(TroopType.TROOP_MAGICICAN, 1);
-            // data.Add(TroopType.TROOP_TITAN, 1);
-
-            // data.Add(TroopType.TROOP_SABER_SUPER2, 1);
-            // data.Add(TroopType.TROOP_ARCHER_SUPER2, 1);
-            // data.Add(TroopType.TROOP_RECOVER_SUPER1, 1);
-            // data.Add(TroopType.TROOP_DANCER_SUPER1, 1);
-            // data.Add(TroopType.TROOP_SPYER_SUPER2, 1);
-            // data.Add(TroopType.TROOP_RIDER_SUPER2, 1);
-            // data.Add(TroopType.TROOP_FLYER_SUPER2, 1);
-            // data.Add(TroopType.TROOP_MAGICICAN_SUPER2, 1);
-            // data.Add(TroopType.TROOP_TITAN_SUPER2, 1);
         }else{
             // int[] enemy = ConfigManager.share().TestConfig.TestModels[1].troops;
             // for(int i = 0; i < enemy.Length; i++){
@@ -92,34 +64,36 @@ public class PlayerTroopController : MonoBehaviour {
 
             // Debug.Assert(enemy.troopType.Length == enemy.troopsCount.Length, "error gate type and count");
             int currentGate = 0;
-			data = new SortedDictionary<TroopType, int >(ConfigManager.share().GateConfig.GateModels[currentGate].troops, new TroopTypeComparer());
+            GateModel m = ConfigManager.share().GateConfig.GateModels[currentGate];
+			data = new SortedDictionary<TroopType, int >(m.troops, new TroopTypeComparer());
             foreach (KeyValuePair<TroopType, int> item in data) {
                 TroopType troopType = item.Key;
                 int count = item.Value;
                 Debug.Log("troopType " + troopType + ": " + count);
             }
-
-
-            // data.Add(TroopType.TROOP_SABER, 1);
-            // data.Add(TroopType.TROOP_ARCHER, 1);
-            // data.Add(TroopType.TROOP_RIDER, 1);
-            // data.Add(TroopType.TROOP_SPYER, 1);
-            // data.Add(TroopType.TROOP_FLYER, 1);
-            // data.Add(TroopType.TROOP_MAGICICAN, 1);
-            // data.Add(TroopType.TROOP_TITAN, 1);
-            // data.Add(TroopType.TROOP_FLYER_SUPER2, 1);
+            skillIds = m.skills;
         }
+
         Debug.Assert(data.Count > 0 && data.Count <= maxCount, "troops count error " + data.Count);
         OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
         InitTroops();
         // Debug.Log("my is my " + isMy + " other is my " + OtherTroopController.isMy);
-
-        foreach(Button btn in skillButtons){
-            btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
-        }
+        InitSkills();
     }
 
+    protected virtual void InitSkills(){
+        // TODO, subclass
+        if(IsMy){
+            foreach(Button btn in skillButtons){
+                btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+            }
+        }else{
+            // foreach(int id in skillIds){
 
+            // }
+            // List<int> filteredList = skillIds.Where( x => skillIds.Contains(x)).ToList();
+        }
+    }
 
     public void OnExplodeEvent(object sender, EventArgs e){
         ExplodeEvent ev = e as ExplodeEvent;
@@ -230,7 +204,7 @@ public class PlayerTroopController : MonoBehaviour {
                     target = obj;
                     continue;
                 }
-                
+
                 TroopType enemyType = obj.GetComponent<BaseController>().Model.Type;
                 if(!DemoUtil.IsAttackIgnoreType(attackerType, enemyType)){
                     if(isMy ? obj.transform.position.x > target.transform.position.x : obj.transform.position.x < target.transform.position.x){

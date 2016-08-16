@@ -10,7 +10,7 @@ public class DemoUtil{
         string DPath = Application.dataPath;
         // int num = DPath.LastIndexOf("/");
         // DPath = DPath.Substring(0, num);
-        string path = DPath + Path.DirectorySeparatorChar + file;
+        string path = DPath + Path.DirectorySeparatorChar + "Config" + Path.DirectorySeparatorChar + file;
         // 第一种
         StreamReader sr = new StreamReader(path, Encoding.Default);
         string line;
