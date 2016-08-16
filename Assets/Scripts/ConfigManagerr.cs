@@ -360,7 +360,7 @@ public class GateConfig{
 
         foreach(GateModel m in GateModels){
             for(int i = 0; i < m.troopsType.Length; i++){
-                m.troops.Add((TroopType)i, m.troopsCount[i]);
+                m.troops.Add((TroopType)(m.troopsType[i]), m.troopsCount[i]);
             }
         }
         // Debug.Log(GateModels.Length + ", " + GateModels[0].troopsType[3]);

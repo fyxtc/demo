@@ -511,8 +511,8 @@ public abstract class BaseController : MonoBehaviour {
             // Debug.Log("attack miss");
             CreateHarmLabel("miss");
         }else{
-            // 被近战攻击要被击退
-            if(!DemoUtil.IsRemoteCategory(harmModel.Type)){
+            // 只有被近战攻击要被击退
+            if(!DemoUtil.IsRemoteCategory(harmModel.Type) && !DemoUtil.IsFlyCategory(harmModel.Type)){
                 // HitedFly();
                 HandleCommand(TroopCommand.CMD_HITED_FLY);
             }

@@ -96,7 +96,7 @@ public class PlayerTroopController : MonoBehaviour {
             foreach (KeyValuePair<TroopType, int> item in data) {
                 TroopType troopType = item.Key;
                 int count = item.Value;
-                // Debug.Log("troopType " + troopType + ": " + count);
+                Debug.Log("troopType " + troopType + ": " + count);
             }
 
 
@@ -215,6 +215,13 @@ public class PlayerTroopController : MonoBehaviour {
 
             for(int i = 0; i < troop.Count; i++){
                 GameObject obj = troop[i];
+                BaseController controller = obj.GetComponent<BaseController>();
+                bool canChoose = !DemoUtil.IsAttackIgnoreType(attackerType, controller.Model.Type)
+                            && !controller.IsZombie
+                            && !controller.IsDead;
+                if(!canChoose){
+                    continue;
+                }
                 // 死亡和zombie都不能成为目标
                 if(obj.GetComponent<BaseController>().IsDead || obj.GetComponent<BaseController>().IsZombie){
                     continue;
@@ -223,6 +230,7 @@ public class PlayerTroopController : MonoBehaviour {
                     target = obj;
                     continue;
                 }
+                
                 TroopType enemyType = obj.GetComponent<BaseController>().Model.Type;
                 if(!DemoUtil.IsAttackIgnoreType(attackerType, enemyType)){
                     if(isMy ? obj.transform.position.x > target.transform.position.x : obj.transform.position.x < target.transform.position.x){
