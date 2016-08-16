@@ -36,7 +36,7 @@ public class PlayerTroopController : MonoBehaviour {
     // UI
     public List<Text> countText;
     public List<Button> skillButtons;
-    public int[] skillIds;
+    public List<int> skillIds;
     bool isBuffing = false;
     SkillController buffingController = null;
     public event EventHandler TrickEventHandler;
@@ -71,7 +71,7 @@ public class PlayerTroopController : MonoBehaviour {
                 int count = item.Value;
                 Debug.Log("troopType " + troopType + ": " + count);
             }
-            skillIds = m.skills;
+            skillIds = new List<int>(m.skills);
         }
 
         Debug.Assert(data.Count > 0 && data.Count <= maxCount, "troops count error " + data.Count);
@@ -88,10 +88,20 @@ public class PlayerTroopController : MonoBehaviour {
                 btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
             }
         }else{
-            // foreach(int id in skillIds){
-
-            // }
-            // List<int> filteredList = skillIds.Where( x => skillIds.Contains(x)).ToList();
+            for(int i = skillButtons.Count - 1; i >= 0; i--){
+                SkillController controller = skillButtons[i].GetComponent<SkillController>();
+                if(!skillIds.Contains((int)controller.Model.Type)){
+                    // 注意顺序，一定要先Destroy，否则就remove之后找不到这个引用了
+                    // Destroy(skillButtons[i]);
+                    // skillButtons[i].enabled = false;
+                    // skillButtons.RemoveAt(i);
+                }
+            }
+            foreach(Button btn in skillButtons){
+                btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+            }
+			// List<int> resultList = skillIds.FindAll(delegate(int id) { return skillIds.Contains(id); });
+			Debug.Log ("skill count" + skillButtons.Count);
         }
     }
 
