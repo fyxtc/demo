@@ -56,7 +56,7 @@ public abstract class BaseController : MonoBehaviour {
     private GameObject hpBarInstance;
 
     public enum TroopStatus{
-        STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD,
+        STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD, STATUS_HITED_FLY
     }
 
     protected TroopStatus status;
@@ -70,9 +70,10 @@ public abstract class BaseController : MonoBehaviour {
             HandleStatusTrick(true); 
         }
     }
+    protected TroopStatus LastStatus{get; set;}
 
     protected enum TroopCommand{
-        CMD_IDLE, CMD_FORWARD, CMD_ATTACK, CMD_BACK,
+        CMD_IDLE, CMD_FORWARD, CMD_ATTACK, CMD_BACK, CMD_HITED_FLY
     }
 
 	public TrickController TrickController{ get; set; }
@@ -93,6 +94,8 @@ public abstract class BaseController : MonoBehaviour {
     protected bool IsThrowWeapon{get; set;}
     private GameObject canvas;
     private Renderer rend;
+
+    private Vector3 hitedFlyEndPos;
 
 
     protected virtual void Start () {
@@ -173,6 +176,14 @@ public abstract class BaseController : MonoBehaviour {
             transform.position = Vector3.Lerp(transform.position, startPos, (float)(1/((transform.position - startPos).magnitude) * Model.Speed));
             if(transform.position == startPos){
                 HandleCommand(TroopCommand.CMD_IDLE);
+            }
+            break;
+        case TroopStatus.STATUS_HITED_FLY:
+            // HitedFly();
+            float flySpeed = 0.2f;
+            transform.position = Vector3.Lerp(transform.position, hitedFlyEndPos, (float)(1/((transform.position - hitedFlyEndPos).magnitude) * flySpeed));
+            if(transform.position == hitedFlyEndPos){
+                Status = LastStatus;
             }
             break;
         }
@@ -294,6 +305,9 @@ public abstract class BaseController : MonoBehaviour {
         case TroopCommand.CMD_BACK:
             Back();
             break;
+        case TroopCommand.CMD_HITED_FLY:
+            HitedFly();
+            break;
         }
     }
 
@@ -312,6 +326,8 @@ public abstract class BaseController : MonoBehaviour {
             break;
         case TroopStatus.STATUS_ATTACK:
             type = TrickStatusType.STATUS_ATTACK;
+            break;
+        case TroopStatus.STATUS_HITED_FLY:
             break;
         default:
             Debug.Assert(false, "error status in handle status trick");
@@ -399,7 +415,6 @@ public abstract class BaseController : MonoBehaviour {
         if(IsMy){
             // Debug.Log("my x:" + transform.position.x + " target x:" + AttackedTarget.transform.position.x);
         }
-        Invoke("DoBackDelay", 0.5f); // 注意这个时间应该要大于攻击cd
         AttackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
         // 不能依赖这个类的任何东西，只能把伤害提取出来发过去，那问题是，如果是传引用，那这个类消失了还会在吗。。harmmodel会消失吗。。
         HarmModel harmModel = CreateHarmModel(AttackedTarget.GetComponent<BaseController>().Model.Type);
@@ -411,7 +426,6 @@ public abstract class BaseController : MonoBehaviour {
             AttackedTarget.GetComponent<BaseController>().BeingAttacked(harmModel);
         }
         HadAttacked = true;
-        // AttackedTarget = null;
     }
 
     // 各种加成的特技buff都放在里对应controller去重写
@@ -497,6 +511,11 @@ public abstract class BaseController : MonoBehaviour {
             // Debug.Log("attack miss");
             CreateHarmLabel("miss");
         }else{
+            // 被近战攻击要被击退
+            if(!DemoUtil.IsRemoteCategory(harmModel.Type)){
+                // HitedFly();
+                HandleCommand(TroopCommand.CMD_HITED_FLY);
+            }
             // 暴击致死
             if(harmModel.IsCritical){
                 model.Life = 0;
@@ -593,8 +612,11 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected virtual void OnAnimComplete(Spine.AnimationState state, int trackIndex, int loopCount){
-        if(state.GetCurrent(trackIndex).Animation.Name == dieAnimationName){
+        string name = state.GetCurrent(trackIndex).Animation.Name;
+        if(name == dieAnimationName){
             OnDeadAnimComplete();
+        }else if(name == shootAnimationName){
+            OnAttackAnimComplete();
         }
     }
 
@@ -605,6 +627,10 @@ public abstract class BaseController : MonoBehaviour {
             summonEvent.Position = transform.position;
             SummonHandler(this, summonEvent);
         }
+    }
+
+    protected virtual void OnAttackAnimComplete(){
+        HandleCommand(TroopCommand.CMD_IDLE);
     }
 
     // 需要处理的碰撞信息，放在被撞的物体身上
@@ -621,6 +647,20 @@ public abstract class BaseController : MonoBehaviour {
         }else{
             spineAnimationState.SetAnimation(0, walkAnimationName, true);
         }
+    }
+
+
+    void HitedFly(){
+		// Debug.Log ("Hited Fly");
+        LastStatus = Status;
+        Status = TroopStatus.STATUS_HITED_FLY;
+        if(IsMy){
+            hitedFlyEndPos = new Vector3(transform.position.x - 1, transform.position.y, 0);
+        }else{
+            hitedFlyEndPos = new Vector3(transform.position.x + 1, transform.position.y, 0);
+        }
+//		GetComponent<Rigidbody2D> ().AddForce (new Vector2 (-100, 1));
+		// GetComponent<Rigidbody2D> ().MovePosition (new Vector2 (transform.position.x - 1, transform.position.y + 1));
     }
 
     void Idle(){
