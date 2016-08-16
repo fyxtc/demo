@@ -6,7 +6,7 @@ public class CamerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         configManager = ConfigManager.share();
-    	configManager.LoadConfig();
+    	configManager.LoadConfig(true);
 		// Debug.Log("saber: " + configManager.CharacterConfig.Saber.Life);
 		// Debug.Log("archer: " + configManager.CharacterConfig.Archer.Attack);
 	}
@@ -22,6 +22,7 @@ public class CamerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Return)) {  
+            // ConfigManager.share().LoadConfig(true);
 			Application.LoadLevel (0);  
 		} 
 	}

@@ -11,6 +11,7 @@ public class DemoUtil{
         // int num = DPath.LastIndexOf("/");
         // DPath = DPath.Substring(0, num);
         string path = DPath + Path.DirectorySeparatorChar + "Config" + Path.DirectorySeparatorChar + file;
+        // string path = "D:\\unity_workspace\\Demo\\exe\\demo_Data\\Config\\" + file;
         // 第一种
         StreamReader sr = new StreamReader(path, Encoding.Default);
         string line;

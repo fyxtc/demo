@@ -21,6 +21,9 @@ public class SkillController : MonoBehaviour {
 
 	void InitModel(){
 		Model = ConfigManager.share().SkillConfig.GetModel(SkillType);
+		// if(!isMy){
+		// 	Debug.Log(skillType + ", " + Model);
+		// }
 		SkillEvent = new SkillEvent();
 		SkillEvent.Type = SkillType;
 		// IsMy表示是不是对自己使用，只有非debuff才是对自己使用

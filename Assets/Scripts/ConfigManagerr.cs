@@ -383,7 +383,7 @@ public class ConfigManager{
         TrickConfig = new TrickConfig();
         TestConfig = new TestConfig();
         GateConfig = new GateConfig();
-        LoadConfig();
+        LoadConfig(false);
     }
 
     public static ConfigManager share(){
@@ -394,8 +394,8 @@ public class ConfigManager{
   //       return instance;
         return instance;
     }
-    public void LoadConfig(){
-        if(!isLoaded){
+    public void LoadConfig(bool isForce){
+        if(!isLoaded || isForce){
             isLoaded = true;
             CharacterConfig.LoadConfig();
             SkillConfig.LoadConfig();

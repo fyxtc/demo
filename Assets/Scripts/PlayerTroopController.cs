@@ -69,7 +69,7 @@ public class PlayerTroopController : MonoBehaviour {
             foreach (KeyValuePair<TroopType, int> item in data) {
                 TroopType troopType = item.Key;
                 int count = item.Value;
-                Debug.Log("troopType " + troopType + ": " + count);
+                // Debug.Log("troopType " + troopType + ": " + count);
             }
             skillIds = new List<int>(m.skills);
         }
@@ -90,16 +90,19 @@ public class PlayerTroopController : MonoBehaviour {
         }else{
             for(int i = skillButtons.Count - 1; i >= 0; i--){
                 SkillController controller = skillButtons[i].GetComponent<SkillController>();
-                if(!skillIds.Contains((int)controller.Model.Type)){
+                // Debug.Log("1:" + controller);
+                // Debug.Log("2:" + controller.Model);
+                // Debug.Log("3" + (int)(controller.Model.Type));
+                if(!skillIds.Contains(i)){
                     // 注意顺序，一定要先Destroy，否则就remove之后找不到这个引用了
-                    // Destroy(skillButtons[i]);
-                    // skillButtons[i].enabled = false;
-                    // skillButtons.RemoveAt(i);
+                    // Destroy(skillButtons[i].parent);
+                    skillButtons.RemoveAt(i);
                 }
             }
             foreach(Button btn in skillButtons){
                 btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
             }
+            Destroy(GameObject.Find("fuck"));
 			// List<int> resultList = skillIds.FindAll(delegate(int id) { return skillIds.Contains(id); });
 			Debug.Log ("skill count" + skillButtons.Count);
         }
