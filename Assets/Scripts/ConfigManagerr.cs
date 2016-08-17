@@ -135,7 +135,7 @@ public class CharacterConfig{
 }
 
 public enum SkillStatus{
-    STATUS_IDLE, STATUS_USING, STATUS_STOP,
+    STATUS_IDLE, STATUS_USING, STATUS_STOP, STATUS_CD,
 }
 
 public class SkillModel{
@@ -187,7 +187,7 @@ public class SkillModel{
     }
 
     public override string ToString(){
-        return "type:"+Type+", attack:"+attack+", defense:"+defense+", hitRate:"+hitRate+", life"+life+", attackRange"+attackRange+", time:"+time+", cd"+cd;
+        return "type:"+Type+", attack:"+attack+", defense:"+defense+", hitRate:"+hitRate+", life"+life+", attackRange"+attackRange+", time:"+time+", cd"+cd+",debuff:"+isDebuff;
     }
 }
 

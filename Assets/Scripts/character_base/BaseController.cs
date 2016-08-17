@@ -687,8 +687,9 @@ public abstract class BaseController : MonoBehaviour {
     public virtual void OnSkillEvent(object sender, EventArgs e)
     {
         SkillEvent ev = (SkillEvent)e;
-        // 给自己的小兵加
-        if(ev.IsMy == IsMy){
+        // 给自己的小兵加，这里不用判断了，因为在上一层判断了，这里只要单纯的触发效果就好了
+        // 这里有一个复杂的地方就是，因为存在buff/debuff，所以这里的isbuffing其实表示了受到技能状态影响，不一定自来自自己的
+        // if(ev.IsMy == IsMy){
             Debug.Log("type " + ev.Type + ", status " + ev.Status);
             isBuffing = ev.Status == SkillStatus.STATUS_USING;
             SpriteRenderer spr = skillTip.GetComponent<SpriteRenderer>();  
@@ -705,7 +706,7 @@ public abstract class BaseController : MonoBehaviour {
             MyTroopController.DispatchTricks(trickIds, isBuffing);
 
             Debug.Log("AFTER SKILL&TRICK: " + Model);
-        }
+        // }
     }
 
     protected virtual BaseModel AddSkillModel(){

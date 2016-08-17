@@ -29,14 +29,16 @@ public class PlayerTroopController : MonoBehaviour {
     Dictionary<TroopType, int> rankMap = new Dictionary<TroopType, int>(); 
     public GameObject[] prefabs; // 注意！！！这个prefabs的下标就是Trooptype来索引的
     public bool IsGameOver{get; set;}
+    public Dictionary<TroopType, List<GameObject>> Troops{get{return troops;}}
 
     public GameObject otherTroopObj;
 	public PlayerTroopController OtherTroopController{ get; set; }
 
     // UI
     public List<Text> countText;
-    public List<Button> skillButtons;
-    public List<int> skillIds;
+    private List<GameObject> skillButtons;
+    private List<int> skillIds;
+    public GameObject skillPrefab;
     bool isBuffing = false;
     SkillController buffingController = null;
     public event EventHandler TrickEventHandler;
@@ -47,6 +49,15 @@ public class PlayerTroopController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
+        InitData();
+        OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
+        InitTroops();
+        // Debug.Log("my is my " + isMy + " other is my " + OtherTroopController.isMy);
+        InitSkills();
+    }
+
+    protected virtual void InitData(){
+        // TODO: subclass
         if(IsMy){
             int[] my = ConfigManager.share().TestConfig.TestModels[0].troops;
             for(int i = 0; i < my.Length; i++){
@@ -54,6 +65,7 @@ public class PlayerTroopController : MonoBehaviour {
                     data.Add((TroopType)i, my[i]);
                 }
             }
+            skillIds = new List<int>{0, 1, 2};
         }else{
             // int[] enemy = ConfigManager.share().TestConfig.TestModels[1].troops;
             // for(int i = 0; i < enemy.Length; i++){
@@ -73,38 +85,43 @@ public class PlayerTroopController : MonoBehaviour {
             }
             skillIds = new List<int>(m.skills);
         }
-
         Debug.Assert(data.Count > 0 && data.Count <= maxCount, "troops count error " + data.Count);
-        OtherTroopController = otherTroopObj.GetComponent<PlayerTroopController>();
-        InitTroops();
-        // Debug.Log("my is my " + isMy + " other is my " + OtherTroopController.isMy);
-        InitSkills();
     }
 
+
+    /*protected virtual void InitSkills(){
+        // TODO, opt: created by need
+        List<Vector3> skillPos = new List<Vector3>();
+        // 使用倒序来删除
+        for(int i = skillButtons.Count - 1; i >= 0; i--){
+            SkillController controller = skillButtons[i].GetComponent<SkillController>();
+            skillPos.Insert(0, skillButtons[i].transform.position);
+            if(!skillIds.Contains(i)){
+                // 注意顺序，一定要先Destroy，否则就remove之后找不到这个引用了
+                Destroy(skillButtons[i]);
+                skillButtons.RemoveAt(i);
+            }
+        }
+        int index = 0;
+        foreach(GameObject btn in skillButtons){
+            btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+            btn.transform.position = skillPos[index];
+            index++;
+        }
+    }*/
+
     protected virtual void InitSkills(){
-        // TODO, subclass
-        if(IsMy){
-            foreach(Button btn in skillButtons){
-                btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
-            }
-        }else{
-            for(int i = skillButtons.Count - 1; i >= 0; i--){
-                SkillController controller = skillButtons[i].GetComponent<SkillController>();
-                // Debug.Log("1:" + controller);
-                // Debug.Log("2:" + controller.Model);
-                // Debug.Log("3" + (int)(controller.Model.Type));
-                if(!skillIds.Contains(i)){
-                    // 注意顺序，一定要先Destroy，否则就remove之后找不到这个引用了
-                    // Destroy(skillButtons[i].parent);
-                    skillButtons.RemoveAt(i);
-                }
-            }
-            foreach(Button btn in skillButtons){
-                btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
-            }
-            Destroy(GameObject.Find("fuck"));
-			// List<int> resultList = skillIds.FindAll(delegate(int id) { return skillIds.Contains(id); });
-			Debug.Log ("skill count" + skillButtons.Count);
+        skillButtons = new List<GameObject>();
+        float y = IsMy ? 0 : -40;
+        GameObject canvas = GameObject.Find("Canvas");
+        for(int i = 0; i < skillIds.Count; i++){
+            GameObject skill = Instantiate(skillPrefab);
+            SkillPrefabController controller = skill.GetComponent<SkillPrefabController>();
+            controller.UpdateSkillType((SkillType)i, IsMy);
+            skill.transform.SetParent(canvas.transform);
+            skill.transform.position = new Vector3(i*60, y, 0);
+            controller.Button.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+            skillButtons.Add(skill);
         }
     }
 
@@ -271,15 +288,25 @@ public class PlayerTroopController : MonoBehaviour {
     void OnSkillEvent(object sender, EventArgs e){
         SkillEvent ev = (SkillEvent)e;
         // 给自己对应的小兵加
-        if(ev.IsMy == isMy){
+        Debug.Log("ev ismy " + ev.IsMy + ", controller ismy " + isMy + ", buff " + !ev.IsDebuff);
+        bool canTrigger = ev.IsMy == IsMy;
+        if(canTrigger){
             // 如果已经处于技能中，而且又来了一个使用，需要覆盖，先stop当前的
-            if(isBuffing && ev.Status == SkillStatus.STATUS_USING && buffingController){
-                buffingController.SkillStop();
-            }
+            // if(isBuffing && ev.Status == SkillStatus.STATUS_USING && buffingController){
+            //     buffingController.SkillStop();
+            // }
+
             buffingController = (SkillController)sender;
             Debug.Assert(buffingController, "buffingController error");
             isBuffing = ev.Status == SkillStatus.STATUS_USING;
-            foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
+            if(isBuffing){
+                foreach(GameObject obj in skillButtons){
+                    obj.GetComponent<SkillPrefabController>().Button.GetComponent<SkillController>().CDBegin((float)buffingController.Model.Time);
+                }
+            }
+            // buff给自己，debuff给对面
+            Dictionary<TroopType, List<GameObject>> target = ev.IsDebuff ? OtherTroopController.Troops : troops;
+            foreach (KeyValuePair<TroopType, List<GameObject>> item in target) {
                 foreach(GameObject obj in item.Value){
 					obj.GetComponent<BaseController>().OnSkillEvent(sender, e);
                 }

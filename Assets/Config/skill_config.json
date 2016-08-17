@@ -30,14 +30,14 @@ type:
 	{
 		"type":3,
 		"hitRate":-0.1,
-		"debuff":true,
+		"isDebuff":true,
 		"time":3.0,
 		"cd":5.0
 	},
 	{
 		"type":4,
 		"life":-2,
-		"debuff":true,
+		"isDebuff":true,
 		"time":3.0,
 		"cd":5.0
 	},

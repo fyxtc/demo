@@ -14,20 +14,23 @@ public class SkillController : MonoBehaviour {
 	public SkillModel Model{get; set;}
 	public event EventHandler SkillEventHandler;
 	public SkillEvent SkillEvent{get; set;}
-	public bool isMy = true;
+	public bool IsMy{get; set;}
 	public bool IsForceStop{get; set;}
+	private float totalCD = 0;
+	private float curCD = 0;
 
 	SkillStatus status;
 
-	void InitModel(){
+	public void InitModel(){
 		Model = ConfigManager.share().SkillConfig.GetModel(SkillType);
-		// if(!isMy){
-		// 	Debug.Log(skillType + ", " + Model);
+		// if(!IsMy){
+			// Debug.Log(skillType + ", " + Model);
 		// }
 		SkillEvent = new SkillEvent();
 		SkillEvent.Type = SkillType;
 		// IsMy表示是不是对自己使用，只有非debuff才是对自己使用
-		SkillEvent.IsMy = !Model.IsDebuff;
+		SkillEvent.IsMy = IsMy;
+		SkillEvent.IsDebuff = Model.IsDebuff;
         // Debug.Log(SkillType + " " + transform.position.x +": " + Model.Attack + ", " + Model.Defense + ", " + Model.HitRate);
 	}
 
@@ -39,7 +42,17 @@ public class SkillController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(status == SkillStatus.STATUS_CD && totalCD > 0 && curCD < totalCD){
+			curCD += Time.deltaTime;
+			float percent = Mathf.Min(curCD / totalCD, 1.0f);
+			GetComponent<Image> ().fillAmount = percent;
+			// if(isMy){
+				// Debug.Log(SkillType + ": " + status + ", " + curCD + ", " + totalCD + ", " + percent);
+			// }
+			if(percent >= 1.0f){
+				SkillReset();
+			}
+		}
 	}
 
 	void OnClick(){
@@ -72,8 +85,16 @@ public class SkillController : MonoBehaviour {
 		}
 	}
 
+	public void CDBegin(float cd){
+		Debug.Log(SkillType +  " CDBegin " + cd);
+		status = SkillStatus.STATUS_CD;
+		this.totalCD = cd;
+	}
+
 	void SkillReset(){
 		status = SkillStatus.STATUS_IDLE;
+		totalCD = 0;
+		curCD = 0;
 		// SkillEvent.Status = status;
 		// SkillEventHandler(this, SkillEvent);
 		// Debug.Log ("skill " + SkillType + " reset");
