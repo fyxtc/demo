@@ -298,9 +298,9 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected void HandleCommand(TroopCommand cmd){
-        // Debug.Log("HandleCommand " + cmd);
+        Debug.Log("HandleCommand " + cmd);
         // 如果死了，就不能再接受任何命令了
-        if(Status == TroopStatus.STATUS_DEAD){
+        if(Status == TroopStatus.STATUS_DEAD || Status == TroopStatus.STATUS_CELEBRATE){
             return;
         }
         switch(cmd){
@@ -345,6 +345,7 @@ public abstract class BaseController : MonoBehaviour {
             type = TrickStatusType.STATUS_ATTACK;
             break;
         case TroopStatus.STATUS_HITED_FLY:
+        case TroopStatus.STATUS_CELEBRATE:
             break;
         default:
             Debug.Assert(false, "error status in handle status trick");
@@ -416,6 +417,9 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     void Forward(){
+        if(IsGameOver()){
+            return;
+        }
         Status = TroopStatus.STATUS_FORWARD;
         skeleton.FlipX = !IsMy;
         if(Model.Speed >= 0.1){
@@ -647,7 +651,9 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected virtual void OnAttackAnimComplete(){
-        HandleCommand(TroopCommand.CMD_IDLE);
+        if(!IsGameOver()){
+            HandleCommand(TroopCommand.CMD_IDLE);
+        }
     }
 
     // 需要处理的碰撞信息，放在被撞的物体身上
@@ -685,8 +691,8 @@ public abstract class BaseController : MonoBehaviour {
         // 击飞的时候要等落地。。。
         Debug.Log("Celebrate");
         // if(Status != TroopStatus.STATUS_HITED_FLY){
-            status = TroopStatus.STATUS_CELEBRATE;
             spineAnimationState.SetAnimation(0, celeAnimationName, true);
+            status = TroopStatus.STATUS_CELEBRATE;
         // }
     }
 

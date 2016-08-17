@@ -192,6 +192,7 @@ public class PlayerTroopController : MonoBehaviour {
             }else{
                 IsWin = false;
             }
+            Celebrate();
             return null;
         }
         GameObject target = null;
@@ -279,7 +280,7 @@ public class PlayerTroopController : MonoBehaviour {
             }else{
                 IsWin = true;
             }
-            IsWin = false;
+            OtherTroopController.Celebrate();
             Debug.Log(isMy ? "you lose" : "you win");
         }
     }
@@ -423,15 +424,13 @@ public class PlayerTroopController : MonoBehaviour {
         skillControllers[index].AIClick();
     } 
 
-    void GameOver(){
-        if(IsWin){
-            foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
-                List<GameObject> troop = item.Value;
-                foreach(GameObject obj in troop){
-                    obj.GetComponent<BaseController>().Celebrate();
-                }
-            }            
-        }
+    public void Celebrate(){
+        foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
+            List<GameObject> troop = item.Value;
+            foreach(GameObject obj in troop){
+                obj.GetComponent<BaseController>().Celebrate();
+            }
+        }            
     }
 
     // Update is called once per frame
