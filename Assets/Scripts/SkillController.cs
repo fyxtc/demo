@@ -61,6 +61,11 @@ public class SkillController : MonoBehaviour {
 		}
 	}
 
+	public void AIClick(){
+		Debug.Assert(status == SkillStatus.STATUS_IDLE || status == SkillStatus.STATUS_STOP, "AI dummy " + status);
+		SkillStart();
+	}
+
 	void SkillStart(){
 		// todo: send event this kind skill start
 		// Debug.Log ("skill " + SkillType + " start");
@@ -86,7 +91,7 @@ public class SkillController : MonoBehaviour {
 	}
 
 	public void CDBegin(float cd){
-		Debug.Log(SkillType +  " CDBegin " + cd);
+		// Debug.Log(SkillType +  " CDBegin " + cd);
 		status = SkillStatus.STATUS_CD;
 		this.totalCD = cd;
 	}

@@ -28,4 +28,8 @@ public class SkillPrefabController : MonoBehaviour {
 		Button.GetComponent<SkillController>().IsMy = isMy;
 
 	}
+
+	public SkillController GetSkillContrller(){
+		return Button.GetComponent<SkillController>();
+	}
 }

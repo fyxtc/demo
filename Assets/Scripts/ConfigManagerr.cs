@@ -349,6 +349,8 @@ public class GateModel{
     public int[] troopsCount;
     public int[] skills;
     public Dictionary<TroopType, int> troops = new Dictionary<TroopType, int>(); 
+    public int[] aiTimeRange;
+    public int[] aiRate;
 }
 
 public class GateConfig{

@@ -29,6 +29,7 @@ public class PlayerTroopController : MonoBehaviour {
     Dictionary<TroopType, int> rankMap = new Dictionary<TroopType, int>(); 
     public GameObject[] prefabs; // 注意！！！这个prefabs的下标就是Trooptype来索引的
     public bool IsGameOver{get; set;}
+    public bool IsWin{get; set;}
     public Dictionary<TroopType, List<GameObject>> Troops{get{return troops;}}
 
     public GameObject otherTroopObj;
@@ -43,7 +44,12 @@ public class PlayerTroopController : MonoBehaviour {
     SkillController buffingController = null;
     public event EventHandler TrickEventHandler;
     protected TrickConfig trickConfig = ConfigManager.share().TrickConfig;
+    protected List<SkillController> skillControllers;
 
+    // AI 相关 TODO: subclass
+    int aiTimeRangeMin;
+    int aiTimeRangeMax;
+    List<int> aiRate;
 
 
 	// Use this for initialization
@@ -54,6 +60,9 @@ public class PlayerTroopController : MonoBehaviour {
         InitTroops();
         // Debug.Log("my is my " + isMy + " other is my " + OtherTroopController.isMy);
         InitSkills();
+        if(!IsMy){
+            AddAIAction();
+        }
     }
 
     protected virtual void InitData(){
@@ -67,60 +76,39 @@ public class PlayerTroopController : MonoBehaviour {
             }
             skillIds = new List<int>{0, 1, 2};
         }else{
-            // int[] enemy = ConfigManager.share().TestConfig.TestModels[1].troops;
-            // for(int i = 0; i < enemy.Length; i++){
-            //     if(enemy[i] !=0){
-            //         data.Add((TroopType)i, enemy[i]);
-            //     }
-            // }
-
-            // Debug.Assert(enemy.troopType.Length == enemy.troopsCount.Length, "error gate type and count");
             int currentGate = 0;
             GateModel m = ConfigManager.share().GateConfig.GateModels[currentGate];
-			data = new SortedDictionary<TroopType, int >(m.troops, new TroopTypeComparer());
+            data = new SortedDictionary<TroopType, int >(m.troops, new TroopTypeComparer());
             foreach (KeyValuePair<TroopType, int> item in data) {
                 TroopType troopType = item.Key;
                 int count = item.Value;
                 // Debug.Log("troopType " + troopType + ": " + count);
             }
             skillIds = new List<int>(m.skills);
+
+            aiTimeRangeMin = m.aiTimeRange[0];
+            aiTimeRangeMax = m.aiTimeRange[1];
+            aiRate = new List<int>(m.aiRate);
+
         }
         Debug.Assert(data.Count > 0 && data.Count <= maxCount, "troops count error " + data.Count);
     }
 
-
-    /*protected virtual void InitSkills(){
-        // TODO, opt: created by need
-        List<Vector3> skillPos = new List<Vector3>();
-        // 使用倒序来删除
-        for(int i = skillButtons.Count - 1; i >= 0; i--){
-            SkillController controller = skillButtons[i].GetComponent<SkillController>();
-            skillPos.Insert(0, skillButtons[i].transform.position);
-            if(!skillIds.Contains(i)){
-                // 注意顺序，一定要先Destroy，否则就remove之后找不到这个引用了
-                Destroy(skillButtons[i]);
-                skillButtons.RemoveAt(i);
-            }
-        }
-        int index = 0;
-        foreach(GameObject btn in skillButtons){
-            btn.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
-            btn.transform.position = skillPos[index];
-            index++;
-        }
-    }*/
-
     protected virtual void InitSkills(){
         skillButtons = new List<GameObject>();
-        float y = IsMy ? 0 : -40;
+        skillControllers = new List<SkillController>();
+        float x = IsMy ? 0 : 500;
         GameObject canvas = GameObject.Find("Canvas");
         for(int i = 0; i < skillIds.Count; i++){
             GameObject skill = Instantiate(skillPrefab);
             SkillPrefabController controller = skill.GetComponent<SkillPrefabController>();
             controller.UpdateSkillType((SkillType)i, IsMy);
             skill.transform.SetParent(canvas.transform);
-            skill.transform.position = new Vector3(i*60, y, 0);
-            controller.Button.GetComponent<SkillController>().SkillEventHandler += OnSkillEvent;
+            skill.transform.position = new Vector3(x + i*60, 0, 0);
+
+            SkillController c = controller.GetSkillContrller();
+            c.SkillEventHandler += OnSkillEvent;
+            skillControllers.Add(c);
             skillButtons.Add(skill);
         }
     }
@@ -199,6 +187,11 @@ public class PlayerTroopController : MonoBehaviour {
         if(troops.Count == 0){
             Debug.Log(isMy ? "you lose" : "you win");
             IsGameOver = true;
+            if(IsMy){
+                IsWin = true;
+            }else{
+                IsWin = false;
+            }
             return null;
         }
         GameObject target = null;
@@ -281,6 +274,12 @@ public class PlayerTroopController : MonoBehaviour {
         if(isOver){
             // 这里涉及到平局的概念，比如空中还有技能在飞呢。。。
             IsGameOver = true;
+            if(isMy){
+                IsWin = false;
+            }else{
+                IsWin = true;
+            }
+            IsWin = false;
             Debug.Log(isMy ? "you lose" : "you win");
         }
     }
@@ -311,6 +310,10 @@ public class PlayerTroopController : MonoBehaviour {
 					obj.GetComponent<BaseController>().OnSkillEvent(sender, e);
                 }
             }
+        }
+
+        if(!IsMy && ev.Status == SkillStatus.STATUS_STOP && !IsGameOver){
+            AddAIAction();
         }
     }
 
@@ -397,6 +400,38 @@ public class PlayerTroopController : MonoBehaviour {
 
     float GetRankPos(int rank){
         return posConfig[rank];
+    }
+
+    void AddAIAction(){
+        float aiDelay = UnityEngine.Random.Range(aiTimeRangeMin, aiTimeRangeMax);
+        // Debug.Log("ai delay " + aiDelay);
+        Invoke("AIClick", aiDelay);
+    }
+
+    void AIClick(){
+        Debug.Assert(aiRate.Count != 0, "aiRate count 0");
+        int val = (int)UnityEngine.Random.Range(1, 100);
+        int index = -1;
+        for(int i = 0; i < aiRate.Count; i++){
+            if(val <= aiRate[i]){
+                index = i;
+                break;
+            }
+        }
+        Debug.Assert(index != -1, "error ai skill index ");
+        // int index = (int)UnityEngine.Random.Range(0, skillControllers.Count);
+        skillControllers[index].AIClick();
+    } 
+
+    void GameOver(){
+        if(IsWin){
+            foreach (KeyValuePair<TroopType, List<GameObject>> item in troops) {
+                List<GameObject> troop = item.Value;
+                foreach(GameObject obj in troop){
+                    obj.GetComponent<BaseController>().Celebrate();
+                }
+            }            
+        }
     }
 
     // Update is called once per frame

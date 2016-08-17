@@ -41,7 +41,7 @@ public class BaseFlyWeapon : MonoBehaviour {
 		}
 		// 释放者和碰撞目标不是同一方才应该产生效果
 		if(target.IsMy != IsMy && !target.IsZombie && !target.IsDead){
-			Debug.Log("fly weapon attack");
+			// Debug.Log("fly weapon attack");
 			target.BeingAttacked(HarmModel);
 			Destroy(gameObject); // 注意不能用this，this指的是销毁自己这个脚本
 			TriggerCallback();

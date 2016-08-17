@@ -56,7 +56,7 @@ public abstract class BaseController : MonoBehaviour {
     private GameObject hpBarInstance;
 
     public enum TroopStatus{
-        STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD, STATUS_HITED_FLY
+        STATUS_IDLE, STATUS_FORWARD, STATUS_ATTACK, STATUS_BACK, STATUS_DEAD, STATUS_HITED_FLY, STATUS_CELEBRATE
     }
 
     protected TroopStatus status;
@@ -73,7 +73,7 @@ public abstract class BaseController : MonoBehaviour {
     protected TroopStatus LastStatus{get; set;}
 
     protected enum TroopCommand{
-        CMD_IDLE, CMD_FORWARD, CMD_ATTACK, CMD_BACK, CMD_HITED_FLY
+        CMD_IDLE, CMD_FORWARD, CMD_ATTACK, CMD_BACK, CMD_HITED_FLY, CMD_CELEBRATE
     }
 
 	public TrickController TrickController{ get; set; }
@@ -96,6 +96,8 @@ public abstract class BaseController : MonoBehaviour {
     private Renderer rend;
 
     private Vector3 hitedFlyEndPos;
+    private Vector3 leftBorder;
+    private Vector3 rightBorder;
 
 
     protected virtual void Start () {
@@ -116,11 +118,16 @@ public abstract class BaseController : MonoBehaviour {
         // InvokeRepeating("AddTrickLifeTimer", 1, 1.0f);
         // Invoke("Test", 5);
 
-        SetPosition();
         spineAnimationState.Complete += OnAnimComplete;
         canvas = GameObject.Find("Canvas");
         rend = GetComponent<Renderer>();
+
+        // y 没用
+        leftBorder = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
+        rightBorder = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width-10, 0));
+        SetPosition();
     }
+
 
     void SetPosition(){
        float offsetY = 0.0f;
@@ -129,7 +136,7 @@ public abstract class BaseController : MonoBehaviour {
         }
         transform.position = new Vector3(transform.position.x, transform.position.y+offsetY, transform.position.z);
         startPos = transform.position;
-        endPos = new Vector3(IsMy ? 6 : -6, transform.position.y);
+        endPos = new Vector3(IsMy ? rightBorder.x : leftBorder.x, transform.position.y);
 
     }
 
@@ -166,7 +173,7 @@ public abstract class BaseController : MonoBehaviour {
                 HandleCommand(TroopCommand.CMD_ATTACK);
             }else if(IsNearBorder()){
                 // 走远了，该回来了，其实更好的是在发现前方没目标就回来，待做
-                HandleCommand(TroopCommand.CMD_BACK);
+                // HandleCommand(TroopCommand.CMD_BACK);
             }
             break;
         case TroopStatus.STATUS_ATTACK:
@@ -184,6 +191,10 @@ public abstract class BaseController : MonoBehaviour {
             transform.position = Vector3.Lerp(transform.position, hitedFlyEndPos, (float)(1/((transform.position - hitedFlyEndPos).magnitude) * flySpeed));
             if(transform.position == hitedFlyEndPos){
                 Status = LastStatus;
+                if(LastStatus == TroopStatus.STATUS_ATTACK && HadAttacked){
+                    HandleCommand(TroopCommand.CMD_IDLE);
+                    // Status = TroopStatus.STATUS_IDLE;
+                }
             }
             break;
         }
@@ -307,6 +318,12 @@ public abstract class BaseController : MonoBehaviour {
             break;
         case TroopCommand.CMD_HITED_FLY:
             HitedFly();
+            break;
+        case TroopCommand.CMD_CELEBRATE:
+            Celebrate();
+            break;
+        default:
+            Debug.Assert(false, "error command " + cmd);
             break;
         }
     }
@@ -651,16 +668,26 @@ public abstract class BaseController : MonoBehaviour {
 
 
     void HitedFly(){
-		// Debug.Log ("Hited Fly");
+		Debug.Log ("Hited Fly in " + Status);
         LastStatus = Status;
         Status = TroopStatus.STATUS_HITED_FLY;
+        spineAnimationState.SetAnimation(0, hitedAnimationName, false);
         if(IsMy){
-            hitedFlyEndPos = new Vector3(transform.position.x - 1, transform.position.y, 0);
+            hitedFlyEndPos = new Vector3(Mathf.Max(leftBorder.x, transform.position.x - 1) , transform.position.y, 0);
         }else{
-            hitedFlyEndPos = new Vector3(transform.position.x + 1, transform.position.y, 0);
+            hitedFlyEndPos = new Vector3(Mathf.Min(rightBorder.x, transform.position.x + 1) , transform.position.y, 0);
         }
 //		GetComponent<Rigidbody2D> ().AddForce (new Vector2 (-100, 1));
 		// GetComponent<Rigidbody2D> ().MovePosition (new Vector2 (transform.position.x - 1, transform.position.y + 1));
+    }
+
+    public void Celebrate(){
+        // 击飞的时候要等落地。。。
+        Debug.Log("Celebrate");
+        // if(Status != TroopStatus.STATUS_HITED_FLY){
+            status = TroopStatus.STATUS_CELEBRATE;
+            spineAnimationState.SetAnimation(0, celeAnimationName, true);
+        // }
     }
 
     void Idle(){
@@ -670,9 +697,14 @@ public abstract class BaseController : MonoBehaviour {
         // 游戏结束就老老实实待着吧，以后会加原地胜利动画
         if(MyTroopController.IsGameOver || OtherTroopController.IsGameOver){
             Debug.Log("game over, stop moving");
+            HandleCommand(TroopCommand.CMD_CELEBRATE);
         }else{
             Invoke("DoForwardDelay", (float)Model.AttackCD);
         }
+    }
+
+    bool IsGameOver(){
+        return MyTroopController.IsGameOver || OtherTroopController.IsGameOver; 
     }
 
     void DoBackDelay () {
@@ -918,6 +950,12 @@ public abstract class BaseController : MonoBehaviour {
 
     [SpineAnimation]
     public string dieAnimationName;
+
+    [SpineAnimation]
+    public string hitedAnimationName;
+
+    [SpineAnimation]
+    public string celeAnimationName;
     #endregion
 
     SkeletonAnimation skeletonAnimation;
