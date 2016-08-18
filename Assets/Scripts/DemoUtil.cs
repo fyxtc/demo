@@ -55,6 +55,10 @@ public class DemoUtil{
         return res;
     }
 
+    public static bool IsNearCategory(TroopType type){
+        return (!DemoUtil.IsFlyCategory(type) && !DemoUtil.IsRemoteCategory(type));
+    }
+
     public static bool IsAttackIgnoreType(TroopType attackerType, TroopType enemyType){
         // 近战都打不到飞行兵
         if(!DemoUtil.IsRemoteCategory(attackerType) && DemoUtil.IsFlyCategory(enemyType)){

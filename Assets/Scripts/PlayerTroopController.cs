@@ -97,7 +97,8 @@ public class PlayerTroopController : MonoBehaviour {
     protected virtual void InitSkills(){
         skillButtons = new List<GameObject>();
         skillControllers = new List<SkillController>();
-        float x = IsMy ? 0 : 500;
+        float x = IsMy ? 0 : Screen.width / 2;
+        // int gap = 60;
         GameObject canvas = GameObject.Find("Canvas");
         for(int i = 0; i < skillIds.Count; i++){
             GameObject skill = Instantiate(skillPrefab);
@@ -187,6 +188,7 @@ public class PlayerTroopController : MonoBehaviour {
         if(troops.Count == 0){
             Debug.Log(isMy ? "you lose" : "you win");
             IsGameOver = true;
+            OtherTroopController.IsGameOver = true;
             if(IsMy){
                 IsWin = true;
             }else{
@@ -275,6 +277,7 @@ public class PlayerTroopController : MonoBehaviour {
         if(isOver){
             // 这里涉及到平局的概念，比如空中还有技能在飞呢。。。
             IsGameOver = true;
+            OtherTroopController.IsGameOver = true;
             if(isMy){
                 IsWin = false;
             }else{
@@ -288,7 +291,7 @@ public class PlayerTroopController : MonoBehaviour {
     void OnSkillEvent(object sender, EventArgs e){
         SkillEvent ev = (SkillEvent)e;
         // 给自己对应的小兵加
-        Debug.Log("ev ismy " + ev.IsMy + ", controller ismy " + isMy + ", buff " + !ev.IsDebuff);
+        // Debug.Log("ev ismy " + ev.IsMy + ", controller ismy " + isMy + ", buff " + !ev.IsDebuff);
         bool canTrigger = ev.IsMy == IsMy;
         if(canTrigger){
             // 如果已经处于技能中，而且又来了一个使用，需要覆盖，先stop当前的
@@ -410,6 +413,9 @@ public class PlayerTroopController : MonoBehaviour {
     }
 
     void AIClick(){
+        if(IsGameOver){
+            return;
+        }
         Debug.Assert(aiRate.Count != 0, "aiRate count 0");
         int val = (int)UnityEngine.Random.Range(1, 100);
         int index = -1;

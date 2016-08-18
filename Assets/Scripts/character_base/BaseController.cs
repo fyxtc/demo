@@ -98,6 +98,7 @@ public abstract class BaseController : MonoBehaviour {
     private Vector3 hitedFlyEndPos;
     private Vector3 leftBorder;
     private Vector3 rightBorder;
+    private Vector3 attackPos;
 
 
     protected virtual void Start () {
@@ -298,7 +299,7 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected void HandleCommand(TroopCommand cmd){
-        Debug.Log("HandleCommand " + cmd);
+        // Debug.Log("HandleCommand " + cmd);
         // 如果死了，就不能再接受任何命令了
         if(Status == TroopStatus.STATUS_DEAD || Status == TroopStatus.STATUS_CELEBRATE){
             return;
@@ -432,10 +433,26 @@ public abstract class BaseController : MonoBehaviour {
 
     protected virtual void Attack(){
         Status = TroopStatus.STATUS_ATTACK;
+        attackPos = transform.position;
         spineAnimationState.SetAnimation(0, shootAnimationName, false);
-        if(IsMy){
-            // Debug.Log("my x:" + transform.position.x + " target x:" + AttackedTarget.transform.position.x);
+
+        if(DemoUtil.IsNearCategory(Model.Type)){
+            Vector3 keyPos;
+            if(IsMy){
+                keyPos = AttackedTarget.transform.position;
+                if(GetRightPos(gameObject).x >= keyPos.x){
+                    float width = GetComponent<MeshRenderer>().bounds.extents.x;
+                    transform.position = new Vector3(keyPos.x - 1, transform.position.y, transform.position.z);
+                }
+            }else{
+                keyPos = GetRightPos(AttackedTarget);
+                if(transform.position.x <= keyPos.x){
+                    float width = AttackedTarget.GetComponent<MeshRenderer>().bounds.extents.x;
+                    transform.position = new Vector3(keyPos.x + 1, transform.position.y, transform.position.z);
+                }
+            }
         }
+
         AttackedTarget.GetComponent<BaseController>().Attacker = this.gameObject;
         // 不能依赖这个类的任何东西，只能把伤害提取出来发过去，那问题是，如果是传引用，那这个类消失了还会在吗。。harmmodel会消失吗。。
         HarmModel harmModel = CreateHarmModel(AttackedTarget.GetComponent<BaseController>().Model.Type);
@@ -651,6 +668,9 @@ public abstract class BaseController : MonoBehaviour {
     }
 
     protected virtual void OnAttackAnimComplete(){
+        // if(attackPos != null){
+        //     transform.position = attackPos;
+        // }
         if(!IsGameOver()){
             HandleCommand(TroopCommand.CMD_IDLE);
         }
@@ -674,7 +694,7 @@ public abstract class BaseController : MonoBehaviour {
 
 
     void HitedFly(){
-		Debug.Log ("Hited Fly in " + Status);
+		// Debug.Log ("Hited Fly in " + Status);
         LastStatus = Status;
         Status = TroopStatus.STATUS_HITED_FLY;
         spineAnimationState.SetAnimation(0, hitedAnimationName, false);
@@ -931,6 +951,12 @@ public abstract class BaseController : MonoBehaviour {
         explodeEvent.IsMy = isMy;
         explodeEvent.Harm = harm;
         ExplodeEventHandler(this, explodeEvent);
+    }
+
+    Vector3 GetRightPos(GameObject target){
+		Bounds bounds = target.GetComponent<MeshRenderer>().bounds;
+		Vector3 worldTopRight = new Vector3(bounds.extents.x, bounds.extents.y, 0.0f) + target.transform.position;
+        return worldTopRight;
     }
 
     void OnGUI() {
