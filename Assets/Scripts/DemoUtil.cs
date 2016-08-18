@@ -6,12 +6,16 @@ using System.Text;
 public class DemoUtil{
     public static string ReadConfigFile(string file){
         string res = "";
-        // string path = "Assets"+Path.DirectorySeparatorChar+"Resources"/*+Path.DirectorySeparatorChar+"Config"*/+Path.DirectorySeparatorChar + file;
-        string DPath = Application.dataPath;
-        // int num = DPath.LastIndexOf("/");
-        // DPath = DPath.Substring(0, num);
-        string path = DPath + Path.DirectorySeparatorChar + "Config" + Path.DirectorySeparatorChar + file;
+        // win
+        string path = "Assets"+Path.DirectorySeparatorChar+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + file;
+        
+        // mac
+        // string DPath = Application.dataPath;
+        // string path = DPath + Path.DirectorySeparatorChar + "Config" + Path.DirectorySeparatorChar + file;
+
+        // lcy
         // string path = "D:\\unity_workspace\\Demo\\exe\\demo_Data\\Config\\" + file;
+        
         // 第一种
         StreamReader sr = new StreamReader(path, Encoding.Default);
         string line;
