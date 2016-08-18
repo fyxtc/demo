@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class CamerController : MonoBehaviour {
     ConfigManager configManager;
@@ -23,7 +24,7 @@ public class CamerController : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Return)) {  
             // ConfigManager.share().LoadConfig(true);
-			Application.LoadLevel (0);  
+			SceneManager.LoadScene ("main");
 		} 
 	}
 }
