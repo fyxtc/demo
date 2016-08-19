@@ -1,0 +1,1615 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"ne",
+				"nextScene"
+			],
+			[
+				"Loadc",
+				"LoadScene	(CamerController.cs)"
+			],
+			[
+				"Scene",
+				"SceneManager	(CamerController.cs)"
+			],
+			[
+				"SCEN",
+				"SceneManagement	(CamerController.cs)"
+			],
+			[
+				"Atta",
+				"AttackedTarget"
+			],
+			[
+				"Att",
+				"AttackedTarget"
+			],
+			[
+				"Isne",
+				"IsNearCategory"
+			],
+			[
+				"Ski",
+				"SkillType"
+			],
+			[
+				"con",
+				"controller"
+			],
+			[
+				"add",
+				"Add"
+			],
+			[
+				"skilf",
+				"skillPrefab"
+			],
+			[
+				"Skill",
+				"SkillController	(PlayerTroopController.cs)"
+			],
+			[
+				"bUTON",
+				"Button"
+			],
+			[
+				"buT",
+				"Button"
+			],
+			[
+				"gAME",
+				"GameObject"
+			],
+			[
+				"skillt",
+				"SkillType"
+			],
+			[
+				"cur",
+				"curCD"
+			],
+			[
+				"total",
+				"totalCD"
+			],
+			[
+				"INve",
+				"InvokeRepeating	(BaseController.cs)"
+			],
+			[
+				"Vec",
+				"Vector3"
+			],
+			[
+				"Ve",
+				"Vector3"
+			],
+			[
+				"skilt",
+				"SkillType"
+			],
+			[
+				"Troops",
+				"Troops"
+			],
+			[
+				"ISDE",
+				"IsDebuff"
+			],
+			[
+				"Isde",
+				"IsDebuff	(SkillController.cs)"
+			],
+			[
+				"skillbu",
+				"skillButtons"
+			],
+			[
+				"remo",
+				"RemoveAt"
+			],
+			[
+				"Gatemo",
+				"GateModel	(ConfigManagerr.cs)"
+			],
+			[
+				"trop",
+				"troopType	(PlayerTroopController.cs)"
+			],
+			[
+				"hitedl",
+				"hitedFlyEndPos2"
+			],
+			[
+				"vE",
+				"Vector3"
+			],
+			[
+				"hit",
+				"hitedFlyEndPos2"
+			],
+			[
+				"Hie",
+				"Hited"
+			],
+			[
+				"rank",
+				"rankList"
+			],
+			[
+				"ran",
+				"rankList"
+			],
+			[
+				"fore",
+				"force"
+			],
+			[
+				"tar",
+				"targetPos"
+			],
+			[
+				"tro",
+				"troop"
+			],
+			[
+				"sum",
+				"summon	(MagicianSuper2Controller.cs)"
+			],
+			[
+				"TROOP_MA",
+				"TROOP_MAGICICAN_SUPER2"
+			],
+			[
+				"obj",
+				"object"
+			],
+			[
+				"SUMM",
+				"SummonHandler	(BaseController.cs)"
+			],
+			[
+				"sUMEV",
+				"SummonEvent"
+			],
+			[
+				"Even",
+				"EventArgs	(BaseController.cs)"
+			],
+			[
+				"send",
+				"sender	(BaseController.cs)"
+			],
+			[
+				"type",
+				"Type"
+			],
+			[
+				"Summ",
+				"SummonEvent"
+			],
+			[
+				"Summon",
+				"SummonHandler"
+			],
+			[
+				"Addski",
+				"AddSkillLifeBuff	(BaseController.cs)"
+			],
+			[
+				"Addtri",
+				"AddTrickModels	(BaseController.cs)"
+			],
+			[
+				"wepo",
+				"weaponObject"
+			],
+			[
+				"wea",
+				"weaponObject"
+			],
+			[
+				"we",
+				"weaponObject"
+			],
+			[
+				"Troop_ti",
+				"TROOP_TITAN_SUPER1	(PlayerTroopController.cs)"
+			],
+			[
+				"HAMR",
+				"harmModel"
+			],
+			[
+				"MA",
+				"Max	(BaseController.cs)"
+			],
+			[
+				"Ma",
+				"Mathf	(BaseController.cs)"
+			],
+			[
+				"HIR",
+				"hitRate"
+			],
+			[
+				"HAM",
+				"harmModel"
+			],
+			[
+				"ADDTR",
+				"AddTrickHarm	(BaseController.cs)"
+			],
+			[
+				"Fly",
+				"FlyerSuper1Controller"
+			],
+			[
+				"at",
+				"Attack"
+			],
+			[
+				"TROOP_FL",
+				"TROOP_FLYER_SUPER1"
+			],
+			[
+				"tra",
+				"target"
+			],
+			[
+				"Dbu",
+				"Debug"
+			],
+			[
+				"Id",
+				"IsDead"
+			],
+			[
+				"Dea",
+				"Dead	(BaseController.cs)"
+			],
+			[
+				"Base",
+				"BaseController"
+			],
+			[
+				"zom",
+				"zombie	(RiderSuper2Controller.cs)"
+			],
+			[
+				"Tri",
+				"TriggerCallback"
+			],
+			[
+				"hN",
+				"HandleCommand"
+			],
+			[
+				"pos",
+				"position"
+			],
+			[
+				"trak",
+				"trackIndex"
+			],
+			[
+				"Sta",
+				"Start	(PlayerTroopController.cs)"
+			],
+			[
+				"li",
+				"Life"
+			],
+			[
+				"TROPDAN",
+				"TROOP_DANCER_SUPER1	(PlayerTroopController.cs)"
+			],
+			[
+				"Ha",
+				"HarmModel"
+			],
+			[
+				"Defn",
+				"DefenseBuff"
+			],
+			[
+				"TROOP_REC",
+				"TROOP_RECOVER_SUPER1	(PlayerTroopController.cs)"
+			],
+			[
+				"TROPSAB",
+				"TROOP_SABER_SUPER2	(PlayerTroopController.cs)"
+			],
+			[
+				"ARCH",
+				"ArcherController	(ArcherSuper2Controller.cs)"
+			],
+			[
+				"pro",
+				"protected	(BaseController.cs)"
+			],
+			[
+				"Ar",
+				"ArcherController	(ArcherSuper1Controller.cs)"
+			],
+			[
+				"attack",
+				"attacker	(DemoUtil.cs)"
+			],
+			[
+				"en",
+				"enemyType	(BaseController.cs)"
+			],
+			[
+				"atta",
+				"attacker	(FlyerController.cs)"
+			],
+			[
+				"Is",
+				"IsRemoteCategory	(FlyerController.cs)"
+			],
+			[
+				"Bse",
+				"BaseController"
+			],
+			[
+				"Isin",
+				"IsIgnoreType"
+			],
+			[
+				"TROPFL",
+				"TROOP_FLYER_SUPER2	(ConfigManagerr.cs)"
+			],
+			[
+				"TROA",
+				"TROOP_ARCHER_SUPER2	(ConfigManagerr.cs)"
+			],
+			[
+				"TROOPACH",
+				"TROOP_ARCHER_SUPER1	(ConfigManagerr.cs)"
+			],
+			[
+				"Getro",
+				"GetTroopCategory"
+			],
+			[
+				"Top",
+				"TroopType"
+			],
+			[
+				"enm",
+				"enemyType"
+			],
+			[
+				"enem",
+				"enemyType"
+			],
+			[
+				"AD",
+				"AddedHarm	(ConfigManagerr.cs)"
+			],
+			[
+				"hamr",
+				"harmModel"
+			],
+			[
+				"mO",
+				"Model"
+			],
+			[
+				"vi",
+				"virtual"
+			],
+			[
+				"TROOP_SABER",
+				"TROOP_SABER_SUPER1	(ConfigManagerr.cs)"
+			],
+			[
+				"Ism",
+				"IsRemoteCategory"
+			],
+			[
+				"Harm",
+				"HarmModel"
+			],
+			[
+				"Har",
+				"HarmModel"
+			],
+			[
+				"harm",
+				"harmModel"
+			],
+			[
+				"hARM",
+				"harmModel"
+			],
+			[
+				"hIR",
+				"HitRate"
+			],
+			[
+				"att",
+				"attackedTarget"
+			],
+			[
+				"die",
+				"dieAnimationName"
+			],
+			[
+				"Stau",
+				"Status"
+			],
+			[
+				"SETING",
+				"SettingFin	(FlyWeaponRocket.cs)"
+			],
+			[
+				"Seting",
+				"SettingFin"
+			],
+			[
+				"spe",
+				"speed	(Gun.cs)"
+			],
+			[
+				"fly",
+				"flyWeaponSpeed	(BaseController.cs)"
+			],
+			[
+				"Cre",
+				"CreateFlyWeapon"
+			],
+			[
+				"Tro",
+				"TroopType"
+			],
+			[
+				"pre",
+				"protected"
+			],
+			[
+				"iSM",
+				"IsMy"
+			],
+			[
+				"tYPE",
+				"Type"
+			],
+			[
+				"Cam",
+				"CalcHarm"
+			],
+			[
+				"HI",
+				"hitRate"
+			],
+			[
+				"CATE",
+				"CATEGORY_REMOTE	(ConfigManagerr.cs)"
+			],
+			[
+				"CAE",
+				"CATEGORY_FLY"
+			],
+			[
+				"mis",
+				"missBuff"
+			],
+			[
+				"remvoe",
+				"RemoveTrickBuff"
+			],
+			[
+				"TRICK",
+				"TRICK_STATUS	(ConfigManagerr.cs)"
+			],
+			[
+				"trici",
+				"trickIds"
+			],
+			[
+				"tricid",
+				"trickId"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "demo.sublime-project",
+			"settings":
+			{
+				"buffer_size": 162,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "using UnityEngine;\nusing System.Collections;\nusing UnityEngine.SceneManagement;\n\npublic class CamerController : MonoBehaviour {\n    ConfigManager configManager;\n	// Use this for initialization\n	void Start () {\n        configManager = ConfigManager.share();\n    	configManager.LoadConfig(true);\n		// Debug.Log(\"saber: \" + configManager.CharacterConfig.Saber.Life);\n		// Debug.Log(\"archer: \" + configManager.CharacterConfig.Archer.Attack);\n		g\n	}\n\n    // IEnumerator LoadConfig(string file)\n    // {\n    //     string sPath= Application.streamingAssetsPath + Path.DirectorySeparatorChar + file;\n    //     WWW www = new WWW(sPath);\n    //     yield return www;\n    //     _result = www.text;\n    // }\n	\n	// Update is called once per frame\n	void Update () {\n		if (Input.GetKeyDown (KeyCode.Return)) {  \n            // ConfigManager.share().LoadConfig(true);\n			SceneManager.LoadScene (\"main\");\n		} \n	}\n}\n",
+			"file": "Assets/Scripts/CamerController.cs",
+			"file_size": 900,
+			"file_write_time": 131160584770000000,
+			"settings":
+			{
+				"buffer_size": 901,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/OmniSharpSublime.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 199,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 127.0,
+		"last_filter": "instal",
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"list pa",
+				"Package Control: List Packages"
+			],
+			[
+				"INSTAL",
+				"Package Control: Install Package"
+			],
+			[
+				"packe",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"-version",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+	],
+	"file_history":
+	[
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/OmniSharp/OmniSharpSublime.sublime-settings",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/PlayerTroopController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/ConfigManagerr.cs",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/OmniSharp/Default.sublime-keymap",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Config/troops_config.json",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Config/gate_config.json",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/JSON.sublime-settings",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/DemoUtil.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/StartButtonController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/TransitionKit/TransitionKit.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/TransitionKitDemo/SceneSwitcher.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/CamerController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/FPSDisplay.cs",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/SublimeCodeIntel.sublime-settings",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/SkillController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/BaseController.cs",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/C#.sublime-settings",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/MyTroopController.cs",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Users/ppby-build/Downloads/TransitionKit-master/README.md",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Config/character_config.json",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/SkillPrefabController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/SkillTipController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Config/skill_config.json",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/HPBarController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/EnemyTroopController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/gate_config.json",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/fly_weapons/FlyWeaponBomb.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/ArcherController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/fly_weapons/BaseFlyWeapon.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/character_config.json",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/troops_config.json",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/SpineBoyController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/RiderSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/RiderSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/ServantController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/MagicianSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/SpyerController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/FlyerSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/FlyerSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/BaseFlyWeapon.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/FlyWeaponUFO.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/FlyWeaponRocket.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/FlyWeaponFire.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/FlyWeaponBomb.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/BaseRemoteController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/TitanSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/TitanSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/MagicianSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/MagicianController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/MagicanSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/FlyWeaponRocket2.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/spine-csharp/AnimationState.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/SpyerSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/SpyerSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/DancerSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/DancerSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/RecoverSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/RecoverController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/SaberSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/SaberSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/ArcherSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/MagicanSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/FlyerController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super1/ArcherSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/TitanController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_base/SaberController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/SaberSuper1Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/SaberController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/FlyerController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/BaseController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/character_super2/RecoverSuper2Controller.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Config/trick_config.json",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/RiderController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/TitanController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Examples/Getting Started/Scripts/BasicPlatformerController.cs",
+		"/Users/ppby-build/Test/Assets/Scripts/Destroyer.cs",
+		"/Users/ppby-build/Test/Assets/Scripts/Gun.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/spine-unity/Asset Types/SkeletonDataAsset.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/SpyerController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/ArcherController.cs",
+		"/Users/ppby-build/Test/Assets/Scripts/Rocket.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/RocketWeapon.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/Rocket.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/RecoverController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/MagicianController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/BloodController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/BangController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/characters/DancerController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/TrickController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/FlyerController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/BaseController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/ArcherController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/SaberController.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/PlayerTroopModel.cs",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Examples/Getting Started/Scripts/SpineBeginnerTwo.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/BaseCharacter.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Examples/Scripts/RaggedySpineboy.cs",
+		"/Users/ppby-build/Desktop/demo/demo/Assets/Examples/Scripts/SpineboyPole.cs",
+		"/Users/ppby-build/Test/Assets/Scripts/BombPickup.cs",
+		"/Users/ppby-build/Test/Assets/Scripts/BackgroundParallax.cs",
+		"/Users/ppby-build/Test/Assets/Scripts/SetParticleSortingLayer.cs",
+		"/Users/ppby-build/Test/Assets/Scripts/PlayerHealth.cs",
+		"/Users/ppby-build/.ssh/id_rsa.pub",
+		"/Users/ppby-build/work/fish1/projects/CatchFish/Resources/config/toll1_fish.conf",
+		"/Users/ppby-build/work/fish1/projects/CatchFish/Classes/FishManage/FishesManageServer.cpp",
+		"/Users/ppby-build/work/fish1/projects/CatchFish/Classes/Component/Sprite/FishSprite.cpp",
+		"/Users/ppby-build/work/fish1/projects/CatchFish/Classes/core/script/FishRandSwatch.cpp",
+		"/Users/ppby-build/work/fish1/projects/CatchFish/Resources/randSwatch/1.dat",
+		"/Users/ppby-build/work/fish1/projects/CatchFish/Classes/core/script/FishBase.cpp",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Component/Sprite/FishSprite.h",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/FishManage/TaskManage.cpp",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Component/Layer/FishLayer.cpp",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Component/Sprite/FishSprite.cpp",
+		"/Users/ppby-build/Documents/room_list.log",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/proj.android/build.gradle",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/proj.android/jenkins_build.sh",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/proj.android/proguard-project-gradle.txt",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Util/LocalDataUtil.h",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Component/popup/PayPopup.cpp",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Util/LocalDataUtil.cpp",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/FishManage/FishesManageServer.cpp",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/FishManage/FishesManageServer.h",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Common/GameConstant.h",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/GameView/GameViewLayer.cpp",
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Common/socket/LobbySocketSink.cpp"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"1 ? 2 : 1",
+			"LoadLevel",
+			"MeshRenderer",
+			"extents",
+			"extent",
+			"extents",
+			"extent",
+			"GetRightPos",
+			"SpriteRenderer",
+			"GetRightPos",
+			"attackPos",
+			"AddAIAction",
+			"IsGameOver",
+			"AddAIAction",
+			"skillButtons",
+			"IsMy",
+			"isMy",
+			"skillIds",
+			"skillButtons",
+			"SkillPrefabController",
+			"skillButtons",
+			"(int)type",
+			"(int)type]",
+			"canvas",
+			"setparent",
+			"float",
+			"SkillStop",
+			"fillamount",
+			"SkillStatus",
+			"skillPos",
+			"debuff",
+			"OtherTroopController",
+			"skillButtons",
+			"skillIds",
+			"			List<int> resultList = skillIds.FindAll(delegate(int s) { return skillIds.c; });\ntolist",
+			"string",
+			"private",
+			"ismy",
+			"SkillController",
+			"skillButtons",
+			"CMD_HITED_FLY",
+			"hitedFly",
+			"HitedFly",
+			"hitedFly",
+			"HitedFly",
+			"hitedFly",
+			"HitedFly",
+			"IsAttackIgnoreType",
+			"hitedFlyEndPos2",
+			"hitedFlyEndPos1",
+			"* Model.Speed",
+			"hitedFlyEndPos2",
+			"hitedFlyEndPos1",
+			"hitedFlyEndPos",
+			"startPos",
+			"AddForce",
+			"HitedFly",
+			"Hited",
+			"2",
+			"27",
+			"rank",
+			"1",
+			"Dictionary",
+			"List",
+			"Resort",
+			"2",
+			"27",
+			"rank",
+			"SkeletonAnimation",
+			"posConfig",
+			"Speed",
+			"OnDeadAnimComplete",
+			"SummonHandler",
+			"void Dead",
+			"OnDeadAnimComplete",
+			"ionState.Comple",
+			"0.08",
+			"0.05",
+			"runAnimationName",
+			"OnSummonEvent",
+			"SummonHandler",
+			"Summon",
+			"SummonHandler",
+			"ExplodeEventHandler",
+			"void Dead()",
+			"SummonHandler",
+			"IsCanBeClean",
+			"SkillEvent",
+			"EventArgs",
+			"HadAttacked",
+			"cmd_attack",
+			"FORWARD",
+			"Forward",
+			"endpos",
+			"IsNearBorder",
+			"\"attackRange\":3",
+			"virtual",
+			"GetFlyWeapon",
+			"CreateFlyWeapon",
+			"throwWeapon",
+			"flyWeapon",
+			"FlyWeapon",
+			"flyWeapon",
+			"FlyWeapon",
+			"flyWeapon",
+			"hitRate",
+			"isbuffing",
+			"SKILL_ATTACK",
+			"isBuffing",
+			"obj",
+			"Instantiate",
+			"destroy",
+			"attackedTarget",
+			"AttackedTarget",
+			"attackedTarget",
+			"attackCount",
+			"IsZombie",
+			"DeadAnimCCallback",
+			"DeadCallback",
+			"IsDead",
+			"CMD_ATTACK",
+			"FindAttackedTarget",
+			"CMD_ATTACK",
+			"target",
+			";\n",
+			"BeingAttacked",
+			"IsZombie",
+			"FindAttackedTarget"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"GetModel",
+			"GetCharacterConfig",
+			"SaveData",
+			"LobbyView",
+			"md5",
+			"DataBase64",
+			"FishConfInfo",
+			"FishGroup",
+			"FishBase",
+			"GCWebClient",
+			"FishGroup2",
+			"LobbyView2",
+			"FishConfInfo2",
+			"SingleFishInfoDef2",
+			"FishBase2",
+			"ShotNetInfo2",
+			"ShotInfo2",
+			"md5_2.h",
+			"DataBase64_2",
+			"SaveData2",
+			"bool isHex(const std::string& input)\nSaveData2",
+			"GCWebClient2",
+			"MXHttpLogicLayer"
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "demo.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 162,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								161,
+								161
+							]
+						],
+						"settings":
+						{
+							"auto_complete": true,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Assets/Scripts/CamerController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 901,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								441,
+								441
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/OmniSharpSublime.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 199,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								193,
+								193
+							]
+						],
+						"settings":
+						{
+							"auto_complete": true,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 112.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.variable_get":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "demo.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"camer",
+				"Assets/Scripts/CamerController.cs"
+			],
+			[
+				"demo.",
+				"demo.sublime-project"
+			],
+			[
+				"basecn",
+				"Scripts/character_base/BaseController.cs"
+			],
+			[
+				"troop",
+				"Config/troops_config.json"
+			],
+			[
+				"demu",
+				"Scripts/DemoUtil.cs"
+			],
+			[
+				"gaecon",
+				"Config/gate_config.json"
+			],
+			[
+				"troo",
+				"Config/troops_config.json"
+			],
+			[
+				"my",
+				"Scripts/MyTroopController.cs"
+			],
+			[
+				"trans",
+				"TransitionKit/TransitionKit.cs"
+			],
+			[
+				"scenesw",
+				"TransitionKitDemo/SceneSwitcher.cs"
+			],
+			[
+				"fps",
+				"Scripts/FPSDisplay.cs"
+			],
+			[
+				"startbu",
+				"Scripts/StartButtonController.cs"
+			],
+			[
+				"skiilon",
+				"Scripts/SkillController.cs"
+			],
+			[
+				"demo",
+				"Scripts/DemoUtil.cs"
+			],
+			[
+				"basecon",
+				"Scripts/character_base/BaseController.cs"
+			],
+			[
+				"char",
+				"Config/character_config.json"
+			],
+			[
+				"baseon",
+				"Scripts/character_base/BaseController.cs"
+			],
+			[
+				"skillcon",
+				"Scripts/SkillController.cs"
+			],
+			[
+				"player",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"baecon",
+				"Scripts/character_base/BaseController.cs"
+			],
+			[
+				"skillt",
+				"Scripts/SkillTipController.cs"
+			],
+			[
+				"skillf",
+				"Scripts/SkillPrefabController.cs"
+			],
+			[
+				"skil",
+				"Scripts/SkillController.cs"
+			],
+			[
+				"configma",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"ski",
+				"Scripts/SkillController.cs"
+			],
+			[
+				"trops",
+				"Config/troops_config.json"
+			],
+			[
+				"gate",
+				"Config/gate_config.json"
+			],
+			[
+				"troops",
+				"Config/troops_config.json"
+			],
+			[
+				"confgim",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"enem",
+				"Scripts/EnemyTroopController.cs"
+			],
+			[
+				"config",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"base",
+				"Scripts/character_base/BaseController.cs"
+			],
+			[
+				"gac",
+				"gate_config.json"
+			],
+			[
+				"t",
+				"troops_config.json"
+			],
+			[
+				"ga",
+				"gate_config.json"
+			],
+			[
+				"tro",
+				"troops_config.json"
+			],
+			[
+				"tr",
+				"troops_config.json"
+			],
+			[
+				"bom",
+				"Scripts/fly_weapons/FlyWeaponBomb.cs"
+			],
+			[
+				"basef",
+				"Scripts/fly_weapons/BaseFlyWeapon.cs"
+			],
+			[
+				"arch",
+				"Scripts/character_base/ArcherController.cs"
+			],
+			[
+				"serv",
+				"Scripts/character_base/ServantController.cs"
+			],
+			[
+				"rider",
+				"Scripts/character_super1/RiderSuper1Controller.cs"
+			],
+			[
+				"con",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"magi",
+				"Scripts/character_super2/MagicianSuper2Controller.cs"
+			],
+			[
+				"flyer",
+				"Scripts/character_super2/FlyerSuper2Controller.cs"
+			],
+			[
+				"skill",
+				"Scripts/SkillController.cs"
+			],
+			[
+				"flyweu",
+				"Scripts/FlyWeaponUFO.cs"
+			],
+			[
+				"flywero",
+				"Scripts/FlyWeaponRocket.cs"
+			],
+			[
+				"flywefi",
+				"Scripts/FlyWeaponFire.cs"
+			],
+			[
+				"basefl",
+				"Scripts/BaseFlyWeapon.cs"
+			],
+			[
+				"flywe",
+				"Scripts/FlyWeaponBomb.cs"
+			],
+			[
+				"flysup",
+				"Scripts/character_super1/FlyerSuper1Controller.cs"
+			],
+			[
+				"cnf",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"baseremo",
+				"Scripts/character_base/BaseRemoteController.cs"
+			],
+			[
+				"dem",
+				"Scripts/DemoUtil.cs"
+			],
+			[
+				"tintup",
+				"Scripts/character_super2/TitanSuper2Controller.cs"
+			],
+			[
+				"titansu",
+				"Scripts/character_super1/TitanSuper1Controller.cs"
+			],
+			[
+				"magicancontroller",
+				"Scripts/character_base/MagicianController.cs"
+			],
+			[
+				"configa",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"magci",
+				"Scripts/character_super1/MagicanSuper1Controller.cs"
+			],
+			[
+				"flyse",
+				"Scripts/character_super2/FlyerSuper2Controller.cs"
+			],
+			[
+				"flyersup",
+				"Scripts/character_super1/FlyerSuper1Controller.cs"
+			],
+			[
+				"baself",
+				"Scripts/BaseFlyWeapon.cs"
+			],
+			[
+				"bas",
+				"Scripts/character_base/BaseController.cs"
+			],
+			[
+				"ridersup",
+				"Scripts/character_super2/RiderSuper2Controller.cs"
+			],
+			[
+				"",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"spyersup",
+				"Scripts/character_super2/SpyerSuper2Controller.cs"
+			],
+			[
+				"spy",
+				"Scripts/character_super1/SpyerSuper1Controller.cs"
+			],
+			[
+				"dancsup",
+				"Scripts/character_super2/DancerSuper2Controller.cs"
+			],
+			[
+				"cifng",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"conf",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"danceup",
+				"Scripts/character_super1/DancerSuper1Controller.cs"
+			],
+			[
+				"recov",
+				"Scripts/character_super1/RecoverSuper1Controller.cs"
+			],
+			[
+				"recover",
+				"Scripts/character_base/RecoverController.cs"
+			],
+			[
+				"dacnsuper",
+				"Scripts/character_super1/DancerSuper1Controller.cs"
+			],
+			[
+				"paler",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"sabersup",
+				"Scripts/character_super2/SaberSuper2Controller.cs"
+			],
+			[
+				"rock",
+				"Scripts/FlyWeaponRocket2.cs"
+			],
+			[
+				"arc",
+				"Scripts/character_base/ArcherController.cs"
+			],
+			[
+				"archsup",
+				"Scripts/character_super2/ArcherSuper2Controller.cs"
+			],
+			[
+				"playertr",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"basec",
+				"Scripts/character_base/BaseController.cs"
+			],
+			[
+				"plaer",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"play",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"configm",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"archersup",
+				"Scripts/character_super1/ArcherSuper1Controller.cs"
+			],
+			[
+				"playe",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"fly",
+				"Scripts/character_base/FlyerController.cs"
+			],
+			[
+				"fl",
+				"Scripts/character_base/FlyerController.cs"
+			],
+			[
+				"acr",
+				"Scripts/character_base/ArcherController.cs"
+			],
+			[
+				"sabe",
+				"Scripts/character_base/SaberController.cs"
+			],
+			[
+				"congi",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"plya",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"sabercon",
+				"Scripts/characters/SaberController.cs"
+			],
+			[
+				"sabersu",
+				"Scripts/characters/SaberSuper1Controller.cs"
+			],
+			[
+				"tri",
+				"Config/trick_config.json"
+			],
+			[
+				"charcon",
+				"Config/character_config.json"
+			],
+			[
+				"playert",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"confi",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"flycon",
+				"Scripts/characters/FlyerController.cs"
+			],
+			[
+				"baseflyweapon",
+				"Scripts/BaseFlyWeapon.cs"
+			],
+			[
+				"roc",
+				"Scripts/FlyWeaponRocket.cs"
+			],
+			[
+				"animstat",
+				"spine-csharp/AnimationState.cs"
+			],
+			[
+				"palyer",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"plyaercon",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"animationstate",
+				"spine-csharp/AnimationState.cs"
+			],
+			[
+				"fla",
+				"Scripts/FlyWeaponRocket.cs"
+			],
+			[
+				"basse",
+				"Scripts/characters/BaseController.cs"
+			],
+			[
+				"spine",
+				"Scripts/SpineBoyController.cs"
+			],
+			[
+				"ar",
+				"Scripts/characters/ArcherController.cs"
+			],
+			[
+				"des",
+				"Scripts/Destroyer.cs"
+			],
+			[
+				"ro",
+				"Scripts/Rocket.cs"
+			],
+			[
+				"gun",
+				"Scripts/Gun.cs"
+			],
+			[
+				"re",
+				"Scripts/characters/RecoverController.cs"
+			],
+			[
+				"tric",
+				"Config/trick_config.json"
+			],
+			[
+				"tian",
+				"Scripts/characters/TitanController.cs"
+			],
+			[
+				"ma",
+				"Scripts/characters/MagicianController.cs"
+			],
+			[
+				"rid",
+				"Scripts/characters/RiderController.cs"
+			],
+			[
+				"bangcon",
+				"Scripts/BangController.cs"
+			],
+			[
+				"blo",
+				"Scripts/BloodController.cs"
+			],
+			[
+				"tricon",
+				"Config/trick_config.json"
+			],
+			[
+				"saber",
+				"Scripts/characters/SaberController.cs"
+			],
+			[
+				"confima",
+				"Scripts/ConfigManagerr.cs"
+			],
+			[
+				"plry",
+				"Scripts/PlayerTroopController.cs"
+			],
+			[
+				"archer",
+				"Scripts/ArcherController.cs"
+			],
+			[
+				"chr",
+				"Config/character_config.json"
+			],
+			[
+				"trico",
+				"Config/trick_config.json"
+			],
+			[
+				"cahr",
+				"Assets/Config/character_config.json"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 196.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

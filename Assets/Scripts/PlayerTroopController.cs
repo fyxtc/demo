@@ -77,6 +77,7 @@ public class PlayerTroopController : MonoBehaviour {
             skillIds = new List<int>{0, 1, 2};
         }else{
             int currentGate = 0;
+            currentGate = TollGateManager.Instance.CurGate;
             GateModel m = ConfigManager.share().GateConfig.GateModels[currentGate];
             data = new SortedDictionary<TroopType, int >(m.troops, new TroopTypeComparer());
             foreach (KeyValuePair<TroopType, int> item in data) {

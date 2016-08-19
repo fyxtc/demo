@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CamerController : MonoBehaviour {
@@ -8,6 +7,7 @@ public class CamerController : MonoBehaviour {
 	void Start () {
         configManager = ConfigManager.share();
     	configManager.LoadConfig(true);
+    	 
 		// Debug.Log("saber: " + configManager.CharacterConfig.Saber.Life);
 		// Debug.Log("archer: " + configManager.CharacterConfig.Archer.Attack);
 	}
