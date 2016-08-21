@@ -17,6 +17,7 @@ public class BackController : MonoBehaviour {
 
 	void OnClick(){
         PlayerManager.Instance.UpdateUnlockGate();
+        PlayerManager.Instance.UpdateStars(1, true);
 		SceneManager.LoadScene(1);
 	}
 }

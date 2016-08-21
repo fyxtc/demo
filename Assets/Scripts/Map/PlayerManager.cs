@@ -15,12 +15,19 @@ public class PlayerManager {
     public readonly int MAX_GATE = 15;
     public static readonly PlayerManager Instance = new PlayerManager();
     // public static readonly PlayerManager Instance = LocalUtil.SharedInstance.Load<PlayerManager>(LOCAL_FILE);
-    public int curGate = 0;
-    public int unlockGate = 0;
-    public List<int> simpleStars = new List<int>();
-    public List<int> diffStars = new List<int>();
-    public int gold;
-    public Dictionary<TroopType, int> troops;
+    private int curGate = 0;
+    private int unlockGate = 0;
+    private List<int> simpleStars = new List<int>();
+    private List<int> diffStars = new List<int>();
+    private int gold;
+    private Dictionary<TroopType, int> troops;
+
+    public int CurGate{get{return curGate;}}
+    public int UnlockGate{get{return unlockGate;}}
+    public int Gold{get{return gold;}}
+    public List<int> SimpleStars{get{return simpleStars;}}
+    public List<int> DiffStars{get{return diffStars;}}
+    public Dictionary<TroopType, int> Troops{get{return troops;}}
 
     public void LoadLocalData(){
         curGate = PlayerPrefs.GetInt(KEY_CUR_GATE);
@@ -44,21 +51,22 @@ public class PlayerManager {
         PlayerPrefs.SetInt(KEY_UNLOCK_GATE, unlockGate);
     }
 
-    public void UpdateStars(int gate, int star, bool isSimple){
+    public void UpdateStars(int star, bool isSimple){
         List<int> stars = simpleStars;
         if(!isSimple){
             stars = diffStars;
         }
 
-        if(star > stars[gate]){
-            stars[gate] = star;
+        if(star > stars[curGate]){
+            stars[curGate] = star;
             string key = isSimple ? KEY_SIMPLE_STARS : KEY_DIFF_STARS;
+            Debug.Log("save star key : " + curGate + " -> " + star);
             PlayerPrefs.SetString("star"+key, DemoUtil.List2String(stars));
         }
     }
 
     public void UpdateGold(int count){
-        gold -= count;
+        gold += count;
         Debug.Assert(gold >= 0);
         PlayerPrefs.SetInt(KEY_GOLD, gold);
     }

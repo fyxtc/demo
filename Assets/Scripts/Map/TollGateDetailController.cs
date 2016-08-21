@@ -15,6 +15,7 @@ public class TollGateDetailController : MonoBehaviour {
     public Button closeButton;
     public GameObject[] troopsIcon = new GameObject[4]; // 最多四个
     public Text desc;
+    public GameObject starPanel;
     public Button diffButton;
     public Button simpleButton;
     public Text diffText;
@@ -34,7 +35,7 @@ public class TollGateDetailController : MonoBehaviour {
 
     void OnAttack(){
         // OnClose();
-        PlayerManager.Instance.curGate = CurGate;
+        PlayerManager.Instance.UpdateCurGate(CurGate);
 
         // var slices = new VerticalSlicesTransition()
         // {
@@ -44,6 +45,9 @@ public class TollGateDetailController : MonoBehaviour {
         // TransitionKit.instance.transitionWithDelegate( slices );
 
         SceneManager.LoadScene(2);
+
+        // test
+        // PlayerManager.Instance.UpdateStars(1, true);
     }
 
     void OnEnable(){
@@ -73,8 +77,10 @@ public class TollGateDetailController : MonoBehaviour {
 
         if(isSimple){
             gateConfig = ConfigManager.share().GateConfigSimple;
+            diffText.text = "Simple";
         }else{
             gateConfig = ConfigManager.share().GateConfigDiff;
+            diffText.text = "Difficulty";
         }
         // Debug.Log(gateConfig.GateModels[CurGate].troops.Count);
         GateModel m = gateConfig.GateModels[CurGate];
@@ -95,7 +101,8 @@ public class TollGateDetailController : MonoBehaviour {
             }
         }
 
-        diffText.text = isSimple ? "Simple" : "Difficulty";
+        int curStar = isSimple ? PlayerManager.Instance.SimpleStars[curGate] : PlayerManager.Instance.DiffStars[curGate];
+        starPanel.GetComponent<StarPanel>().UpdateStar(curStar);
     }
 
 }

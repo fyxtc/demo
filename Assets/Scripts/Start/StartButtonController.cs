@@ -9,11 +9,6 @@ public class StartButtonController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GetComponent<Button>().onClick.AddListener(OnClick);
-
-		// PlayerManager.Instance LocalUtil.SharedInstance.Load<PlayerManager>(LOCAL_FILE)
-		// LocalUtil.SharedInstance.Save(PlayerManager.Instance);
-		// Debug.Log("Local Data: " + PlayerManager.Instance);
-		PlayerManager.Instance.LoadLocalData();
 	}
 
 	void OnClick(){
