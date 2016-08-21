@@ -87,15 +87,19 @@ public class DemoUtil{
         return l2;
     }
 
-    public static List<int> String2List(string str){
+    public static List<int> String2List(string str, int initZeroCount=0){
         List<string> l1 = new List<string>(str.Split(','));
         // Debug.Log(string.Join(",", l1.ToArray()));
         // Debug.Log(l1.Count + ":1" + l1[0] + "1" + (l1[0] == "" ? 0 : int.Parse(l1[0])));
-        if(l1.Count > 0){
+        if(l1[0] != ""){
             List<int> res = l1.ConvertAll<int>(x => x == "" ? 0 : int.Parse(x));
             return res;
         }else{
-            return default(List<int>);
+            List<int> res = new List<int>();
+            for(int i = 0; i < initZeroCount; i++){
+                res.Add(0);
+            }
+            return res;
         }
     }
 

@@ -47,7 +47,7 @@ public class TollGateDetailController : MonoBehaviour {
         SceneManager.LoadScene(2);
 
         // test
-        // PlayerManager.Instance.UpdateStars(1, true);
+        PlayerManager.Instance.UpdateStars(1, true);
     }
 
     void OnEnable(){

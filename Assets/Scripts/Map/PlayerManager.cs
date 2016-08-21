@@ -33,8 +33,8 @@ public class PlayerManager {
         curGate = PlayerPrefs.GetInt(KEY_CUR_GATE);
         unlockGate = PlayerPrefs.GetInt(KEY_UNLOCK_GATE);
         gold = PlayerPrefs.GetInt(KEY_GOLD);
-        simpleStars = DemoUtil.String2List(PlayerPrefs.GetString(KEY_SIMPLE_STARS));
-        diffStars = DemoUtil.String2List(PlayerPrefs.GetString(KEY_DIFF_STARS));
+        simpleStars = DemoUtil.String2List(PlayerPrefs.GetString(KEY_SIMPLE_STARS), MAX_GATE);
+        diffStars = DemoUtil.String2List(PlayerPrefs.GetString(KEY_DIFF_STARS), MAX_GATE);
 
         Debug.Log("LOAD DATA: " + "curGate:"+curGate+", unlockGate:"+unlockGate+", gold:"+gold+", stars:"+simpleStars.Count);
     }
@@ -60,8 +60,8 @@ public class PlayerManager {
         if(star > stars[curGate]){
             stars[curGate] = star;
             string key = isSimple ? KEY_SIMPLE_STARS : KEY_DIFF_STARS;
-            Debug.Log("save star key : " + curGate + " -> " + star);
-            PlayerPrefs.SetString("star"+key, DemoUtil.List2String(stars));
+            Debug.Log("save star: " + DemoUtil.List2String(stars));
+            PlayerPrefs.SetString(key, DemoUtil.List2String(stars));
         }
     }
 
