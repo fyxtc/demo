@@ -4,7 +4,7 @@ using System.Collections;
 public class EnemyTroopController : PlayerTroopController {
     // protected override void InitData(){
     //     int currentGate = 0;
-    //     GateModel m = ConfigManager.share().GateConfig.GateModels[currentGate];
+    //     GateModel m = ConfigManager.share().GateConfigSimple.GateModels[currentGate];
     //     data = new SortedDictionary<TroopType, int >(m.troops, new TroopTypeComparer());
     //     foreach (KeyValuePair<TroopType, int> item in data) {
     //         TroopType troopType = item.Key;

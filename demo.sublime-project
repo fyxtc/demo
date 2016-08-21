@@ -2,11 +2,11 @@
     "folders":
     [
         {
-            "path": "./Scripts",
+            "path": "./Assets/Scripts",
             "file_exclude_patterns": ["*.meta"],
         },
         {
-            "path": "Config",
+            "path": "./Assets/Config",
         },
     ],
     "solution_file": "./demo.sln"

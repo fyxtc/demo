@@ -1,0 +1,39 @@
+/*
+注意数组的逗号之间不能用空格。。。而且字段大小写要和model一样
+aiTimeRnage：使用技能之间的随机CD
+aiRate：对应使用那个技能触发的概率百分比，范围是1~100，如果是[30,70,100]表示第一个技能30%（1~30），第二个技能40%（30~70），第三个技能30%概率（70~100）
+*/
+[
+    {
+        "gate":0,
+        "troopsType":[0,1,2,3],
+        "troopsCount":[1,1,1,1],
+        "skills":[0,2,4],
+        "aiTimeRange":[1,5],
+        "aiRate":[30,70,100]
+    },
+    {
+        "gate":1,
+        "troopsType":[0,1,2,3],
+        "troopsCount":[1,1,0,0],
+        "skills":[0,2,4],
+        "aiTimeRange":[1,5],
+        "aiRate":[30,70,100]
+    },
+    {
+        "gate":2,
+        "troopsType":[0,1,2,3],
+        "troopsCount":[1,1,1,0],
+        "skills":[0,2,4],
+        "aiTimeRange":[1,5],
+        "aiRate":[30,70,100]
+    },
+    {
+        "gate":3,
+        "troopsType":[0,1,2,3],
+        "troopsCount":[1,1,1,1],
+        "skills":[0,2,4],
+        "aiTimeRange":[1,5],
+        "aiRate":[30,70,100]
+    } 
+]

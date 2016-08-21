@@ -53,6 +53,7 @@ public class PlayerTroopController : MonoBehaviour {
 
 
 	// Use this for initialization
+    // TODO: 总结：我们尽量将其他Object的reference设置等事情放在Awake处理。然后将这些reference的Object的赋值设置放在Start()中来完成。
 	void Start () {
         Debug.Assert(prefabs.Length <= CHARACTER_MAX_COUNT, "prefabs count error");
         InitData();
@@ -78,7 +79,7 @@ public class PlayerTroopController : MonoBehaviour {
         }else{
             int currentGate = 0;
             currentGate = TollGateManager.Instance.CurGate;
-            GateModel m = ConfigManager.share().GateConfig.GateModels[currentGate];
+            GateModel m = ConfigManager.share().GateConfigSimple.GateModels[currentGate];
             data = new SortedDictionary<TroopType, int >(m.troops, new TroopTypeComparer());
             foreach (KeyValuePair<TroopType, int> item in data) {
                 TroopType troopType = item.Key;

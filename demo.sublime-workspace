@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"Cu",
+				"CurGate	int { get; set; }"
+			],
+			[
+				"Gtecom",
+				"GetComponent<T>()	T"
+			],
+			[
+				"Insta",
+				"Instantiate(Object original)	Object"
+			],
+			[
+				"uNI",
+				"UnityEngine	UnityEngine"
+			],
+			[
+				"Getcom",
+				"GetComponent<T>()	T"
+			],
+			[
 				"ne",
 				"nextScene"
 			],
@@ -494,26 +514,6 @@
 			[
 				"CAE",
 				"CATEGORY_FLY"
-			],
-			[
-				"mis",
-				"missBuff"
-			],
-			[
-				"remvoe",
-				"RemoveTrickBuff"
-			],
-			[
-				"TRICK",
-				"TRICK_STATUS	(ConfigManagerr.cs)"
-			],
-			[
-				"trici",
-				"trickIds"
-			],
-			[
-				"tricid",
-				"trickId"
 			]
 		]
 	},
@@ -523,26 +523,81 @@
 			"file": "demo.sublime-project",
 			"settings":
 			{
-				"buffer_size": 162,
+				"buffer_size": 237,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "using UnityEngine;\nusing System.Collections;\nusing UnityEngine.SceneManagement;\n\npublic class CamerController : MonoBehaviour {\n    ConfigManager configManager;\n	// Use this for initialization\n	void Start () {\n        configManager = ConfigManager.share();\n    	configManager.LoadConfig(true);\n		// Debug.Log(\"saber: \" + configManager.CharacterConfig.Saber.Life);\n		// Debug.Log(\"archer: \" + configManager.CharacterConfig.Archer.Attack);\n		g\n	}\n\n    // IEnumerator LoadConfig(string file)\n    // {\n    //     string sPath= Application.streamingAssetsPath + Path.DirectorySeparatorChar + file;\n    //     WWW www = new WWW(sPath);\n    //     yield return www;\n    //     _result = www.text;\n    // }\n	\n	// Update is called once per frame\n	void Update () {\n		if (Input.GetKeyDown (KeyCode.Return)) {  \n            // ConfigManager.share().LoadConfig(true);\n			SceneManager.LoadScene (\"main\");\n		} \n	}\n}\n",
+			"file": "Assets/Scripts/ConfigManagerr.cs",
+			"settings":
+			{
+				"buffer_size": 12510,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "using UnityEngine;\nusing UnityEngine.SceneManagement;\n\npublic class CamerController : MonoBehaviour {\n    ConfigManager configManager;\n	// Use this for initialization\n	void Start () {\n        configManager = ConfigManager.share();\n    	configManager.LoadConfig(true);\n    	 \n		// Debug.Log(\"saber: \" + configManager.CharacterConfig.Saber.Life);\n		// Debug.Log(\"archer: \" + configManager.CharacterConfig.Archer.Attack);\n	}\n\n    // IEnumerator LoadConfig(string file)\n    // {\n    //     string sPath= Application.streamingAssetsPath + Path.DirectorySeparatorChar + file;\n    //     WWW www = new WWW(sPath);\n    //     yield return www;\n    //     _result = www.text;\n    // }\n	\n	// Update is called once per frame\n	void Update () {\n		if (Input.GetKeyDown (KeyCode.Return)) {  \n            // ConfigManager.share().LoadConfig(true);\n			SceneManager.LoadScene (\"main\");\n		} \n	}\n}\n",
 			"file": "Assets/Scripts/CamerController.cs",
-			"file_size": 900,
-			"file_write_time": 131160584770000000,
+			"file_size": 881,
+			"file_write_time": 131160895782343936,
 			"settings":
 			{
-				"buffer_size": 901,
+				"buffer_size": 878,
+				"line_ending": "Unix",
+				"scratch": true
+			}
+		},
+		{
+			"file": "Assets/Config/gate_config.json",
+			"settings":
+			{
+				"buffer_size": 886,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "using UnityEngine;\nusing System.Collections;\nusing UnityEngine.UI;\nusing Prime31.TransitionKit;\n\npublic class TollGateDetailController : MonoBehaviour {\n    public int CurGate{get; set;}\n    public int CurStar{get; set;}\n    public int CurDifficulty{get; set;}\n    void Start(){\n\n    }\n\n    void OnClick(){\n        isShow = true;\n        TollGateManager.Instance.CurGate = CurGate;\n        var slices = new VerticalSlicesTransition()\n        {\n            nextScene = 2,\n            divisions = Random.Range( 3, 20 )\n        };\n        TransitionKit.instance.transitionWithDelegate( slices );\n    }\n\n    public Rect windowRect = new Rect(20, 20, 120, 50);\n    public bool isShow = true;\n    void OnGUI() {\n        // isShow = GUI.Toggle(new Rect(10, 10, 100, 20), isShow, \"Window 0\");\n        if(isShow){\n            windowRect = GUI.Window(0, windowRect, CreateWindow, \"My Window\");\n        }\n    }\n    void CreateWindow(int windowID) {\n        if (GUI.Button(new Rect(10, 20, 100, 20), \"Hello World\"))\n            print(\"Got a click\");\n            OnClick();\n            isShow = false;\n    }\n}\n",
+			"file": "Assets/Scripts/TollGateDetailController.cs",
+			"file_size": 1100,
+			"file_write_time": 131161569462179477,
+			"settings":
+			{
+				"buffer_size": 1097,
+				"line_ending": "Unix",
+				"scratch": true
+			}
+		},
+		{
+			"file": "Assets/Scripts/TollGateManager.cs",
+			"settings":
+			{
+				"buffer_size": 264,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/OmniSharpSublime.sublime-settings",
+			"file": "Assets/Scripts/TollGateController.cs",
 			"settings":
 			{
-				"buffer_size": 199,
+				"buffer_size": 1498,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 63 files for \"VerticalSlicesTransition\"\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\StartButtonController.cs:\n   15: 		var slices = new VerticalSlicesTransition()\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\TollGateController.cs:\n   46:         var slices = new VerticalSlicesTransition()\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\TollGateDetailController.cs:\n   17:         var slices = new VerticalSlicesTransition()\n\n3 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 445,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "Assets/Scripts/StartButtonController.cs",
+			"settings":
+			{
+				"buffer_size": 654,
 				"line_ending": "Unix"
 			}
 		}
@@ -554,10 +609,22 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 127.0,
-		"last_filter": "instal",
+		"height": 104.0,
+		"last_filter": "reload",
 		"selected_items":
 		[
+			[
+				"reload",
+				"OmniSharpSublime: Reload Solution"
+			],
+			[
+				"omishow",
+				"OmniSharpSublime: Show Server Output"
+			],
+			[
+				"pakclist",
+				"Package Control: List Packages"
+			],
 			[
 				"instal",
 				"Package Control: Install Package"
@@ -579,7 +646,7 @@
 				"Preferences: Browse Packages"
 			]
 		],
-		"width": 449.0
+		"width": 416.0
 	},
 	"console":
 	{
@@ -601,9 +668,13 @@
 	},
 	"expanded_folders":
 	[
+		"/D/unity_workspace/Demo/Assets/Scripts",
+		"/D/unity_workspace/Demo/Assets/Config"
 	],
 	"file_history":
 	[
+		"/D/Program Files/Sublime Text Build 3059/Data/Packages/User/C#.sublime-settings",
+		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/OmniSharpSublime.sublime-settings",
 		"/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/OmniSharp/OmniSharpSublime.sublime-settings",
 		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/PlayerTroopController.cs",
 		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/ConfigManagerr.cs",
@@ -729,9 +800,7 @@
 		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Util/LocalDataUtil.cpp",
 		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/FishManage/FishesManageServer.cpp",
 		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/FishManage/FishesManageServer.h",
-		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Common/GameConstant.h",
-		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/GameView/GameViewLayer.cpp",
-		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Common/socket/LobbySocketSink.cpp"
+		"/Users/ppby-build/work/catchfish2/projects/CatchFish/Classes/Common/GameConstant.h"
 	],
 	"find":
 	{
@@ -750,6 +819,19 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"10",
+			"isShowDetail",
+			"VerticalSlicesTransition",
+			"closeButton",
+			"CreateWindow",
+			"isShow",
+			"OnClose",
+			"curGate",
+			"Close",
+			"OnClick",
+			"CurGate",
+			"DoMyWindow",
+			"GetComponent",
 			"1 ? 2 : 1",
 			"LoadLevel",
 			"MeshRenderer",
@@ -864,20 +946,7 @@
 			"destroy",
 			"attackedTarget",
 			"AttackedTarget",
-			"attackedTarget",
-			"attackCount",
-			"IsZombie",
-			"DeadAnimCCallback",
-			"DeadCallback",
-			"IsDead",
-			"CMD_ATTACK",
-			"FindAttackedTarget",
-			"CMD_ATTACK",
-			"target",
-			";\n",
-			"BeingAttacked",
-			"IsZombie",
-			"FindAttackedTarget"
+			"attackedTarget"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -918,7 +987,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -927,49 +996,330 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 162,
+						"buffer_size": 237,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								161,
-								161
+								237,
+								237
 							]
 						],
 						"settings":
 						{
 							"auto_complete": true,
-							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+							"is_init_dirty_state": false,
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Assets/Scripts/CamerController.cs",
+					"file": "Assets/Scripts/ConfigManagerr.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 901,
+						"buffer_size": 12510,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								441,
-								441
+								1055,
+								1055
 							]
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
+							"oops":
+							{
+								"0,5": "Using directive is not used by code and can be removed safely.",
+								"10157,10165": "'instance' should start with an upper case letter. (Rule 'Static Readonly Fields')",
+								"10442,10447": "Initializing field by default value is redundant",
+								"10754,10759": "'share' should start with an upper case letter. (Rule 'Methods')",
+								"1112,1114": "Convert to 'return' statement",
+								"11374,11386": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"1177,1181": "Redundant 'else' keyword",
+								"1206,1207": "Type cast is redundant",
+								"12401,12412": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"1306,1313": "Convert to auto property",
+								"1398,1403": "Convert to auto property",
+								"1481,1489": "Convert to auto property",
+								"1573,1577": "Convert to auto property",
+								"1656,1664": "Convert to auto property",
+								"1751,1762": "Convert to auto property",
+								"1855,1863": "Convert to auto property",
+								"1950,1957": "Convert to auto property",
+								"2041,2047": "Convert to auto property",
+								"2161,2165": "'this.' is redundant and can be removed safely.",
+								"224,228": "Name should have prefix '_'. (Rule 'Fields').",
+								"275,279": "Name should have prefix '_'. (Rule 'Fields').",
+								"296,305": "Name should have prefix '_'. (Rule 'Fields').",
+								"322,331": "Name should have prefix '_'. (Rule 'Fields').",
+								"3485,3491": "Name should have prefix '_'. (Rule 'Fields').",
+								"349,361": "Name should have prefix '_'. (Rule 'Fields').",
+								"378,385": "Name should have prefix '_'. (Rule 'Fields').",
+								"3954,3958": "Name should have prefix '_'. (Rule 'Fields').",
+								"3978,3984": "Name should have prefix '_'. (Rule 'Fields').",
+								"4004,4011": "Name should have prefix '_'. (Rule 'Fields').",
+								"4031,4038": "Name should have prefix '_'. (Rule 'Fields').",
+								"4055,4059": "Name should have prefix '_'. (Rule 'Fields').",
+								"4079,4090": "Name should have prefix '_'. (Rule 'Fields').",
+								"408,413": "Name should have prefix '_'. (Rule 'Fields').",
+								"41,46": "Using directive is not used by code and can be removed safely.",
+								"4110,4114": "Name should have prefix '_'. (Rule 'Fields').",
+								"4134,4136": "Name should have prefix '_'. (Rule 'Fields').",
+								"4154,4162": "Name should have prefix '_'. (Rule 'Fields').",
+								"4186,4190": "Convert to auto property",
+								"4266,4272": "Convert to auto property",
+								"430,438": "Name should have prefix '_'. (Rule 'Fields').",
+								"4354,4361": "Convert to auto property",
+								"4445,4452": "Convert to auto property",
+								"4536,4540": "Convert to auto property",
+								"455,459": "Name should have prefix '_'. (Rule 'Fields').",
+								"4625,4636": "Convert to auto property",
+								"4729,4733": "Convert to auto property",
+								"479,487": "Name should have prefix '_'. (Rule 'Fields').",
+								"4814,4816": "Convert to auto property",
+								"4891,4899": "Convert to auto property",
+								"507,518": "Name should have prefix '_'. (Rule 'Fields').",
+								"5352,5362": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"538,546": "Name should have prefix '_'. (Rule 'Fields').",
+								"566,573": "Name should have prefix '_'. (Rule 'Fields').",
+								"592,598": "Name should have prefix '_'. (Rule 'Fields').",
+								"622,626": "Convert to auto property",
+								"6475,6477": "Name should have prefix '_'. (Rule 'Fields').",
+								"6500,6504": "Name should have prefix '_'. (Rule 'Fields').",
+								"6531,6539": "Name should have prefix '_'. (Rule 'Fields').",
+								"6559,6565": "Name should have prefix '_'. (Rule 'Fields').",
+								"6585,6589": "Name should have prefix '_'. (Rule 'Fields').",
+								"6614,6620": "Name should have prefix '_'. (Rule 'Fields').",
+								"6638,6644": "Name should have prefix '_'. (Rule 'Fields').",
+								"6669,6677": "Name should have prefix '_'. (Rule 'Fields').",
+								"6805,6810": "Name should have prefix '_'. (Rule 'Fields').",
+								"6865,6871": "Name should have prefix '_'. (Rule 'Fields').",
+								"6922,6924": "Convert to auto property",
+								"6996,7000": "Convert to auto property",
+								"703,707": "Convert to auto property",
+								"7137,7138": "Empty statement is redundant",
+								"7164,7170": "Convert to auto property",
+								"7247,7251": "Convert to auto property",
+								"7329,7335": "Convert to auto property",
+								"7597,7603": "Convert to auto property",
+								"7691,7699": "Convert to auto property",
+								"784,793": "Convert to auto property",
+								"8135,8145": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"8703,8705": "Parameter can be IComparable",
+								"8786,8792": "Name should have prefix '_'. (Rule 'Fields').",
+								"879,888": "Convert to auto property",
+								"9222,9226": "Name should have prefix '_'. (Rule 'Fields').",
+								"9245,9255": "Name should have prefix '_'. (Rule 'Fields').",
+								"9274,9285": "Name should have prefix '_'. (Rule 'Fields').",
+								"9304,9310": "Name should have prefix '_'. (Rule 'Fields').",
+								"9350,9356": "Name should have prefix '_'. (Rule 'Fields').",
+								"9411,9422": "Name should have prefix '_'. (Rule 'Fields').",
+								"9441,9447": "Name should have prefix '_'. (Rule 'Fields').",
+								"975,987": "Convert to auto property"
+							},
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 240.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Assets/Scripts/CamerController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 878,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								474,
+								474
+							]
+						],
+						"settings":
+						{
+							"in_converting": true,
+							"is_init_dirty_state": false,
+							"oops":
+							{
+								"448,452": "Unexpected symbol `value'', expecting `.''",
+								"461,462": "; expected"
+							},
+							"origin_encoding": "UTF-8-SIG",
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Assets/Config/gate_config.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 886,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								517,
+								517
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"origin_encoding": "UTF-8",
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Assets/Scripts/TollGateDetailController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1097,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								685,
+								685
+							]
+						],
+						"settings":
+						{
+							"in_converting": true,
+							"is_init_dirty_state": false,
+							"oops":
+							{
+								"19,24": "Using directive is not used by code and can be removed safely.",
+								"407,431": "Empty argument list is redundant",
+								"45,50": "Using directive is not used by code and can be removed safely.",
+								"616,626": "Name should have prefix '_'. (Rule 'Fields').",
+								"672,678": "Name should have prefix '_'. (Rule 'Fields')."
+							},
+							"origin_encoding": "UTF-8-SIG",
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Assets/Scripts/TollGateManager.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 264,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								76,
+								76
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"oops":
+							{
+								"0,5": "Using directive is not used by code and can be removed safely.",
+								"19,24": "Using directive is not used by code and can be removed safely."
+							},
 							"syntax": "Packages/C#/C#.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Assets/Scripts/TollGateController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1498,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								402,
+								402
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": true,
+							"oops":
+							{
+								"1258,1282": "Empty argument list is redundant",
+								"158,165": "Name should have prefix '_'. (Rule 'Fields').",
+								"19,24": "Using directive is not used by code and can be removed safely.",
+								"555,564": "Name should have prefix '_'. (Rule 'Fields').",
+								"582,592": "Name should have prefix '_'. (Rule 'Fields').",
+								"638,650": "Name should have prefix '_'. (Rule 'Fields').",
+								"653,658": "Initializing field by default value is redundant"
+							},
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -979,26 +1329,83 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "/Users/ppby-build/Library/Application Support/Sublime Text 3/Packages/User/OmniSharpSublime.sublime-settings",
+					"buffer": 7,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 199,
+						"buffer_size": 445,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										142,
+										166
+									],
+									[
+										264,
+										288
+									],
+									[
+										392,
+										416
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								158,
+								158
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"is_init_dirty_state": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Assets/Scripts/StartButtonController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 654,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								193,
-								193
+								311,
+								311
 							]
 						],
 						"settings":
 						{
-							"auto_complete": true,
-							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+							"is_init_dirty_state": false,
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1043,7 +1450,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 112.0
+		"height": 130.0
 	},
 	"output.find_results":
 	{
@@ -1051,7 +1458,7 @@
 	},
 	"output.variable_get":
 	{
-		"height": 0.0
+		"height": 65.0
 	},
 	"pinned_build_system": "",
 	"project": "demo.sublime-project",
@@ -1066,6 +1473,14 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"tollgatede",
+				"Scripts\\TollGateDetailController.cs"
+			],
+			[
+				"confi",
+				"Scripts\\ConfigManagerr.cs"
+			],
 			[
 				"camer",
 				"Assets/Scripts/CamerController.cs"
@@ -1459,10 +1874,6 @@
 				"Scripts/PlayerTroopController.cs"
 			],
 			[
-				"confi",
-				"Scripts/ConfigManagerr.cs"
-			],
-			[
 				"flycon",
 				"Scripts/characters/FlyerController.cs"
 			],
@@ -1573,10 +1984,6 @@
 			[
 				"trico",
 				"Config/trick_config.json"
-			],
-			[
-				"cahr",
-				"Assets/Config/character_config.json"
 			]
 		],
 		"width": 0.0

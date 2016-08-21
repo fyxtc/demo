@@ -354,18 +354,34 @@ public class GateModel{
 }
 
 public class GateConfig{
-    public const string GATE_CONFIG_FILE = "gate_config.json";
+    protected string configFile = "";
     public GateModel[] GateModels{get; set;}
     public void LoadConfig(){
-        string str = DemoUtil.ReadConfigFile(GATE_CONFIG_FILE);
+        // Debug.Log("laod gate config " + configFile);
+        string str = DemoUtil.ReadConfigFile(configFile);
         GateModels = JsonMapper.ToObject<GateModel[]>(str);    
 
         foreach(GateModel m in GateModels){
             for(int i = 0; i < m.troopsType.Length; i++){
-                m.troops.Add((TroopType)(m.troopsType[i]), m.troopsCount[i]);
+                if(m.troopsCount[i] != 0){
+                    m.troops.Add((TroopType)(m.troopsType[i]), m.troopsCount[i]);
+                }
             }
         }
-        // Debug.Log(GateModels.Length + ", " + GateModels[0].troopsType[3]);
+        // Debug.Log(GateModels.Length + ", " + GateModels[0].troops.Count);
+    }
+    
+}
+
+public class GateConfigSimple : GateConfig{
+    public GateConfigSimple(){
+        configFile = "gate_config_simple.json";
+    }
+}
+
+public class GateConfigDiff : GateConfig{
+    public GateConfigDiff(){
+        configFile = "gate_config_diff.json";
     }
 }
 
@@ -376,7 +392,8 @@ public class ConfigManager{
 	public SkillConfig SkillConfig{ get; set;}
     public TrickConfig TrickConfig{ get; set;}
     public TestConfig TestConfig{ get; set;}
-    public GateConfig GateConfig{ get; set;}
+    public GateConfigSimple GateConfigSimple{ get; set;}
+    public GateConfigDiff GateConfigDiff{ get; set;}
     bool isLoaded = false;
 
     private ConfigManager(){
@@ -384,7 +401,8 @@ public class ConfigManager{
         SkillConfig = new SkillConfig();
         TrickConfig = new TrickConfig();
         TestConfig = new TestConfig();
-        GateConfig = new GateConfig();
+        GateConfigSimple = new GateConfigSimple();
+        GateConfigDiff = new GateConfigDiff();
         LoadConfig(false);
     }
 
@@ -403,7 +421,10 @@ public class ConfigManager{
             SkillConfig.LoadConfig();
             TrickConfig.LoadConfig();
             TestConfig.LoadConfig();
-            GateConfig.LoadConfig();
+            GateConfigSimple.LoadConfig();
+            GateConfigDiff.LoadConfig();
+
+            Debug.Assert(GateConfigSimple.GateModels.Length == GateConfigDiff.GateModels.Length, "simple models is different from diff");
         }
     }
 

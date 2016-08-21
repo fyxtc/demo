@@ -1,22 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using Prime31.TransitionKit;
 
 public class TollGateController : MonoBehaviour{
 	public int curGate;
+	public GameObject detailPanel;
+
 	void Start(){
-		// Debug.Log("curGate " + curGate);
+		GetComponent<Button>().onClick.AddListener(OnClick);
+		detailPanel.SetActive(false);
 	}
 
-	void OnMouseDown(){
-		Debug.Log("OnMouseDown gate " + curGate);
-		TollGateManager.Instance.CurGate = curGate;
-		var slices = new VerticalSlicesTransition()
-		{
-			nextScene = 2,
-			divisions = Random.Range( 3, 20 )
-		};
-		TransitionKit.instance.transitionWithDelegate( slices );
+	void OnClick(){
+		// Debug.Log("click gate " + curGate);
+		detailPanel.GetComponent<TollGateDetailController>().UpdateUI(curGate, true);
+		detailPanel.SetActive(!detailPanel.activeSelf);
 	}
-
 }
