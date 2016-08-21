@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -73,4 +74,33 @@ public class DemoUtil{
         }
         return false;
     }
+
+    public static string List2String(List<int> l1){
+        List<string> l2 = l1.ConvertAll<string>(x => x.ToString());
+        string res = string.Join(",", l2.ToArray());
+        return res;
+    }
+
+    public static List<string> ListInt2ListString(List<int> l1){
+        // List<string> l2 = l1.ConvertAll<string>(delegate(int i) { return i.ToString(); });
+        List<string> l2 = l1.ConvertAll<string>(x => x.ToString());
+        return l2;
+    }
+
+    public static List<int> String2List(string str){
+        List<string> l1 = new List<string>(str.Split(','));
+        // Debug.Log(string.Join(",", l1.ToArray()));
+        // Debug.Log(l1.Count + ":1" + l1[0] + "1" + (l1[0] == "" ? 0 : int.Parse(l1[0])));
+        if(l1.Count > 0){
+            List<int> res = l1.ConvertAll<int>(x => x == "" ? 0 : int.Parse(x));
+            return res;
+        }else{
+            return default(List<int>);
+        }
+    }
+
+    // public static string Dict2String(Dictionary<TroopType, int> dictionary){
+    //     var res = string.Join(";", dictionary);
+    //     return res;
+    // }
 }

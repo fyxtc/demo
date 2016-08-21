@@ -16,11 +16,7 @@ public class BackController : MonoBehaviour {
 	}
 
 	void OnClick(){
-        // TEST
-        int curGate = TollGateManager.Instance.CurGate;
-        if(curGate + 1 > TollGateManager.Instance.UnlockGate){
-            TollGateManager.Instance.UnlockGate = Mathf.Min(15, curGate + 1);
-        }
+        PlayerManager.Instance.UpdateUnlockGate();
 		SceneManager.LoadScene(1);
 	}
 }

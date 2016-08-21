@@ -21,19 +21,11 @@ public class MapController : MonoBehaviour {
     }
 
     void UpdateMap(){
-        unlockGate = TollGateManager.Instance.UnlockGate;
+        unlockGate = PlayerManager.Instance.unlockGate;
         Debug.Log("update map to lock gate: " + unlockGate);
         for(int i = unlockGate+1; i < tollGates.Length; i++){
             tollGates[i].SetActive(false);
         }
     }
 
-    // 每次回大地图的时候刷新就行了，没必要发事件
-    // void UpdateMap(){
-    //     if(TollGateManager.Instance.UnlockGate > unlockGate){
-    //         unlockGate = TollGateManager.Instance.UnlockGate;
-    //         Debug.Log("unlock new gate " + unlockGate);
-    //         tollGates[unlockGate].SetActive(true);
-    //     }
-    // }
 }

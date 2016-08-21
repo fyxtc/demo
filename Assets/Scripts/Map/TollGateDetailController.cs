@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 public class TollGateDetailController : MonoBehaviour {
     public int CurGate{get; set;}
     public int CurStar{get; set;}
-    public int CurDifficulty{get; set;}
     private GateConfig gateConfig;
 
     public GameObject detailPanel;
@@ -35,7 +34,7 @@ public class TollGateDetailController : MonoBehaviour {
 
     void OnAttack(){
         // OnClose();
-        TollGateManager.Instance.CurGate = CurGate;
+        PlayerManager.Instance.curGate = CurGate;
 
         // var slices = new VerticalSlicesTransition()
         // {
