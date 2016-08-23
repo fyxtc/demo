@@ -24,7 +24,7 @@ public class TroopStatusButton : MonoBehaviour {
 
     public void UpdateStatus(){
     	ButtonStatus newStatus = GetTroopStatus();
-    	Debug.Log(type + ": " + Status + " -> " + newStatus);
+    	// Debug.Log(type + ": " + Status + " -> " + newStatus);
     	Status = newStatus;
     	statusText.text = newStatus.ToString();
     }
