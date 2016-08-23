@@ -3,6 +3,8 @@ using System.Collections;
 using Spine.Unity;
 
 public class TroopShowController : MonoBehaviour {
+	public TroopType type;
+
 
 	#region Inspector
 	// [SpineAnimation] attribute allows an Inspector dropdown of Spine animation names coming form SkeletonAnimation.

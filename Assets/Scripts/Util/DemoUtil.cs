@@ -103,6 +103,14 @@ public class DemoUtil{
         }
     }
 
+    public static HashSet<TroopType> String2Set(string str){
+        List<int> l1 = DemoUtil.String2List(str);
+        List<TroopType> res = l1.ConvertAll<TroopType>(x => (TroopType)x);
+        return new HashSet<TroopType>(res);
+    }
+
+
+
     // public static string Dict2String(Dictionary<TroopType, int> dictionary){
     //     var res = string.Join(";", dictionary);
     //     return res;
