@@ -122,6 +122,7 @@ public class PlayerManager {
     public void SaveTroops(){
         PlayerPrefs.SetString(KEY_OWN_TROOPS, DemoUtil.List2String(ownTroops));
         PlayerPrefs.SetString(KEY_USING_TROOPS, DemoUtil.List2String(usingTroops));
+        // Debug.Log("save usingTroops: " + DemoUtil.List2String(usingTroops));
     }
 
     public override string ToString(){

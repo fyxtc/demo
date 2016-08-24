@@ -69,13 +69,22 @@ public class PlayerTroopController : MonoBehaviour {
     protected virtual void InitData(){
         // TODO: subclass
         if(IsMy){
-            int[] my = ConfigManager.share().TestConfig.TestModels[0].troops;
-            for(int i = 0; i < my.Length; i++){
-                if(my[i] !=0){
-                    data.Add((TroopType)i, my[i]);
-                }
+            // int[] my = ConfigManager.share().TestConfig.TestModels[0].troops;
+            // for(int i = 0; i < my.Length; i++){
+            //     if(my[i] !=0){
+            //         data.Add((TroopType)i, my[i]);
+            //     }
+            // }
+            // skillIds = new List<int>{0, 1, 2};
+
+            List<int> my = PlayerManager.Instance.UsingTroops;
+            for(int i = 0; i < my.Count; i++){
+                TroopType type = (TroopType)my[i];
+                int max = ConfigManager.share().CharacterConfig.GetModel(type).MaxCount;
+                max = 1; // test
+                data.Add(type, max);
             }
-            skillIds = new List<int>{0, 1, 2};
+            skillIds = PlayerManager.Instance.Skills;
         }else{
             int currentGate = 0;
             currentGate = PlayerManager.Instance.CurGate;

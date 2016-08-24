@@ -69,6 +69,7 @@ public class TroopsStatusController : MonoBehaviour {
 	}
 
 	void InsertTroop(TroopType type){
+		// Debug.Log("insert troop " + type);
 		GameObject newTroop = CreateTroopByType(type);
 		int insertIndex = GetInsertIndex(type);
 		Debug.Assert(0 <= insertIndex && insertIndex <= showTroops.Length);
@@ -160,7 +161,7 @@ public class TroopsStatusController : MonoBehaviour {
 		List<int> troops = PlayerManager.Instance.UsingTroops;
 		// List<int> troops = new List<int>{0, 1, 2};
 		for(int i = 0; i < troops.Count; i++){
-			InsertTroop((TroopType)i);
+			InsertTroop((TroopType)troops[i]);
 		}
 
 		// foreach(GameObject obj in buttons){
@@ -168,7 +169,7 @@ public class TroopsStatusController : MonoBehaviour {
 		// }
 		// 委托的两种写法
 		clean.onClick.AddListener(() => PlayerPrefs.DeleteAll());
-		ok.onClick.AddListener(delegate() { PlayerManager.Instance.SaveTroops();});
+		ok.onClick.AddListener(delegate() { PlayerManager.Instance.SaveTroops();gameObject.SetActive(false);});
 		cancel.onClick.AddListener(() => gameObject.SetActive(false));
 
 	}
