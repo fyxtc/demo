@@ -84,7 +84,7 @@ public class PlayerTroopController : MonoBehaviour {
                 max = 1; // test
                 data.Add(type, max);
             }
-            skillIds = PlayerManager.Instance.Skills;
+            skillIds = PlayerManager.Instance.UsingSkills;
         }else{
             int currentGate = 0;
             currentGate = PlayerManager.Instance.CurGate;

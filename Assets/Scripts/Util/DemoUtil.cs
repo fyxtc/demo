@@ -87,7 +87,7 @@ public class DemoUtil{
         return l2;
     }
 
-    public static List<int> String2List(string str, int initZeroCount=0){
+    public static List<int> String2List(string str, int initZeroCount=0, int initValue=0){
         List<string> l1 = new List<string>(str.Split(','));
         // Debug.Log(string.Join(",", l1.ToArray()));
         // Debug.Log(l1.Count + ":1" + l1[0] + "1" + (l1[0] == "" ? 0 : int.Parse(l1[0])));
@@ -97,7 +97,7 @@ public class DemoUtil{
         }else{
             List<int> res = new List<int>();
             for(int i = 0; i < initZeroCount; i++){
-                res.Add(0);
+                res.Add(initValue);
             }
             return res;
         }

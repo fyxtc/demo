@@ -12,10 +12,12 @@ public class PlayerManager {
     private const string KEY_GOLD = "KEY_GOLD";
     private const string KEY_OWN_TROOPS = "KEY_OWN_TROOPS";
     private const string KEY_USING_TROOPS = "KEY_USING_TROOPS";
-    private const string KEY_SKILLS = "KEY_SKILLS";
+    private const string KEY_OWN_SKILLS = "KEY_OWN_SKILLS";
+    private const string KEY_USING_SKILLS = "KEY_USING_SKILLS";
 
     //改成 Application.persistentDataPath永久存储
     public readonly int MAX_GATE = 15;
+    public readonly int MAX_SKILL_CARRY = 2;
     public static readonly PlayerManager Instance = new PlayerManager();
     // public static readonly PlayerManager Instance = LocalUtil.SharedInstance.Load<PlayerManager>(LOCAL_FILE);
     private int curGate = 0;
@@ -25,7 +27,8 @@ public class PlayerManager {
     private int gold;
     private List<int> ownTroops;
     private List<int> usingTroops;
-    private List<int> skills;
+    private List<int> ownSkills;
+    private List<int> usingSkills;
 
     public int CurGate{get{return curGate;}}
     public int UnlockGate{get{return unlockGate;}}
@@ -36,7 +39,8 @@ public class PlayerManager {
     // 这里完全没有必要用DICT，因为个数一定是指定的最大个数
     public List<int> OwnTroops{get{return ownTroops;}}
     public List<int> UsingTroops{get{return usingTroops;}}
-    public List<int> Skills{get{return skills;}}
+    public List<int> OwnSkills{get{return ownSkills;}}
+    public List<int> UsingSkills{get{return usingSkills;}}
 
     public void LoadLocalData(){
         curGate = PlayerPrefs.GetInt(KEY_CUR_GATE);
@@ -47,12 +51,13 @@ public class PlayerManager {
 
         ownTroops = DemoUtil.String2List(PlayerPrefs.GetString(KEY_OWN_TROOPS));
         usingTroops = DemoUtil.String2List(PlayerPrefs.GetString(KEY_USING_TROOPS));
-        skills = DemoUtil.String2List(PlayerPrefs.GetString(KEY_SKILLS));
+        ownSkills = DemoUtil.String2List(PlayerPrefs.GetString(KEY_OWN_SKILLS));
+        usingSkills = DemoUtil.String2List(PlayerPrefs.GetString(KEY_USING_SKILLS), MAX_SKILL_CARRY, (int)SkillType.SKILL_INVALID);
 
         // test
         // UpdateOwnTroops(TroopType.TROOP_SABER);
 
-        Debug.Log("LOAD DATA: " +"ownTroops:"+ownTroops.Count+", usingTroops:"+usingTroops.Count+", skills:"+skills.Count + ", curGate:"+curGate+", unlockGate:"+unlockGate+", gold:"+gold+", stars:"+simpleStars.Count);
+        Debug.Log("LOAD DATA: " +"ownTroops:"+ownTroops.Count+", usingTroops:"+usingTroops.Count+", skills:"+ownSkills.Count + ", curGate:"+curGate+", unlockGate:"+unlockGate+", gold:"+gold+", stars:"+simpleStars.Count);
     }
 
     public void UpdateCurGate(int gate){
@@ -110,19 +115,32 @@ public class PlayerManager {
         }
     }
 
-    public void UpdateSkills(SkillType type){
-        if(ownTroops.Count(i => i.Equals((int)type)) == 1){
+    public void UpdateOwnSkills(SkillType type){
+        if(ownSkills.Count(i => i.Equals((int)type)) == 1){
             Debug.Assert(false);
             return;
         }
-        skills.Add((int)type);
-        PlayerPrefs.SetString(KEY_SKILLS, DemoUtil.List2String(skills));
+        ownSkills.Add((int)type);
+        PlayerPrefs.SetString(KEY_OWN_SKILLS, DemoUtil.List2String(ownSkills));
+    }
+
+    public void UpdateUsingSkills(SkillType type, int index, bool save=false){
+        usingSkills[index] = (int)type;
+        if(save){
+            PlayerPrefs.SetString(KEY_USING_SKILLS, DemoUtil.List2String(usingSkills));
+        }
     }
 
     public void SaveTroops(){
         PlayerPrefs.SetString(KEY_OWN_TROOPS, DemoUtil.List2String(ownTroops));
         PlayerPrefs.SetString(KEY_USING_TROOPS, DemoUtil.List2String(usingTroops));
         // Debug.Log("save usingTroops: " + DemoUtil.List2String(usingTroops));
+    }
+
+    public void SaveSkills(){
+        PlayerPrefs.SetString(KEY_OWN_SKILLS, DemoUtil.List2String(ownSkills));
+        PlayerPrefs.SetString(KEY_USING_SKILLS, DemoUtil.List2String(usingSkills));
+
     }
 
     public override string ToString(){

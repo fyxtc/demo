@@ -9,12 +9,17 @@ public class MapController : MonoBehaviour {
     private int unlockGate;
     public Button editTroop;
     public GameObject editTroopPanel;
+    public Button editSkill;
+    public GameObject editSkillPanel;
+
 
 	// Use this for initialization
 	void Start () {
 	   Debug.Assert(tollGates.Length != 0, "tollGates length 0");
        editTroopPanel.SetActive(false);
        editTroop.onClick.AddListener(() => editTroopPanel.SetActive(!editTroopPanel.activeSelf));
+       editSkillPanel.SetActive(false);
+       editSkill.onClick.AddListener(() => editSkillPanel.SetActive(!editSkillPanel.activeSelf));
     }
     
     // Update is called once per frame

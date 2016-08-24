@@ -51,7 +51,6 @@ public class TroopsStatusController : MonoBehaviour {
 				break;
 			case ButtonAction.UNLOCKED:
 				PlayerManager.Instance.UpdateOwnTroops(type);
-				// UpdateButtonStatus(type);
 				break;
 			default:
 				Debug.Assert(false);
