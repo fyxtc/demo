@@ -23,16 +23,39 @@ public class TroopsStatusController : MonoBehaviour {
 		}
 	}
 
+	public ButtonStatus GetButtonStatus(TroopType type){
+		return buttons[(int)type].GetComponent<TroopStatusButton>().GetTroopStatus();
+	}
+
 	void OnTroopStatusEvent(object sender, EventArgs e){
+		TroopStatusButton btn = sender as TroopStatusButton;
 		TroopStatusEvent ev = (TroopStatusEvent)e;
 		TroopType type = ev.Type;
-		bool isAdd = ev.IsAdd;
-		if(isAdd){
-			InsertTroop(type);
-		}else{
-			RemoveTroop(type);
+		ButtonAction action = ev.Action;
+		switch(action){
+			case ButtonAction.SELECTED:
+				if(GetShowCount() == 4){
+					Debug.Log("show count max");
+				}else{
+					PlayerManager.Instance.UpdateUsingTroops(type, true);
+					InsertTroop(type);
+				}
+				break;
+			case ButtonAction.DISSELECTED:
+				PlayerManager.Instance.UpdateUsingTroops(type, false);
+				RemoveTroop(type);
+				break;
+			case ButtonAction.UNLOCKED:
+				PlayerManager.Instance.UpdateOwnTroops(type);
+				// UpdateButtonStatus(type);
+				break;
+			default:
+				Debug.Assert(false);
+				break;
 		}
+		btn.UpdateStatus();
 	}
+
 
 	GameObject CreateTroopByType(TroopType type){
 		GameObject newObj = Instantiate(prefabs[(int)type]) as GameObject;
@@ -59,8 +82,12 @@ public class TroopsStatusController : MonoBehaviour {
 		ResortSiblingIndex();
 	}
 
+	int GetShowCount(){
+		return showTroops.Count(x => x != null);
+	}
+
 	void ResortSiblingIndex(){
-		int count = showTroops.Count(x => x != null);
+		int count = GetShowCount();
 		for(int i = 0; i < showTroops.Length; i++){
 			if(showTroops[i]){
 				// Debug.Log("set " + i + " index " + (count-1-i));
@@ -126,11 +153,15 @@ public class TroopsStatusController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		// List<int> troops = PlayerManager.Instance.UsingTroops;
-		List<int> troops = new List<int>{0, 1, 2};
+		List<int> troops = PlayerManager.Instance.UsingTroops;
+		// List<int> troops = new List<int>{0, 1, 2};
 		for(int i = 0; i < troops.Count; i++){
 			InsertTroop((TroopType)i);
 		}
+
+		// foreach(GameObject obj in buttons){
+		// 	obj.GetComponent<TroopStatusButton>().UpdateStatus();
+		// }
 	}
 	
 	// Update is called once per frame

@@ -109,6 +109,28 @@ public class DemoUtil{
         return new HashSet<TroopType>(res);
     }
 
+    public static TroopType GetSuper1(TroopType type){
+        return (TroopType)((int)type + 9*1); // 基础兵9种
+    }
+
+    public static TroopType GetSuper2(TroopType type){
+        return (TroopType)((int)type + 9*2); // 基础兵9种
+    }
+
+    public static TroopType GetBase(TroopType type){
+        int t = (int)type;
+        int baseCount = 9; // todo: move to configmanager
+        if(t <= (int)TroopType.TROOP_TITAN){
+            return type;
+        }else if(t <= (int)TroopType.TROOP_TITAN_SUPER1){
+            return (TroopType)(t - baseCount);
+        }else if(t <= (int)TroopType.TROOP_TITAN_SUPER2){
+            return (TroopType)(t - baseCount*2);
+        }else{
+            Debug.Assert(false);
+            return TroopType.TROOP_SERVANT;
+        }
+    }
 
 
     // public static string Dict2String(Dictionary<TroopType, int> dictionary){
