@@ -32,6 +32,23 @@ public class TroopStatusButton : MonoBehaviour {
     	// Debug.Log(type + ": " + Status + " -> " + newStatus);
     	Status = newStatus;
     	statusText.text = newStatus.ToString();
+
+    	Color color = Color.white;
+    	switch(Status){
+    		case ButtonStatus.COMMON:
+	    		color = Color.white;
+	    		break;
+	    	case ButtonStatus.LOCKED:
+	    		color = Color.gray;
+	    		break;
+	    	case ButtonStatus.SELECTED:
+	    		color = Color.blue;
+	    		break;
+	    	case ButtonStatus.TOBUY:
+	    		color = Color.red;
+	    		break;
+    	}
+    	GetComponent<Image>().color = color;
     }
 
    	public ButtonStatus GetTroopStatus(){

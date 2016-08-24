@@ -9,7 +9,10 @@ public class TroopsStatusController : MonoBehaviour {
 	public GameObject[] showTroops;
 	public GameObject[] prefabs;
 	public GameObject[] buttons;
-	public GameObject panel;
+	public GameObject showPanel;
+	public Button ok;
+	public Button clean;
+	public Button cancel;
 	// private GameObject[] showTroops = new GameObject[4]; // sorted by rank
 
 	void Awake(){
@@ -21,6 +24,7 @@ public class TroopsStatusController : MonoBehaviour {
 		for(int i = 0; i < buttons.Length; i++){
 			buttons[i].GetComponent<TroopStatusButton>().Handler += OnTroopStatusEvent;
 		}
+
 	}
 
 	public ButtonStatus GetButtonStatus(TroopType type){
@@ -59,7 +63,7 @@ public class TroopsStatusController : MonoBehaviour {
 
 	GameObject CreateTroopByType(TroopType type){
 		GameObject newObj = Instantiate(prefabs[(int)type]) as GameObject;
-		newObj.transform.SetParent(panel.transform);
+		newObj.transform.SetParent(showPanel.transform);
 		newObj.transform.localScale = new Vector3(15, 15, 0);
 		return newObj;
 	}
@@ -162,6 +166,11 @@ public class TroopsStatusController : MonoBehaviour {
 		// foreach(GameObject obj in buttons){
 		// 	obj.GetComponent<TroopStatusButton>().UpdateStatus();
 		// }
+		// 委托的两种写法
+		clean.onClick.AddListener(() => PlayerPrefs.DeleteAll());
+		ok.onClick.AddListener(delegate() { PlayerManager.Instance.SaveTroops();});
+		cancel.onClick.AddListener(() => gameObject.SetActive(false));
+
 	}
 	
 	// Update is called once per frame

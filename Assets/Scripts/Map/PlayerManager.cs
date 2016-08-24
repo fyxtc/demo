@@ -87,23 +87,27 @@ public class PlayerManager {
         PlayerPrefs.SetInt(KEY_GOLD, gold);
     }
 
-    public void UpdateOwnTroops(TroopType type){
+    public void UpdateOwnTroops(TroopType type, bool save=false){
         if(ownTroops.Count(i => i.Equals((int)type)) == 1){
             return;
         }
         ownTroops.Add((int)type);
         Debug.Assert(ownTroops.Count(i => i.Equals((int)type)) == 1);
-        PlayerPrefs.SetString(KEY_OWN_TROOPS, DemoUtil.List2String(ownTroops));
+        if(save){
+            PlayerPrefs.SetString(KEY_OWN_TROOPS, DemoUtil.List2String(ownTroops));
+        }
     }
 
-    public void UpdateUsingTroops(TroopType type, bool addIn){
+    public void UpdateUsingTroops(TroopType type, bool addIn, bool save=false){
         if(addIn){
             usingTroops.Add((int)type);
             Debug.Assert(usingTroops.Count(i => i.Equals((int)type)) == 1);
         }else{
             usingTroops.Remove((int)type);
         }
-        PlayerPrefs.SetString(KEY_USING_TROOPS, DemoUtil.List2String(usingTroops));
+        if(save){
+            PlayerPrefs.SetString(KEY_USING_TROOPS, DemoUtil.List2String(usingTroops));
+        }
     }
 
     public void UpdateSkills(SkillType type){
@@ -113,6 +117,11 @@ public class PlayerManager {
         }
         skills.Add((int)type);
         PlayerPrefs.SetString(KEY_SKILLS, DemoUtil.List2String(skills));
+    }
+
+    public void SaveTroops(){
+        PlayerPrefs.SetString(KEY_OWN_TROOPS, DemoUtil.List2String(ownTroops));
+        PlayerPrefs.SetString(KEY_USING_TROOPS, DemoUtil.List2String(usingTroops));
     }
 
     public override string ToString(){
