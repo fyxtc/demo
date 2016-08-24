@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
+using System.Linq;
 
 public class TroopsStatusController : MonoBehaviour {
 	public GameObject[] showTroops;
@@ -10,17 +11,11 @@ public class TroopsStatusController : MonoBehaviour {
 	public GameObject[] buttons;
 	public GameObject panel;
 	// private GameObject[] showTroops = new GameObject[4]; // sorted by rank
-	private Vector3[] rankPos = new Vector3[4];
 
 	void Awake(){
 		for(int i = 0; i < showTroops.Length; i++){
-			// GameObject newObj = Instantiate(prefabs[i], showTroops[i].transform.position, showTroops[i].transform.rotation) as GameObject;
-			// newObj.transform.SetParent(showTroops[i].transform.parent);
-			// newObj.transform.localScale = new Vector3(15, 15, 0);
-			rankPos[i] = showTroops[i].transform.position;
 			Destroy(showTroops[i]);
 			showTroops[i] = null;
-
 		}
 
 		for(int i = 0; i < buttons.Length; i++){
@@ -53,26 +48,40 @@ public class TroopsStatusController : MonoBehaviour {
 
 		// 为0直接插
 		if(insertIndex != 0){
-			for(int i = showTroops.Length; i > insertIndex; i--){
+			for(int i = showTroops.Length-1; i > insertIndex; i--){
 				if(showTroops[i] == null && showTroops[i-1] != null){
 					showTroops[i] = showTroops[i-1];
-					// showTroops[i].transform.position = rankPos[i];
 					showTroops[i-1] = null;
 				}
 			}
 		}
 		showTroops[insertIndex] = newTroop;
-		// newTroop.transform.position = rankPos[insertIndex];
+		ResortSiblingIndex();
+	}
+
+	void ResortSiblingIndex(){
+		int count = showTroops.Count(x => x != null);
+		for(int i = 0; i < showTroops.Length; i++){
+			if(showTroops[i]){
+				// Debug.Log("set " + i + " index " + (count-1-i));
+				showTroops[i].transform.SetSiblingIndex(count-1 - i);
+			}else{
+				break;
+			}
+		}
 	}
 
 	void RemoveTroop(TroopType type){
 		int targetIndex = FindObjectByTroopType(type);
-		Destroy(showTroops[targetIndex]);
-		showTroops[targetIndex] = null;
-		// resort
-		for(int i = targetIndex+1; i < showTroops.Length; i++){
-			showTroops[i-1] = showTroops[i];
+		if(targetIndex != -1){
+			Destroy(showTroops[targetIndex]);
+			showTroops[targetIndex] = null;
+			// resort
+			for(int i = targetIndex+1; i < showTroops.Length; i++){
+				showTroops[i-1] = showTroops[i];
+			}
 		}
+		ResortSiblingIndex();
 	}
 
 
@@ -81,7 +90,6 @@ public class TroopsStatusController : MonoBehaviour {
 		int insertIndex = -1;
 		// 从右往左，总共有三种情况插入，前插，中插，后插，因为中间肯定不存在空隙的，每次remove都会重排
 		for(int i = 0; i < showTroops.Length; i++){
-			// Debug.Log("fuck " + i + ": " + showTroops[i]);
 			if(showTroops[i]){
 				int iRank = GetRank(showTroops[i]);
 				Debug.Assert(rank != iRank, "same rank");
@@ -96,7 +104,7 @@ public class TroopsStatusController : MonoBehaviour {
 			}
 		}
 		Debug.Assert(insertIndex != -1, "error insert index");
-		return 0;
+		return insertIndex;
 	}
 
 	int GetRank(GameObject obj){
@@ -107,8 +115,10 @@ public class TroopsStatusController : MonoBehaviour {
 
 	int FindObjectByTroopType(TroopType type){
 		for(int i = 0; i < showTroops.Length; i++){
-			if(showTroops[i].GetComponent<TroopShowController>().type == type){
-				return i;
+			if(showTroops[i]){
+				if(showTroops[i].GetComponent<TroopShowController>().type == type){
+					return i;
+				}
 			}
 		}
 		return -1;
