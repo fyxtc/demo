@@ -21,7 +21,7 @@ public class PlayerTroopController : MonoBehaviour {
         get{return isMy;}
         set{isMy = value;}
     }
-    float[] posConfig = {-1.5f, -3.0f, -4.5f, -6.0f};
+    float[] posConfig = {-1.5f, -3.2f, -4.9f, -6.6f};
     int maxCount = 4; // 最多能带四个兵团
     SortedDictionary<TroopType, int> data = new SortedDictionary<TroopType, int>(new TroopTypeComparer()); 
 	// Dictionary<TroopType, int> data = new Dictionary<TroopType, int>(); 
@@ -69,22 +69,22 @@ public class PlayerTroopController : MonoBehaviour {
     protected virtual void InitData(){
         // TODO: subclass
         if(IsMy){
-            // int[] my = ConfigManager.share().TestConfig.TestModels[0].troops;
-            // for(int i = 0; i < my.Length; i++){
-            //     if(my[i] !=0){
-            //         data.Add((TroopType)i, my[i]);
-            //     }
-            // }
-            // skillIds = new List<int>{0, 1, 2};
-
-            List<int> my = PlayerManager.Instance.UsingTroops;
-            for(int i = 0; i < my.Count; i++){
-                TroopType type = (TroopType)my[i];
-                int max = ConfigManager.share().CharacterConfig.GetModel(type).MaxCount;
-                max = 1; // test
-                data.Add(type, max);
+            int[] my = ConfigManager.share().TestConfig.TestModels[0].troops;
+            for(int i = 0; i < my.Length; i++){
+                if(my[i] !=0){
+                    data.Add((TroopType)i, my[i]);
+                }
             }
-            skillIds = PlayerManager.Instance.UsingSkills;
+            skillIds = new List<int>{0, 1, 2, 3, 4, 5};
+
+            // List<int> my = PlayerManager.Instance.UsingTroops;
+            // for(int i = 0; i < my.Count; i++){
+            //     TroopType type = (TroopType)my[i];
+            //     int max = ConfigManager.share().CharacterConfig.GetModel(type).MaxCount;
+            //     max = 1; // test
+            //     data.Add(type, max);
+            // }
+            // skillIds = PlayerManager.Instance.UsingSkills;
         }else{
             int currentGate = 0;
             currentGate = PlayerManager.Instance.CurGate;

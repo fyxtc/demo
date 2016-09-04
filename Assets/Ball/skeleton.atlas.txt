@@ -1,0 +1,103 @@
+
+skeleton.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+images/BasketBall_Head
+  rotate: false
+  xy: 2, 12
+  size: 110, 114
+  orig: 110, 114
+  offset: 0, 0
+  index: -1
+images/BasketBall_Head_2
+  rotate: false
+  xy: 114, 16
+  size: 110, 110
+  orig: 110, 110
+  offset: 0, 0
+  index: -1
+images/Head_Font
+  rotate: false
+  xy: 226, 18
+  size: 96, 108
+  orig: 96, 108
+  offset: 0, 0
+  index: -1
+images/Head_Side
+  rotate: false
+  xy: 324, 24
+  size: 96, 102
+  orig: 96, 102
+  offset: 0, 0
+  index: -1
+images/L_Arm
+  rotate: false
+  xy: 444, 89
+  size: 23, 37
+  orig: 23, 37
+  offset: 0, 0
+  index: -1
+images/L_Calf
+  rotate: true
+  xy: 114, 2
+  size: 12, 43
+  orig: 12, 43
+  offset: 0, 0
+  index: -1
+images/L_Foot
+  rotate: false
+  xy: 2, 2
+  size: 19, 8
+  orig: 19, 8
+  offset: 0, 0
+  index: -1
+images/L_Hand
+  rotate: true
+  xy: 324, 2
+  size: 20, 52
+  orig: 20, 52
+  offset: 0, 0
+  index: -1
+images/L_Thigh
+  rotate: false
+  xy: 422, 32
+  size: 20, 44
+  orig: 20, 44
+  offset: 0, 0
+  index: -1
+images/R_Arm
+  rotate: false
+  xy: 444, 50
+  size: 22, 37
+  orig: 22, 37
+  offset: 0, 0
+  index: -1
+images/R_Calf
+  rotate: true
+  xy: 226, 2
+  size: 14, 43
+  orig: 14, 43
+  offset: 0, 0
+  index: -1
+images/R_Foot
+  rotate: false
+  xy: 23, 2
+  size: 19, 8
+  orig: 19, 8
+  offset: 0, 0
+  index: -1
+images/R_Hand
+  rotate: true
+  xy: 378, 2
+  size: 20, 52
+  orig: 20, 52
+  offset: 0, 0
+  index: -1
+images/R_Thigh
+  rotate: false
+  xy: 422, 78
+  size: 20, 48
+  orig: 20, 48
+  offset: 0, 0
+  index: -1

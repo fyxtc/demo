@@ -8,7 +8,9 @@ public class DemoUtil{
     public static string ReadConfigFile(string file){
         string res = "";
         // win
-        string path = "Assets"+Path.DirectorySeparatorChar+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + file;
+        // string path = "Assets"+Path.DirectorySeparatorChar+Path.DirectorySeparatorChar+"Config"+Path.DirectorySeparatorChar + file;
+        string path = file;
+        Debug.Log("load file: " + path);
         
         // mac
         // string DPath = Application.dataPath;
