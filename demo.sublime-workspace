@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"confi",
+				"configManager"
+			],
+			[
 				"Trop",
 				"Troops	(PlayerTroopController.cs)"
 			],
@@ -510,10 +514,6 @@
 			[
 				"Is",
 				"IsRemoteCategory	(FlyerController.cs)"
-			],
-			[
-				"Bse",
-				"BaseController"
 			]
 		]
 	},
@@ -524,6 +524,41 @@
 			"settings":
 			{
 				"buffer_size": 3357,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Scripts/Map/TroopStatusButton.cs",
+			"settings":
+			{
+				"buffer_size": 3153,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "using UnityEngine;\nusing UnityEngine.SceneManagement;\n\npublic class CamerController : MonoBehaviour {\n    ConfigManager configManager;\n	// Use this for initialization\n\n    void Awake(){\n        configManager = ConfigManager.share();\n        configManager.ConfigPath\n    	configManager.LoadConfig(true);\n        \n    }\n\n    void Start () {\n    	 \n		// Debug.Log(\"saber: \" + configManager.CharacterConfig.Saber.Life);\n		// Debug.Log(\"archer: \" + configManager.CharacterConfig.Archer.Attack);\n	}\n\n    // IEnumerator LoadConfig(string file)\n    // {\n    //     string sPath= Application.streamingAssetsPath + Path.DirectorySeparatorChar + file;\n    //     WWW www = new WWW(sPath);\n    //     yield return www;\n    //     _result = www.text;\n    // }\n	\n	// Update is called once per frame\n	void Update () {\n		if (Input.GetKeyDown (KeyCode.Return)) {  \n            // ConfigManager.share().LoadConfig(true);\n			SceneManager.LoadScene (\"main\");\n		} \n	}\n}\n",
+			"file": "Assets/Scripts/Battle/CamerController.cs",
+			"file_size": 881,
+			"file_write_time": 131160895782343936,
+			"settings":
+			{
+				"buffer_size": 949,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/F/[异域-11番小队][爆漫王第二季Bakuman_II][BDRIP][1-25+SP][X264_AAC][720P]/[YYDM-11FANS][Bakuman_II][BDRIP][12][X264_AAC][720P][32FF4F2B].DMG-tc.ass",
+			"settings":
+			{
+				"buffer_size": 25122,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/Scripts/Util/ConfigManagerr.cs",
+			"settings":
+			{
+				"buffer_size": 13213,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,7 +574,7 @@
 			"file": "Assets/Scripts/map/PlayerManager.cs",
 			"settings":
 			{
-				"buffer_size": 3119,
+				"buffer_size": 5877,
 				"line_ending": "Unix"
 			}
 		},
@@ -555,7 +590,7 @@
 			"file": "Assets/Scripts/Util/DemoUtil.cs",
 			"settings":
 			{
-				"buffer_size": 4044,
+				"buffer_size": 5068,
 				"line_ending": "Unix"
 			}
 		},
@@ -579,7 +614,7 @@
 			"file": "Assets/Scripts/battle/MapController.cs",
 			"settings":
 			{
-				"buffer_size": 1091,
+				"buffer_size": 1502,
 				"line_ending": "Unix"
 			}
 		},
@@ -592,20 +627,10 @@
 			}
 		},
 		{
-			"contents": "Searching 66 files for \"UpdateMap\" (whole word)\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\battle\\MapController.cs:\n   23:         UpdateMap();\n   26:     void UpdateMap(){\n\n2 matches in 1 file\n\n\nSearching 66 files for \"PlayerManager.Instance\" (whole word)\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\battle\\BackController.cs:\n   19:         PlayerManager.Instance.UpdateUnlockGate();\n   20:         PlayerManager.Instance.UpdateStars(1, true);\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\battle\\MapController.cs:\n   22:         PlayerManager.Instance.LoadLocalData();\n   28:         unlockGate = PlayerManager.Instance.UnlockGate;\n   36:         PlayerManager.Instance.UpdateGold(10);\n   37:         goldText.text = \"GOLD: \" + PlayerManager.Instance.Gold;\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\battle\\PlayerTroopController.cs:\n   81:             currentGate = PlayerManager.Instance.curGate;\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\map\\TollGateDetailController.cs:\n   38:         PlayerManager.Instance.UpdateCurGate(CurGate);\n   50:         // PlayerManager.Instance.UpdateStars(1, true);\n  103:         int curStar = isSimple ? PlayerManager.Instance.SimpleStars[curGate] : PlayerManager.Instance.DiffStars[curGate];\n\n11 matches across 4 files\n\n\nSearching 66 files for \"String2List\" (whole word)\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\map\\PlayerManager.cs:\n   36:         simpleStars = DemoUtil.String2List(PlayerPrefs.GetString(KEY_SIMPLE_STARS));\n   37:         diffStars = DemoUtil.String2List(PlayerPrefs.GetString(KEY_DIFF_STARS));\n\nD:\\unity_workspace\\Demo\\Assets\\Scripts\\Util\\DemoUtil.cs:\n   90:     public static List<int> String2List(string str, int initZeroCount=0){\n\n3 matches across 2 files\n",
-			"settings":
-			{
-				"buffer_size": 1697,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
 			"file": "Assets/Scripts/battle/PlayerTroopController.cs",
 			"settings":
 			{
-				"buffer_size": 17516,
+				"buffer_size": 17931,
 				"line_ending": "Unix"
 			}
 		}
@@ -686,6 +711,10 @@
 	],
 	"file_history":
 	[
+		"/C/Users/Administrator/Desktop/[DMG][Bakuman]/第二季/[DMG][Bakuman2][12][AVC_AAC][720P].tc.ass",
+		"/C/Users/Administrator/Desktop/Live Training 16 Dec 2013 - 2D Character Controllers [English].srt",
+		"/C/Users/Administrator/Desktop/youtube/Tutorials - 2D Roguelike Project/2D Roguelike 3 of 14 - Tile Prefabs [English].srt",
+		"/D/Program Files/shadowsocks/SwitchyPac.pac",
 		"/D/unity_workspace/Demo/Assets/Scripts/Util/ConfigManagerr.cs",
 		"/D/unity_workspace/Demo/Assets/Scripts/Util/PlayerInfo.cs",
 		"/D/unity_workspace/Demo/Assets/Scripts/map/TollGateManager.cs",
@@ -809,11 +838,7 @@
 		"/Users/ppby-build/Desktop/demo/demo/Assets/Scripts/BaseCharacter.cs",
 		"/Users/ppby-build/Desktop/demo/demo/Assets/Examples/Scripts/RaggedySpineboy.cs",
 		"/Users/ppby-build/Desktop/demo/demo/Assets/Examples/Scripts/SpineboyPole.cs",
-		"/Users/ppby-build/Test/Assets/Scripts/BombPickup.cs",
-		"/Users/ppby-build/Test/Assets/Scripts/BackgroundParallax.cs",
-		"/Users/ppby-build/Test/Assets/Scripts/SetParticleSortingLayer.cs",
-		"/Users/ppby-build/Test/Assets/Scripts/PlayerHealth.cs",
-		"/Users/ppby-build/.ssh/id_rsa.pub"
+		"/Users/ppby-build/Test/Assets/Scripts/BombPickup.cs"
 	],
 	"find":
 	{
@@ -832,6 +857,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"GameObject",
 			"String2List",
 			"PlayerManager.Instance",
 			"public",
@@ -958,8 +984,7 @@
 			"27",
 			"rank",
 			"1",
-			"Dictionary",
-			"List"
+			"Dictionary"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1002,7 +1027,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -1018,12 +1043,13 @@
 						"selection":
 						[
 							[
-								1001,
-								1011
+								1188,
+								1188
 							]
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"101,106": "Using directive is not used by code and can be removed safely.",
@@ -1051,11 +1077,181 @@
 						"translation.y": 354.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"file": "Assets/Scripts/Map/TroopStatusButton.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3153,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								463,
+								463
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"oops":
+							{
+								"113,126": "'MonoBehaviour' is not a known identifier",
+								"145,155": "'GameObject' is not a known identifier",
+								"6,17": "'UnityEngine' is not a known identifier"
+							},
+							"syntax": "Packages/C#/C#.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Assets/Scripts/Battle/CamerController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 949,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								265,
+								265
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": true,
+							"syntax": "Packages/C#/C#.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/F/[异域-11番小队][爆漫王第二季Bakuman_II][BDRIP][1-25+SP][X264_AAC][720P]/[YYDM-11FANS][Bakuman_II][BDRIP][12][X264_AAC][720P][32FF4F2B].DMG-tc.ass",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 25122,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2466,
+								2466
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Assets/Scripts/Util/ConfigManagerr.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13213,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10885,
+								10895
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"oops":
+							{
+								"0,5": "Using directive is not used by code and can be removed safely.",
+								"10509,10517": "'instance' should start with an upper case letter. (Rule 'Static Readonly Fields')",
+								"1112,1114": "Convert to 'return' statement",
+								"11271,11276": "'share' should start with an upper case letter. (Rule 'Methods')",
+								"1177,1181": "Redundant 'else' keyword",
+								"1206,1207": "Type cast is redundant",
+								"12077,12089": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"1306,1313": "Convert to auto property",
+								"13104,13115": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"1398,1403": "Convert to auto property",
+								"1481,1489": "Convert to auto property",
+								"1573,1577": "Convert to auto property",
+								"1656,1664": "Convert to auto property",
+								"1751,1762": "Convert to auto property",
+								"1855,1863": "Convert to auto property",
+								"1950,1957": "Convert to auto property",
+								"2041,2047": "Convert to auto property",
+								"2161,2165": "'this.' is redundant and can be removed safely.",
+								"41,46": "Using directive is not used by code and can be removed safely.",
+								"4186,4190": "Convert to auto property",
+								"4266,4272": "Convert to auto property",
+								"4354,4361": "Convert to auto property",
+								"4445,4452": "Convert to auto property",
+								"4536,4540": "Convert to auto property",
+								"4625,4636": "Convert to auto property",
+								"4729,4733": "Convert to auto property",
+								"4814,4816": "Convert to auto property",
+								"4891,4899": "Convert to auto property",
+								"5352,5362": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"622,626": "Convert to auto property",
+								"6922,6924": "Convert to auto property",
+								"6996,7000": "Convert to auto property",
+								"703,707": "Convert to auto property",
+								"7137,7138": "Empty statement is redundant",
+								"7164,7170": "Convert to auto property",
+								"7247,7251": "Convert to auto property",
+								"7329,7335": "Convert to auto property",
+								"7597,7603": "Convert to auto property",
+								"7691,7699": "Convert to auto property",
+								"784,793": "Convert to auto property",
+								"8135,8145": "Name should have suffix 'EventArgs'. (Rule 'Event Arguments')",
+								"879,888": "Convert to auto property",
+								"975,987": "Convert to auto property"
+							},
+							"origin_encoding": "UTF-8",
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7507.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "Assets/Scripts/map/StarPanel.cs",
 					"semi_transient": false,
 					"settings":
@@ -1073,6 +1269,7 @@
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"111,115": "Name should have prefix '_'. (Rule 'Fields').",
@@ -1087,28 +1284,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 6,
 					"file": "Assets/Scripts/map/PlayerManager.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3119,
+						"buffer_size": 5877,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2601,
-								2601
+								0,
+								0
 							]
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"1831,1835": "Parameter can be IComparable",
@@ -1124,11 +1322,11 @@
 						"translation.y": 840.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 7,
 					"file": "Assets/Scripts/Start/StartButtonController.cs",
 					"semi_transient": false,
 					"settings":
@@ -1146,6 +1344,7 @@
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"19,24": "Using directive is not used by code and can be removed safely.",
@@ -1159,28 +1358,29 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 8,
 					"file": "Assets/Scripts/Util/DemoUtil.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4044,
+						"buffer_size": 5068,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3795,
-								3795
+								0,
+								0
 							]
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"0,5": "Using directive is not used by code and can be removed safely.",
@@ -1203,11 +1403,11 @@
 						"translation.y": 1234.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 9,
 					"file": "Assets/Scripts/battle/BackController.cs",
 					"semi_transient": false,
 					"settings":
@@ -1225,6 +1425,7 @@
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"244,251": "Cannot convert from ? to UnityEngine.Events.UnityAction"
@@ -1235,11 +1436,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 10,
 					"file": "Assets/Scripts/Util/LocalUtil.cs",
 					"semi_transient": false,
 					"settings":
@@ -1257,6 +1458,7 @@
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"1017,1028": "Method 'EncryptData' can be made static.",
@@ -1279,28 +1481,29 @@
 						"translation.y": 420.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 11,
 					"file": "Assets/Scripts/battle/MapController.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1091,
+						"buffer_size": 1502,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								680,
-								680
+								0,
+								0
 							]
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"656,657": "Invocation error: AmbiguousMatch"
@@ -1313,11 +1516,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 12,
 					"file": "Assets/Scripts/battle/SkillController.cs",
 					"semi_transient": false,
 					"settings":
@@ -1335,6 +1538,7 @@
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"syntax": "Packages/C#/C#.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
@@ -1342,135 +1546,29 @@
 						"translation.y": 1094.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1697,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										128,
-										137
-									],
-									[
-										157,
-										166
-									],
-									[
-										335,
-										357
-									],
-									[
-										393,
-										415
-									],
-									[
-										518,
-										540
-									],
-									[
-										586,
-										608
-									],
-									[
-										636,
-										658
-									],
-									[
-										717,
-										739
-									],
-									[
-										852,
-										874
-									],
-									[
-										972,
-										994
-									],
-									[
-										1037,
-										1059
-									],
-									[
-										1122,
-										1144
-									],
-									[
-										1168,
-										1190
-									],
-									[
-										1390,
-										1401
-									],
-									[
-										1480,
-										1491
-									],
-									[
-										1625,
-										1636
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								1396,
-								1396
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 3,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 570.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
+					"buffer": 13,
 					"file": "Assets/Scripts/battle/PlayerTroopController.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17516,
+						"buffer_size": 17931,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2965,
-								2965
+								0,
+								0
 							]
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"oops":
 							{
 								"10519,10529": "Use 'var' keyword",
@@ -1517,7 +1615,7 @@
 						"translation.y": 1174.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 11,
 					"type": "text"
 				}
 			]
@@ -1580,6 +1678,22 @@
 		"selected_items":
 		[
 			[
+				"",
+				"Scripts\\Util\\ConfigManagerr.cs"
+			],
+			[
+				"config",
+				"Scripts\\Util\\ConfigManagerr.cs"
+			],
+			[
+				"camer",
+				"Scripts\\Battle\\CamerController.cs"
+			],
+			[
+				"troopb",
+				"Scripts\\Map\\TroopStatusButton.cs"
+			],
+			[
 				"skillcon",
 				"Scripts\\battle\\SkillController.cs"
 			],
@@ -1622,10 +1736,6 @@
 			[
 				"localu",
 				"Scripts\\Util\\LocalUtil.cs"
-			],
-			[
-				"config",
-				"Scripts\\Util\\ConfigManagerr.cs"
 			],
 			[
 				"start",
@@ -1678,10 +1788,6 @@
 			[
 				"tollgame",
 				"Scripts\\TollGateManager.cs"
-			],
-			[
-				"camer",
-				"Assets/Scripts/CamerController.cs"
 			],
 			[
 				"demo.",
@@ -1912,10 +2018,6 @@
 				"Scripts/character_super2/RiderSuper2Controller.cs"
 			],
 			[
-				"",
-				"Scripts/PlayerTroopController.cs"
-			],
-			[
 				"spyersup",
 				"Scripts/character_super2/SpyerSuper2Controller.cs"
 			],
@@ -2086,10 +2188,6 @@
 			[
 				"ar",
 				"Scripts/characters/ArcherController.cs"
-			],
-			[
-				"des",
-				"Scripts/Destroyer.cs"
 			]
 		],
 		"width": 0.0

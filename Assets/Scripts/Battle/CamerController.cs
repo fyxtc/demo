@@ -1,12 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using System.IO;
 
 public class CamerController : MonoBehaviour {
-    ConfigManager configManager;
+    // ConfigManager configManager;
 	// Use this for initialization
-	void Start () {
-        configManager = ConfigManager.share();
-    	configManager.LoadConfig(true);
+
+    void Awake(){
+
+        
+    }
+
+    void Start () {
     	 
 		// Debug.Log("saber: " + configManager.CharacterConfig.Saber.Life);
 		// Debug.Log("archer: " + configManager.CharacterConfig.Archer.Attack);
@@ -27,4 +35,14 @@ public class CamerController : MonoBehaviour {
 			SceneManager.LoadScene ("main");
 		} 
 	}
+    
+    #if UNITY_EDITOR
+        [MenuItem ("Assets/Build AssetBundles")]
+        static void BuildAllAssetBundles ()
+        {
+            // BuildPipeline.BuildAssetBundles ("Assets/AssetBundles", BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
+            string path = Application.dataPath + "/StreamingAssets";
+            BuildPipeline.BuildAssetBundles (path, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
+        }
+    #endif
 }

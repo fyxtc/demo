@@ -1,0 +1,75 @@
+
+IceBall.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+images/Head
+  rotate: false
+  xy: 2, 18
+  size: 61, 66
+  orig: 61, 66
+  offset: 0, 0
+  index: -1
+images/L_Arm
+  rotate: true
+  xy: 65, 19
+  size: 27, 30
+  orig: 27, 30
+  offset: 0, 0
+  index: -1
+images/L_Foot
+  rotate: true
+  xy: 132, 86
+  size: 29, 48
+  orig: 29, 48
+  offset: 0, 0
+  index: -1
+images/L_Hand
+  rotate: true
+  xy: 2, 2
+  size: 14, 33
+  orig: 14, 33
+  offset: 0, 0
+  index: -1
+images/L_Leg
+  rotate: false
+  xy: 215, 88
+  size: 18, 27
+  orig: 18, 27
+  offset: 0, 0
+  index: -1
+images/R_Arm
+  rotate: false
+  xy: 65, 48
+  size: 35, 36
+  orig: 35, 36
+  offset: 0, 0
+  index: -1
+images/R_Foot
+  rotate: false
+  xy: 182, 86
+  size: 31, 29
+  orig: 58, 56
+  offset: 0, 0
+  index: -1
+images/R_Hand
+  rotate: false
+  xy: 102, 53
+  size: 15, 31
+  orig: 15, 31
+  offset: 0, 0
+  index: -1
+images/R_Leg
+  rotate: false
+  xy: 235, 92
+  size: 19, 23
+  orig: 19, 23
+  offset: 0, 0
+  index: -1
+images/Weapon
+  rotate: false
+  xy: 2, 86
+  size: 128, 29
+  orig: 128, 29
+  offset: 0, 0
+  index: -1

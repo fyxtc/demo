@@ -122,7 +122,7 @@ public class CharacterConfig{
     public const string CHARACTER_CONFIG_FILE = "character_config.json";
     public BaseModel[] models;
     public void LoadConfig(){
-        string str = DemoUtil.ReadConfigFile(CHARACTER_CONFIG_FILE);
+        string str = DemoUtil.ReadConfigFile(ConfigManager.share().ConfigPath + "/" + CHARACTER_CONFIG_FILE);
 		models = JsonMapper.ToObject<BaseModel[]>(str);
         // foreach (BaseModel m in models){
         //     Debug.Log(m);
@@ -208,7 +208,7 @@ public class SkillConfig{
     private SkillModel[] models;
 
     public void LoadConfig(){
-        string str = DemoUtil.ReadConfigFile(SKILL_CONFIG_FILE);
+        string str = DemoUtil.ReadConfigFile(ConfigManager.share().ConfigPath + "/" + SKILL_CONFIG_FILE);
         models = JsonMapper.ToObject<SkillModel[]>(str);
         // foreach (SkillModel m in models){
         //     Debug.Log(m);
@@ -314,7 +314,7 @@ public class TrickConfig{
     public const string TRICK_CONFIG_FILE = "trick_config.json";
     private TrickModel[] models;
     public void LoadConfig(){
-        string str = DemoUtil.ReadConfigFile(TRICK_CONFIG_FILE);
+        string str = DemoUtil.ReadConfigFile(ConfigManager.share().ConfigPath + "/" + TRICK_CONFIG_FILE);
         models = JsonMapper.ToObject<TrickModel[]>(str);
         // foreach (TrickModel m in models){
         //     Debug.Log(m);
@@ -335,7 +335,7 @@ public class TestConfig{
     public const string TEST_FILE = "troops_config.json";
     public TestModel[] TestModels{get; set;}
     public void LoadConfig(){
-        string str = DemoUtil.ReadConfigFile(TEST_FILE);
+        string str = DemoUtil.ReadConfigFile(ConfigManager.share().ConfigPath + "/" + TEST_FILE);
         TestModels = JsonMapper.ToObject<TestModel[]>(str);
         // Debug.Log(TestModels.Length + ", " + TestModels[0].troops[0]);
     }
@@ -358,7 +358,7 @@ public class GateConfig{
     public GateModel[] GateModels{get; set;}
     public void LoadConfig(){
         // Debug.Log("laod gate config " + configFile);
-        string str = DemoUtil.ReadConfigFile(configFile);
+        string str = DemoUtil.ReadConfigFile(ConfigManager.share().ConfigPath + "/" +configFile);
         GateModels = JsonMapper.ToObject<GateModel[]>(str);    
 
         foreach(GateModel m in GateModels){
@@ -396,6 +396,8 @@ public class ConfigManager{
     public GateConfigDiff GateConfigDiff{ get; set;}
     bool isLoaded = false;
 
+    public string ConfigPath{get; set;}
+
     private ConfigManager(){
         CharacterConfig = new CharacterConfig();
         SkillConfig = new SkillConfig();
@@ -403,7 +405,7 @@ public class ConfigManager{
         TestConfig = new TestConfig();
         GateConfigSimple = new GateConfigSimple();
         GateConfigDiff = new GateConfigDiff();
-        LoadConfig(false);
+        // LoadConfig(false);
     }
 
     public static ConfigManager share(){

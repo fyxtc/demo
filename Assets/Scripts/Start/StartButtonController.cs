@@ -3,12 +3,17 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Prime31.TransitionKit;
+using System.IO;
 
 public class StartButtonController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
 		GetComponent<Button>().onClick.AddListener(OnClick);
+
+        ConfigManager configManager = ConfigManager.share();
+        configManager.ConfigPath =  Path.Combine(Application.dataPath, "StreamingAssets/Config");
+    	configManager.LoadConfig(true);
 	}
 
 	void OnClick(){
